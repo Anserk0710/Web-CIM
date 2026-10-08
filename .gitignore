@@ -1,0 +1,58 @@
+# Environment files
+.env
+.env.*
+!.env.example
+
+# PHP / Composer
+/vendor/
+composer.phar
+auth.json
+
+# Node
+/node_modules/
+/npm-debug.log*
+/yarn-debug.log*
+/yarn-error.log*
+/pnpm-debug.log*
+
+# Laravel Runtime
+/public/build/
+/public/hot
+/public/storage
+
+/storage/*.key
+/storage/logs/*.log
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+/bootstap/cache/*.php
+
+# Testing / static analysis
+.phpunit.result.cache
+.phpunit.cache/
+.phpunit.cache
+coverage/
+.phpstan.cache
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temp Files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Local Docker
+compose.override.yml
+docker-compose.override.yml

@@ -1,0 +1,13 @@
+﻿docker compose exec -T mysql sh -lc `
+    'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -e "CREATE TABLE IF NOT EXISTS phase1_persistence_probe (id INT PRIMARY KEY, value VARCHAR(64) NOT NULL);"'
+
+if ($LASTEXITCODE -ne 0) {
+    Fail "Could not create MySQL persistence probe table."
+}
+
+docker compose exec -T mysql sh -lc `
+    'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" -e "REPLACE INTO phase1_persistence_probe (id, value) VALUES (1, 0x7072657365727665643);"'
+
+if ($LASTEXITCODE -ne 0) {
+    Fail "Could not create MySQL persistence probe."
+}

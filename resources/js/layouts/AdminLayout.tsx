@@ -13,12 +13,22 @@ import {
 } from 'lucide-react';
 
 import {
+    Breadcrumbs,
+    type BreadcrumbItem,
+} from '@/components/admin/Breadcrumbs';
+
+import {
     type SharedPageProps,
 } from '@/types';
 
+type Props = PropsWithChildren<{
+    breadcrumbs?: BreadcrumbItem[];
+}>;
+
 export default function AdminLayout({
     children,
-}: PropsWithChildren) {
+    breadcrumbs = [],
+}: Props) {
     const {
         app,
         auth,
@@ -39,14 +49,20 @@ export default function AdminLayout({
                         </p>
                     </div>
 
-                    <div className="text-right">
-                        <p className="text-sm font-medium">
-                            {auth.user?.name}
-                        </p>
+                    <div className="flex items-center gap-4">
+                        <span className="rounded-full bg-cim-ice px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cim-navy">
+                            {app.environment}
+                        </span>
 
-                        <p className="text-xs text-muted-foreground">
-                            {auth.user?.email}
-                        </p>
+                        <div className="text-right">
+                            <p className="text-sm font-medium">
+                                {auth.user?.name}
+                            </p>
+
+                            <p className="text-xs text-muted-foreground">
+                                {auth.user?.email}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -96,6 +112,12 @@ export default function AdminLayout({
                 </aside>
 
                 <main>
+                    {breadcrumbs.length > 0 && (
+                        <Breadcrumbs
+                            items={breadcrumbs}
+                        />
+                    )}
+
                     {children}
                 </main>
             </div>

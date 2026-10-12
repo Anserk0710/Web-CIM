@@ -86,6 +86,24 @@ services:
     networks:
       - cim
 
+  e2e:
+    image: mcr.microsoft.com/playwright:v1.64.0-noble
+    profiles:
+      - e2e
+    working_dir: /var/www/html
+    environment:
+      PLAYWRIGHT_BASE_URL: http://nginx
+      E2E_USER_EMAIL: ${E2E_USER_EMAIL:-e2e@cim.test}
+      E2E_USER_PASSWORD: ${E2E_USER_PASSWORD:-CimE2E-Local-Only-2026!}
+    volumes:
+      - .:/var/www/html
+      - node_modules:/var/www/html/node_modules
+    depends_on:
+      - nginx
+    ipc: host
+    networks:
+      - cim
+
 networks:
   cim:
     driver: bridge

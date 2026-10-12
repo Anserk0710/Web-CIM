@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
 
 class Media extends BaseModel
@@ -46,5 +49,32 @@ class Media extends BaseModel
     public function usages(): HasMany
     {
         return $this->hasMany(MediaUsage::class);
+    }
+
+    public function scopeImages(
+        Builder $query,
+    ): Builder {
+        return $query->where(
+            'mime',
+            'like',
+            'image/%',
+        );
+    }
+
+    public function scopePdf(
+        Builder $query,
+    ): Builder {
+        return $query->where(
+            'mime',
+            'application/pdf',
+        );
+    }
+
+    public function url(): string
+    {
+        /** @var FilesystemAdapter $disk */
+        $disk = Storage::disk($this->disk);
+
+        return $disk->url($this->path);
     }
 }

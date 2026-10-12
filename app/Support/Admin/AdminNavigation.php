@@ -24,6 +24,24 @@ class AdminNavigation
             ],
 
             [
+                'label' => 'Products',
+                'href' => '/admin/products',
+                'ability' => 'product.read',
+            ],
+
+            [
+                'label' => 'Taxonomies',
+                'href' => '/admin/taxonomies',
+                'ability' => 'taxonomy.read',
+            ],
+
+            [
+                'label' => 'Media',
+                'href' => '/admin/media',
+                'ability' => 'media.read',
+            ],
+
+            [
                 'label' => 'Users',
                 'href' => '/admin/users',
                 'ability' => 'user.read',

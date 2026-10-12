@@ -6,11 +6,27 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="description" content="@yield('meta_description', 'PT Cahya Intan Medika')">
-
     <title>
         @yield('title', config('app.name'))
     </title>
+
+    <meta name="description" content="@yield('meta_description', 'PT Cahya Intan Medika')">
+
+    @hasSection('canonical')
+        <link rel="canonical" href="@yield('canonical')">
+    @endif
+
+    @hasSection('robots')
+        <meta name="robots" content="@yield('robots')">
+    @endif
+
+    @hasSection('og_image')
+        <meta property="og:image" content="@yield('og_image')">
+    @endif
+
+    <meta property="og:title" content="@yield('title', config('app.name'))">
+
+    <meta property="og:description" content="@yield('meta_description', 'PT Cahya Intan Medika')">
 
     @vite('resources/js/public.ts')
 </head>
@@ -25,6 +41,10 @@
             <nav aria-label="Primary navigation" class="flex items-center gap-4 text-sm">
                 <a href="{{ route('home') }}" class="font-medium text-foreground hover:text-cim-blue">
                     Home
+                </a>
+
+                <a href="{{ route('products.index') }}" class="font-medium text-foreground hover:text-cim-blue">
+                    Products
                 </a>
 
                 <a href="{{ route('login') }}"

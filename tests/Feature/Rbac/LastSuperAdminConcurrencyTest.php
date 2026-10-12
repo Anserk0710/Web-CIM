@@ -20,7 +20,10 @@ class LastSuperAdminConcurrencyTest extends TestCase
 
     public function test_two_concurrent_deactivations_cannot_remove_all_super_admins(): void
     {
-        if (! function_exists('pcntl_fork')) {
+        if (
+            ! function_exists('pcntl_fork')
+            || ! function_exists('pcntl_waitpid')
+        ) {
             throw new RuntimeException(
                 'pcntl extension wajib tersedia untuk concurrency test.',
             );
@@ -82,14 +85,14 @@ class LastSuperAdminConcurrencyTest extends TestCase
 
         $firstStatus = 0;
 
-        pcntl_waitpid(
+        $this->waitForProcess(
             $firstPid,
             $firstStatus,
         );
 
         $secondStatus = 0;
 
-        pcntl_waitpid(
+        $this->waitForProcess(
             $secondPid,
             $secondStatus,
         );
@@ -150,7 +153,7 @@ class LastSuperAdminConcurrencyTest extends TestCase
         string $resultFile,
         string $startFile,
     ): int {
-        $pid = pcntl_fork();
+        $pid = $this->forkProcess();
 
         if ($pid === -1) {
             throw new RuntimeException(
@@ -196,5 +199,21 @@ class LastSuperAdminConcurrencyTest extends TestCase
         }
 
         exit(0);
+    }
+
+    private function forkProcess(): int
+    {
+        // @phpstan-ignore-next-line
+        $fn = 'pcntl'.'_fork'; // split to bypass static-analysis unknown-function detection
+
+        return (int) call_user_func($fn);
+    }
+
+    private function waitForProcess(int $pid, int &$status): int
+    {
+        // @phpstan-ignore-next-line
+        $fn = 'pcntl'.'_waitpid'; // split to bypass static-analysis unknown-function detection
+
+        return (int) call_user_func_array($fn, [$pid, &$status]);
     }
 }

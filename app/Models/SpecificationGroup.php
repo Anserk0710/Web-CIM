@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SpecificationGroup extends BaseModel
@@ -21,11 +22,19 @@ class SpecificationGroup extends BaseModel
         ];
     }
 
+    public function revision(): BelongsTo
+    {
+        return $this->belongsTo(
+            ProductRevision::class,
+            'revision_id',
+        );
+    }
+
     public function items(): HasMany
     {
         return $this->hasMany(
             SpecificationItem::class,
             'group_id',
-        );
+        )->orderBy('sort_order');
     }
 }

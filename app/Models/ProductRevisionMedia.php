@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProductMediaRole;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductRevisionMedia extends BaseModel
@@ -20,6 +21,7 @@ class ProductRevisionMedia extends BaseModel
     protected function casts(): array
     {
         return [
+            'role' => ProductMediaRole::class,
             'sort_order' => 'integer',
         ];
     }

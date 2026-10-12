@@ -5,6 +5,11 @@ use App\Http\Controllers\Admin\Auth\ChangePasswordController;
 use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
+use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductPreviewController;
+use App\Http\Controllers\Admin\ProductPublicationController;
+use App\Http\Controllers\Admin\ProductTaxonomyController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\RolePermissionController;
 use App\Http\Controllers\Admin\UserAccessController;
@@ -83,35 +88,116 @@ Route::prefix('admin')
             )->name('admin.dashboard');
 
             Route::get(
-                '/users',
+                '/products',
+                [ProductController::class, 'index'],
+            )->name('admin.products.index');
+
+            Route::get(
+                '/products/create',
+                [ProductController::class, 'create'],
+            )->name('admin.products.create');
+
+            Route::post(
+                '/products',
+                [ProductController::class, 'store'],
+            )->name('admin.products.store');
+
+            Route::get(
+                '/products/{product}/edit',
+                [ProductController::class, 'edit'],
+            )->name('admin.products.edit');
+
+            Route::put(
+                '/products/{product}',
+                [ProductController::class, 'update'],
+            )->name('admin.products.update');
+
+            Route::post(
+                '/products/{product}/publish',
                 [
-                    UserController::class,
+                    ProductPublicationController::class,
+                    'publish',
+                ],
+            )->name('admin.products.publish');
+
+            Route::post(
+                '/products/{product}/unpublish',
+                [
+                    ProductPublicationController::class,
+                    'unpublish',
+                ],
+            )->name('admin.products.unpublish');
+
+            Route::post(
+                '/products/{product}/archive',
+                [
+                    ProductPublicationController::class,
+                    'archive',
+                ],
+            )->name('admin.products.archive');
+
+            Route::get(
+                '/products/{product}/preview',
+                ProductPreviewController::class,
+            )->name('admin.products.preview');
+
+            Route::get(
+                '/taxonomies',
+                [
+                    ProductTaxonomyController::class,
                     'index',
                 ],
+            )->name('admin.taxonomies.index');
+
+            Route::post(
+                '/taxonomies/{kind}',
+                [
+                    ProductTaxonomyController::class,
+                    'store',
+                ],
+            )->name('admin.taxonomies.store');
+
+            Route::patch(
+                '/taxonomies/{kind}/{id}',
+                [
+                    ProductTaxonomyController::class,
+                    'update',
+                ],
+            )->name('admin.taxonomies.update');
+
+            Route::get(
+                '/media',
+                [MediaController::class, 'index'],
+            )->name('admin.media.index');
+
+            Route::post(
+                '/media',
+                [MediaController::class, 'store'],
+            )->name('admin.media.store');
+
+            Route::delete(
+                '/media/{media}',
+                [MediaController::class, 'destroy'],
+            )->name('admin.media.destroy');
+
+            Route::get(
+                '/users',
+                [UserController::class, 'index'],
             )->name('admin.users.index');
 
             Route::patch(
                 '/users/{user}/active',
-                [
-                    UserAccessController::class,
-                    'update',
-                ],
+                [UserAccessController::class, 'update'],
             )->name('admin.users.active');
 
             Route::put(
                 '/users/{user}/roles',
-                [
-                    UserRoleController::class,
-                    'update',
-                ],
+                [UserRoleController::class, 'update'],
             )->name('admin.users.roles');
 
             Route::get(
                 '/roles',
-                [
-                    RoleController::class,
-                    'index',
-                ],
+                [RoleController::class, 'index'],
             )->name('admin.roles.index');
 
             Route::put(

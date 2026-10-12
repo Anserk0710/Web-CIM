@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
+use App\Policies\ProductPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
 use App\Support\Rbac\PermissionRegistry;
@@ -27,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(
             Role::class,
             RolePolicy::class,
+        );
+
+        Gate::policy(
+            Product::class,
+            ProductPolicy::class,
         );
 
         foreach (

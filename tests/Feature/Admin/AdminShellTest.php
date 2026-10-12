@@ -24,51 +24,35 @@ class AdminShellTest extends TestCase
         ]);
     }
 
-    public function test_admin_login_shell_is_available(): void
+    public function test_guest_is_redirected_to_login(): void
     {
-        $this->withoutVite();
-
-        $response = $this->get('/admin/login');
-
-        $response
-            ->assertOk()
-            ->assertInertia(
-                fn (Assert $page) => $page
-                    ->component('Admin/Auth/Login')
-            );
+        $this->get('/admin')
+            ->assertRedirect('/admin/login');
     }
 
-    public function test_admin_dashboard_shell_is_available(): void
+    public function test_authorized_user_can_open_dashboard(): void
     {
         $this->withoutVite();
 
-        $user = $this->superAdmin();
+        $user = User::factory()->create();
 
-        $response = $this->actingAs($user)
+        $role = Role::query()
+            ->where('name', 'Read Only')
+            ->firstOrFail();
+
+        $user->roles()->attach($role);
+
+        $response = $this
+            ->actingAs($user)
             ->get('/admin');
 
         $response
             ->assertOk()
             ->assertInertia(
                 fn (Assert $page) => $page
-                    ->component('Admin/Dashboard')
-                    ->where('phase', 'Phase 2')
+                    ->component(
+                        'Admin/Dashboard',
+                    ),
             );
-    }
-
-    private function superAdmin(): User
-    {
-        $user = User::factory()->create();
-
-        $role = Role::query()
-            ->where(
-                'name',
-                Role::SUPER_ADMIN,
-            )
-            ->firstOrFail();
-
-        $user->roles()->attach($role);
-
-        return $user;
     }
 }

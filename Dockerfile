@@ -4,26 +4,27 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        curl \
-        git \
-        libcurl4-openssl-dev \
-        libicu-dev \
-        libonig-dev \
-        libsqlite3-dev \
-        libxml2-dev \
-        libzip-dev \
-        unzip \
+    curl \
+    git \
+    libcurl4-openssl-dev \
+    libicu-dev \
+    libonig-dev \
+    libsqlite3-dev \
+    libxml2-dev \
+    libzip-dev \
+    unzip \
     && docker-php-ext-install -j"$(nproc)" \
-        bcmath \
-        curl \
-        dom \
-        intl \
-        mbstring \
-        opcache \
-        pdo_mysql \
-        pdo_sqlite \
-        xml \
-        zip \
+    bcmath \
+    curl \
+    dom \
+    intl \
+    mbstring \
+    opcache \
+    pcntl \
+    pdo_mysql \
+    pdo_sqlite \
+    xml \
+    zip \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2.8 /usr/bin/composer /usr/bin/composer

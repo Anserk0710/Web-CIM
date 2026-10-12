@@ -8,22 +8,21 @@ import {
 } from 'react';
 
 import {
-    LayoutDashboard,
-    LogIn,
+    KeyRound,
+    LogOut,
 } from 'lucide-react';
 
-type SharedPageProps = {
-    app: {
-        name: string;
-        environment: string;
-    };
-};
+import {
+    type SharedPageProps,
+} from '@/types';
 
 export default function AdminLayout({
     children,
 }: PropsWithChildren) {
     const {
         app,
+        auth,
+        navigation,
     } = usePage<SharedPageProps>().props;
 
     return (
@@ -40,40 +39,58 @@ export default function AdminLayout({
                         </p>
                     </div>
 
-                    <span className="rounded-full bg-cim-ice px-3 py-1 text-xs font-semibold uppercase tracking-wide text-cim-navy">
-                        {app.environment}
-                    </span>
+                    <div className="text-right">
+                        <p className="text-sm font-medium">
+                            {auth.user?.name}
+                        </p>
+
+                        <p className="text-xs text-muted-foreground">
+                            {auth.user?.email}
+                        </p>
+                    </div>
                 </div>
             </header>
 
-            <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[220px_1fr] lg:px-8">
+            <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[240px_1fr] lg:px-8">
                 <aside className="rounded-xl border bg-background p-3">
                     <nav
                         aria-label="CMS navigation"
                         className="space-y-1"
                     >
+                        {navigation.map((item) => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                className="block rounded-lg px-3 py-2 text-sm font-medium hover:bg-muted"
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
+
                         <Link
-                            href="/admin"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+                            href="/admin/change-password"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-muted"
                         >
-                            <LayoutDashboard
-                                aria-hidden="true"
+                            <KeyRound
                                 className="size-4"
+                                aria-hidden="true"
                             />
 
-                            Dashboard
+                            Ganti password
                         </Link>
 
                         <Link
-                            href="/admin/login"
-                            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-foreground hover:bg-muted"
+                            href="/admin/logout"
+                            method="post"
+                            as="button"
+                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-destructive hover:bg-muted"
                         >
-                            <LogIn
-                                aria-hidden="true"
+                            <LogOut
                                 className="size-4"
+                                aria-hidden="true"
                             />
 
-                            Login shell
+                            Logout
                         </Link>
                     </nav>
                 </aside>

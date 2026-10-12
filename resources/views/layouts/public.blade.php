@@ -1,5 +1,3 @@
-{{-- path: D:\WEB CIM\Website CIM\cim-web\resources\views\layouts\public.blade.php --}}
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -29,7 +27,7 @@
                     Home
                 </a>
 
-                <a href="{{ route('admin.login') }}"
+                <a href="{{ route('login') }}"
                     class="rounded-lg bg-cim-navy px-4 py-2 font-medium text-white hover:bg-cim-blue">
                     CMS
                 </a>

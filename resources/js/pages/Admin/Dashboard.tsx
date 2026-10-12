@@ -3,9 +3,9 @@ import {
 } from '@inertiajs/react';
 
 import {
-    Boxes,
-    Database,
-    Mail,
+    KeyRound,
+    ShieldCheck,
+    UserCheck,
 } from 'lucide-react';
 
 import AdminLayout from '@/layouts/AdminLayout';
@@ -13,24 +13,6 @@ import AdminLayout from '@/layouts/AdminLayout';
 type DashboardProps = {
     phase: string;
 };
-
-const cards = [
-    {
-        title: 'Laravel',
-        description: 'Laravel 13 melalui PHP-FPM.',
-        icon: Boxes,
-    },
-    {
-        title: 'Database',
-        description: 'MySQL tersedia melalui Compose DNS mysql.',
-        icon: Database,
-    },
-    {
-        title: 'Mail',
-        description: 'Development SMTP diarahkan ke Mailpit.',
-        icon: Mail,
-    },
-];
 
 export default function Dashboard({
     phase,
@@ -46,41 +28,54 @@ export default function Dashboard({
                     </p>
 
                     <h1 className="mt-2 text-3xl font-bold tracking-tight text-cim-navy">
-                        CMS Application Foundation
+                        Security Foundation
                     </h1>
 
                     <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-                        Halaman ini masih berupa shell. Tujuannya adalah
-                        membuktikan Laravel, Inertia, React, TypeScript,
-                        Vite, dan Tailwind terintegrasi secara nyata.
+                        Dashboard hanya menampilkan surface
+                        yang diizinkan. Counts domain pribadi
+                        tidak dikirim pada Phase 2.
                     </p>
 
                     <div className="mt-8 grid gap-4 md:grid-cols-3">
-                        {cards.map((card) => {
-                            const Icon = card.icon;
+                        <article className="rounded-xl border bg-background p-5">
+                            <UserCheck className="size-5 text-cim-blue" />
 
-                            return (
-                                <article
-                                    key={card.title}
-                                    className="rounded-2xl border bg-background p-5 shadow-sm"
-                                >
-                                    <div className="flex size-10 items-center justify-center rounded-xl bg-cim-ice text-cim-navy">
-                                        <Icon
-                                            aria-hidden="true"
-                                            className="size-5"
-                                        />
-                                    </div>
+                            <h2 className="mt-4 font-semibold">
+                                Authentication
+                            </h2>
 
-                                    <h2 className="mt-4 font-semibold text-foreground">
-                                        {card.title}
-                                    </h2>
+                            <p className="mt-2 text-sm text-muted-foreground">
+                                Login, logout, reset dan change
+                                password aktif.
+                            </p>
+                        </article>
 
-                                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                                        {card.description}
-                                    </p>
-                                </article>
-                            );
-                        })}
+                        <article className="rounded-xl border bg-background p-5">
+                            <ShieldCheck className="size-5 text-cim-blue" />
+
+                            <h2 className="mt-4 font-semibold">
+                                RBAC
+                            </h2>
+
+                            <p className="mt-2 text-sm text-muted-foreground">
+                                Authorization server-side
+                                deny-by-default.
+                            </p>
+                        </article>
+
+                        <article className="rounded-xl border bg-background p-5">
+                            <KeyRound className="size-5 text-cim-blue" />
+
+                            <h2 className="mt-4 font-semibold">
+                                Audit
+                            </h2>
+
+                            <p className="mt-2 text-sm text-muted-foreground">
+                                Mutation sensitif memiliki
+                                audit trail append-only.
+                            </p>
+                        </article>
                     </div>
                 </section>
             </AdminLayout>

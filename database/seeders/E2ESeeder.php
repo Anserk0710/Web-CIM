@@ -77,6 +77,11 @@ class E2ESeeder extends Seeder
                     ->pluck('id');
 
                 if ($products->isNotEmpty()) {
+                    // Other products' revisions may still reference these E2E fixtures.
+                    DB::table('product_revision_related')
+                        ->whereIn('related_product_id', $products)
+                        ->delete();
+
                     UrlRedirect::query()
                         ->where(
                             'entity_type',

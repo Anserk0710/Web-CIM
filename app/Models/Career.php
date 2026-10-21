@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Enums\CareerStatus;
 use App\Enums\EmploymentType;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 
 class Career extends BaseModel
 {
@@ -40,10 +40,12 @@ class Career extends BaseModel
         ];
     }
 
-    public function applications(): HasMany
-    {
-        return $this->hasMany(
-            CareerApplication::class,
+    public function scopeOpen(
+        Builder $query,
+    ): Builder {
+        return $query->where(
+            'status',
+            CareerStatus::Open->value,
         );
     }
 }

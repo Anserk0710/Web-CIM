@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\AuditResult;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AuditLog extends BaseModel
 {
@@ -28,5 +29,13 @@ class AuditLog extends BaseModel
             'changes' => 'array',
             'created_at' => 'datetime',
         ];
+    }
+
+    public function actor(): BelongsTo
+    {
+        return $this->belongsTo(
+            User::class,
+            'actor_id',
+        );
     }
 }

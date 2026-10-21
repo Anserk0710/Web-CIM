@@ -2,9 +2,15 @@
 
 namespace App\Providers;
 
+use App\Models\Activity;
+use App\Models\Career;
+use App\Models\EcatalogEntry;
 use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
+use App\Policies\ActivityPolicy;
+use App\Policies\CareerPolicy;
+use App\Policies\EcatalogEntryPolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\RolePolicy;
 use App\Policies\UserPolicy;
@@ -34,6 +40,21 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(
             Product::class,
             ProductPolicy::class,
+        );
+
+        Gate::policy(
+            EcatalogEntry::class,
+            EcatalogEntryPolicy::class,
+        );
+
+        Gate::policy(
+            Activity::class,
+            ActivityPolicy::class,
+        );
+
+        Gate::policy(
+            Career::class,
+            CareerPolicy::class,
         );
 
         foreach (

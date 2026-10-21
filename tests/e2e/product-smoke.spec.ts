@@ -83,7 +83,7 @@ test('login -> save draft -> publish -> public visibility', async ({
     );
 
     await expect(
-        page.getByText(
+        page.getByRole('status').getByText(
             'Draft product berhasil dibuat.',
         ),
     ).toBeVisible();
@@ -96,7 +96,7 @@ test('login -> save draft -> publish -> public visibility', async ({
         .click();
 
     await expect(
-        page.getByText(
+        page.getByRole('status').getByText(
             'Product berhasil dipublish.',
         ),
     ).toBeVisible();

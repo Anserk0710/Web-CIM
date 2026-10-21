@@ -30,6 +30,24 @@ class AdminNavigation
             ],
 
             [
+                'label' => 'E-Catalog',
+                'href' => '/admin/ecatalog',
+                'ability' => 'ecatalog.read',
+            ],
+
+            [
+                'label' => 'Activities',
+                'href' => '/admin/activities',
+                'ability' => 'activity.read',
+            ],
+
+            [
+                'label' => 'Careers',
+                'href' => '/admin/careers',
+                'ability' => 'career.read',
+            ],
+
+            [
                 'label' => 'Taxonomies',
                 'href' => '/admin/taxonomies',
                 'ability' => 'taxonomy.read',
@@ -39,6 +57,12 @@ class AdminNavigation
                 'label' => 'Media',
                 'href' => '/admin/media',
                 'ability' => 'media.read',
+            ],
+
+            [
+                'label' => 'Settings',
+                'href' => '/admin/settings',
+                'ability' => 'settings.read',
             ],
 
             [
@@ -52,20 +76,31 @@ class AdminNavigation
                 'href' => '/admin/roles',
                 'ability' => 'role.read',
             ],
+
+            [
+                'label' => 'Audit',
+                'href' => '/admin/audit',
+                'ability' => 'audit.read',
+            ],
         ];
 
         return collect($items)
             ->filter(
                 fn (array $item): bool => $item['ability']
                     === 'access-admin'
-                    ? $user->hasAnyPermission()
-                    : $user->hasPermission(
-                        $item['ability'],
-                    ),
+                    ? $user
+                        ->hasAnyPermission()
+                    : $user
+                        ->hasPermission(
+                            $item[
+                                'ability'
+                            ],
+                        ),
             )
             ->map(
                 fn (array $item): array => [
                     'label' => $item['label'],
+
                     'href' => $item['href'],
                 ],
             )

@@ -49,6 +49,8 @@ services:
       - --
       - --host
       - 0.0.0.0
+    profiles:
+      - dev
     networks:
       - cim
 

@@ -3,24 +3,46 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Actions\Media\DeleteMedia;
+use App\Actions\Media\UpdateMediaMetadata;
 use App\Actions\Media\UploadMedia;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\MediaMetadataRequest;
 use App\Http\Requests\Admin\MediaUploadRequest;
 use App\Models\Media;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class MediaController extends Controller
 {
-    public function index(): Response
-    {
+    public function index(
+        Request $request,
+    ): Response {
         Gate::authorize('media.read');
 
-        $media = Media::query()
+        $search = trim(
+            (string) $request->query(
+                'q',
+                '',
+            ),
+        );
+
+        $query = Media::query();
+
+        if ($search !== '') {
+            $query->where(
+                'original_name',
+                'like',
+                '%'.$search.'%',
+            );
+        }
+
+        $media = $query
             ->latest()
             ->paginate(20)
+            ->withQueryString()
             ->through(
                 fn (Media $item): array => [
                     'id' => $item->id,
@@ -28,6 +50,15 @@ class MediaController extends Controller
                     'mime' => $item->mime,
                     'size_bytes' => $item->size_bytes,
                     'url' => $item->url(),
+
+                    'default_alt' => $item->default_alt,
+
+                    'caption' => $item->caption,
+
+                    'lock_version' => $item->lock_version,
+
+                    'usage_count' => $item->usages()
+                        ->count(),
                 ],
             );
 
@@ -36,10 +67,18 @@ class MediaController extends Controller
             [
                 'media' => $media,
 
+                'filters' => [
+                    'q' => $search,
+                ],
+
                 'can' => [
                     'upload' => request()
                         ->user()
                         ->can('media.upload'),
+
+                    'update' => request()
+                        ->user()
+                        ->can('media.update'),
 
                     'delete' => request()
                         ->user()
@@ -56,12 +95,16 @@ class MediaController extends Controller
         $action->handle(
             actor: $request->user(),
             file: $request->file('file'),
+
             defaultAlt: $request->string(
                 'default_alt',
-            )->toString() ?: null,
+            )->toString()
+            ?: null,
+
             caption: $request->string(
                 'caption',
-            )->toString() ?: null,
+            )->toString()
+            ?: null,
         );
 
         return back()->with(
@@ -70,11 +113,43 @@ class MediaController extends Controller
         );
     }
 
+    public function update(
+        MediaMetadataRequest $request,
+        Media $media,
+        UpdateMediaMetadata $action,
+    ): RedirectResponse {
+        $action->handle(
+            actor: $request->user(),
+            media: $media,
+
+            defaultAlt: $request->string(
+                'default_alt',
+            )->toString()
+            ?: null,
+
+            caption: $request->string(
+                'caption',
+            )->toString()
+            ?: null,
+
+            expectedLockVersion: $request->integer(
+                'lock_version',
+            ),
+        );
+
+        return back()->with(
+            'success',
+            'Media metadata diperbarui.',
+        );
+    }
+
     public function destroy(
         Media $media,
         DeleteMedia $action,
     ): RedirectResponse {
-        Gate::authorize('media.delete');
+        Gate::authorize(
+            'media.delete',
+        );
 
         $action->handle(
             actor: request()->user(),

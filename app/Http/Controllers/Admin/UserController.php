@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Users\CreateUser;
+use App\Actions\Users\UpdateUserProfile;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\UserRequest;
+use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,31 +26,103 @@ class UserController extends Controller
             ->with('roles:id,name')
             ->orderBy('name')
             ->paginate(20)
-            ->withQueryString()
-            ->through(
-                fn (User $user): array => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'is_active' => $user->is_active,
-                    'lock_version' => $user->lock_version,
-
-                    'roles' => $user->roles
-                        ->map(
-                            fn ($role): array => [
-                                'id' => $role->id,
-                                'name' => $role->name,
-                            ],
-                        )
-                        ->values(),
-                ],
-            );
+            ->withQueryString();
 
         return Inertia::render(
             'Admin/Users/Index',
             [
                 'users' => $users,
+
+                'roles' => Role::query()
+                    ->orderBy('name')
+                    ->get([
+                        'id',
+                        'name',
+                    ]),
+
+                'can' => [
+                    'create' => request()
+                        ->user()
+                        ->hasPermission(
+                            'user.create',
+                        ),
+
+                    'update' => request()
+                        ->user()
+                        ->hasPermission(
+                            'user.update',
+                        ),
+
+                    'disable' => request()
+                        ->user()
+                        ->hasPermission(
+                            'user.disable',
+                        ),
+
+                    'assignRoles' => request()
+                        ->user()
+                        ->hasPermission(
+                            'user.assign_roles',
+                        ),
+                ],
             ],
+        );
+    }
+
+    public function store(
+        UserRequest $request,
+        CreateUser $action,
+    ): RedirectResponse {
+        Gate::authorize(
+            'user.create',
+        );
+
+        $action->handle(
+            actor: $request->user(),
+            name: $request->string(
+                'name',
+            )->toString(),
+            email: $request->string(
+                'email',
+            )->toString(),
+        );
+
+        return back()->with(
+            'success',
+            'User dibuat. Reset-password email dikirim.',
+        );
+    }
+
+    public function update(
+        UserRequest $request,
+        User $user,
+        UpdateUserProfile $action,
+    ): RedirectResponse {
+        Gate::authorize(
+            'update',
+            $user,
+        );
+
+        $action->handle(
+            actor: $request->user(),
+            target: $user,
+
+            name: $request->string(
+                'name',
+            )->toString(),
+
+            email: $request->string(
+                'email',
+            )->toString(),
+
+            expectedLockVersion: $request->integer(
+                'lock_version',
+            ),
+        );
+
+        return back()->with(
+            'success',
+            'User diperbarui.',
         );
     }
 }

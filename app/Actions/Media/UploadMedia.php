@@ -9,6 +9,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use RuntimeException;
 use Throwable;
 
@@ -26,19 +27,31 @@ class UploadMedia
     ): Media {
         $mime = (string) $file->getMimeType();
 
-        $extension = $file->guessExtension()
+        $this->validateFile(
+            $file,
+            $mime,
+        );
+
+        $extension =
+            $file->guessExtension()
             ?: strtolower(
-                $file->getClientOriginalExtension(),
+                $file
+                    ->getClientOriginalExtension(),
             );
 
-        $directory = 'media/'
+        $directory =
+            'media/'
             .now()->format('Y/m');
 
-        $filename = (string) Str::uuid()
+        $filename =
+            (string) Str::uuid()
             .'.'
             .$extension;
 
-        $path = $directory.'/'.$filename;
+        $path =
+            $directory
+            .'/'
+            .$filename;
 
         $sha256 = hash_file(
             'sha256',
@@ -48,23 +61,33 @@ class UploadMedia
         $width = null;
         $height = null;
 
-        if (str_starts_with($mime, 'image/')) {
+        if (
+            str_starts_with(
+                $mime,
+                'image/',
+            )
+        ) {
             $dimensions = @getimagesize(
                 $file->getRealPath(),
             );
 
-            if ($dimensions !== false) {
-                $width = $dimensions[0];
-                $height = $dimensions[1];
+            if ($dimensions === false) {
+                throw ValidationException::withMessages([
+                    'file' => 'Image tidak valid.',
+                ]);
             }
+
+            $width = $dimensions[0];
+            $height = $dimensions[1];
         }
 
-        $stored = Storage::disk('public')
-            ->putFileAs(
-                $directory,
-                $file,
-                $filename,
-            );
+        $stored = Storage::disk(
+            'public',
+        )->putFileAs(
+            $directory,
+            $file,
+            $filename,
+        );
 
         if ($stored === false) {
             throw new RuntimeException(
@@ -75,29 +98,48 @@ class UploadMedia
         try {
             return DB::transaction(
                 function () use ($actor, $file, $mime, $path, $sha256, $width, $height, $defaultAlt, $caption): Media {
-                    $media = Media::query()->create([
-                        'disk' => 'public',
-                        'path' => $path,
-                        'original_name' => $file
-                            ->getClientOriginalName(),
-                        'mime' => $mime,
-                        'size_bytes' => $file->getSize(),
-                        'sha256' => $sha256,
-                        'width' => $width,
-                        'height' => $height,
-                        'default_alt' => $defaultAlt,
-                        'caption' => $caption,
-                        'uploaded_by' => $actor->id,
-                        'lock_version' => 1,
-                    ]);
+                    $media =
+                        Media::query()
+                            ->create([
+                                'disk' => 'public',
+
+                                'path' => $path,
+
+                                'original_name' => $file
+                                    ->getClientOriginalName(),
+
+                                'mime' => $mime,
+
+                                'size_bytes' => $file
+                                    ->getSize(),
+
+                                'sha256' => $sha256,
+
+                                'width' => $width,
+
+                                'height' => $height,
+
+                                'default_alt' => $defaultAlt,
+
+                                'caption' => $caption,
+
+                                'uploaded_by' => $actor->id,
+
+                                'lock_version' => 1,
+                            ]);
 
                     $this->audit->record(
                         action: 'media.uploaded',
+
                         entity: $media,
+
                         changes: [
                             'mime' => $mime,
-                            'size_bytes' => $file->getSize(),
+
+                            'size_bytes' => $file
+                                ->getSize(),
                         ],
+
                         actor: $actor,
                     );
 
@@ -111,5 +153,87 @@ class UploadMedia
 
             throw $exception;
         }
+    }
+
+    private function validateFile(
+        UploadedFile $file,
+        string $mime,
+    ): void {
+        $size =
+            (int) $file->getSize();
+
+        if (
+            str_starts_with(
+                $mime,
+                'image/',
+            )
+        ) {
+            if (
+                ! in_array(
+                    $mime,
+                    [
+                        'image/jpeg',
+                        'image/png',
+                        'image/webp',
+                    ],
+                    true,
+                )
+            ) {
+                throw ValidationException::withMessages([
+                    'file' => 'Only JPEG, PNG, and WebP are allowed.',
+                ]);
+            }
+
+            if (
+                $size
+                > 5 * 1024 * 1024
+            ) {
+                throw ValidationException::withMessages([
+                    'file' => 'Image maximum is 5 MiB.',
+                ]);
+            }
+
+            $dimensions = @getimagesize(
+                $file->getRealPath(),
+            );
+
+            if ($dimensions === false) {
+                throw ValidationException::withMessages([
+                    'file' => 'Invalid image.',
+                ]);
+            }
+
+            $pixels =
+                $dimensions[0]
+                * $dimensions[1];
+
+            if ($pixels > 25_000_000) {
+                throw ValidationException::withMessages([
+                    'file' => 'Image maximum is 25 megapixels.',
+                ]);
+            }
+
+            return;
+        }
+
+        if (
+            $mime
+            === 'application/pdf'
+        ) {
+            if (
+                $size
+                > 10 * 1024 * 1024
+            ) {
+                throw ValidationException::withMessages([
+                    'file' => 'PDF maximum is 10 MiB.',
+                ]);
+            }
+
+            return;
+        }
+
+        throw ValidationException::withMessages([
+            'file' => 'Unsupported media type.',
+        ]);
     }
 }

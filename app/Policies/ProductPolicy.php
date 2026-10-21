@@ -39,6 +39,15 @@ class ProductPolicy
         );
     }
 
+    public function delete(
+        User $user,
+        Product $product,
+    ): bool {
+        return $user->hasPermission(
+            'product.delete',
+        );
+    }
+
     public function publish(
         User $user,
         Product $product,

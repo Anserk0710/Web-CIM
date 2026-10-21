@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 class ActivityBlock extends BaseModel
 {
     protected $fillable = [
@@ -18,5 +20,13 @@ class ActivityBlock extends BaseModel
             'data' => 'array',
             'sort_order' => 'integer',
         ];
+    }
+
+    public function revision(): BelongsTo
+    {
+        return $this->belongsTo(
+            ActivityRevision::class,
+            'revision_id',
+        );
     }
 }

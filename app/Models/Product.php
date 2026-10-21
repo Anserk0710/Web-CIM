@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends BaseModel
 {
-    public const REDIRECT_TYPE = 'product';
+    public const REDIRECT_TYPE = 'PRODUCT';
 
     protected $fillable = [
         'public_slug',
@@ -55,12 +55,21 @@ class Product extends BaseModel
             );
     }
 
-    public function scopePublished(Builder $query): Builder
+    public function ecatalogEntries(): HasMany
     {
-        return $query->where(
-            'status',
-            ContentStatus::Published->value,
-        )
+        return $this->hasMany(
+            EcatalogEntry::class,
+        );
+    }
+
+    public function scopePublished(
+        Builder $query,
+    ): Builder {
+        return $query
+            ->where(
+                'status',
+                ContentStatus::Published->value,
+            )
             ->whereNotNull('public_slug')
             ->whereNotNull('published_at');
     }

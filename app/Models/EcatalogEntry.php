@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ContentStatus;
 use App\Enums\ECatalogAvailability;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EcatalogEntry extends BaseModel
 {
@@ -37,5 +38,10 @@ class EcatalogEntry extends BaseModel
             'sort_order' => 'integer',
             'lock_version' => 'integer',
         ];
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 }

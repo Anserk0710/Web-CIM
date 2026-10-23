@@ -74,6 +74,9 @@ final class PermissionRegistry
             'role.manage',
 
             'audit.read',
+
+            'notification.read',
+            'notification.retry',
         ];
     }
 
@@ -119,6 +122,8 @@ final class PermissionRegistry
 
                 'inquiry.read',
                 'inquiry.update',
+
+                'notification.read',
             ],
 
             'Editor' => [

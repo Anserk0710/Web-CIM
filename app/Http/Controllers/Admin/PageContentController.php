@@ -87,7 +87,7 @@ class PageContentController extends Controller
                 $page->key
             ] ?? [];
 
-        $validated = $request->validate([
+        $rules = [
             'lock_version' => [
                 'required',
                 'integer',
@@ -113,7 +113,23 @@ class PageContentController extends Controller
                 'required',
                 'array',
             ],
-        ]);
+        ];
+
+        if ($page->key === 'PRIVACY') {
+            $rules['sections.*.data.version'] = [
+                'required',
+                'string',
+                'max:40',
+            ];
+
+            $rules['sections.*.data.body'] = [
+                'required',
+                'string',
+                'max:5000',
+            ];
+        }
+
+        $validated = $request->validate($rules);
 
         DB::transaction(
             function () use ($request, $page, $allowed, $validated, $audit): void {

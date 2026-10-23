@@ -4,7 +4,10 @@ namespace App\Models;
 
 use App\Enums\CareerStatus;
 use App\Enums\EmploymentType;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 class Career extends BaseModel
 {
@@ -40,6 +43,13 @@ class Career extends BaseModel
         ];
     }
 
+    public function applications(): HasMany
+    {
+        return $this->hasMany(
+            CareerApplication::class,
+        );
+    }
+
     public function scopeOpen(
         Builder $query,
     ): Builder {
@@ -47,5 +57,31 @@ class Career extends BaseModel
             'status',
             CareerStatus::Open->value,
         );
+    }
+
+    public function isAcceptingApplicationsAt(
+        ?CarbonInterface $at = null,
+    ): bool {
+        $at ??= Carbon::now();
+
+        if ($this->status !== CareerStatus::Open) {
+            return false;
+        }
+
+        if (
+            $this->opens_at !== null
+            && $this->opens_at->greaterThan($at)
+        ) {
+            return false;
+        }
+
+        if (
+            $this->closes_at !== null
+            && ! $at->lessThan($this->closes_at)
+        ) {
+            return false;
+        }
+
+        return true;
     }
 }

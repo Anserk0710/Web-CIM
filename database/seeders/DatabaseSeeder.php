@@ -12,6 +12,8 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
             RoleSeeder::class,
             SitePageSeeder::class,
+            LocalPrivacyNoticeSeeder::class,
+            LocalConsentVersionSeeder::class,
             LocalSuperAdminSeeder::class,
         ]);
     }

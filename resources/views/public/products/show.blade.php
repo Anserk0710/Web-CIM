@@ -30,6 +30,90 @@
 )
 @endif
 
+@if (!$preview)
+    @section('og_type', 'product')
+
+    @php
+        $productSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Product',
+            '@id' => route(
+                'products.show',
+                $product->public_slug,
+            ).'#product',
+            'name' => $revision->name,
+            'description' => trim(
+                strip_tags(
+                    $revision->summary
+                    ?: ($revision->description ?: $revision->name)
+                )
+            ),
+            'url' => route(
+                'products.show',
+                $product->public_slug,
+            ),
+        ];
+
+        $schemaImages = $revision->media
+            ->where('role', $galleryRole)
+            ->map(
+                fn ($item) => $item->media?->url()
+            )
+            ->filter()
+            ->values()
+            ->all();
+
+        if ($schemaImages !== []) {
+            $productSchema['image'] = $schemaImages;
+        }
+
+        if ($revision->brand !== null) {
+            $productSchema['brand'] = [
+                '@type' => 'Brand',
+                'name' => $revision->brand->name,
+            ];
+        }
+
+        if ($revision->category !== null) {
+            $productSchema['category'] =
+                $revision->category->name;
+        }
+
+        $schemaProperties = $revision
+            ->specificationGroups
+            ->flatMap(
+                fn ($group) => $group->items->map(
+                    fn ($item) => [
+                        '@type' => 'PropertyValue',
+                        'name' => $group->name
+                            .' - '.$item->label,
+                        'value' => trim(
+                            $item->value
+                            .(
+                                $item->unit
+                                    ? ' '.$item->unit
+                                    : ''
+                            )
+                        ),
+                    ]
+                )
+            )
+            ->values()
+            ->all();
+
+        if ($schemaProperties !== []) {
+            $productSchema['additionalProperty'] =
+                $schemaProperties;
+        }
+    @endphp
+
+    @section('structured_data')
+        <script type="application/ld+json">
+            @json($productSchema)
+        </script>
+    @endsection
+@endif
+
 @section('content')
     @php
         $gallery = $revision

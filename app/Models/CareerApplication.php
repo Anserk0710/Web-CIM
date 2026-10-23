@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\ApplicationStatus;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CareerApplication extends BaseModel
 {
@@ -31,6 +33,12 @@ class CareerApplication extends BaseModel
         'lock_version',
     ];
 
+    protected $hidden = [
+        'cv_disk',
+        'cv_path',
+        'cv_sha256',
+    ];
+
     protected function casts(): array
     {
         return [
@@ -43,5 +51,43 @@ class CareerApplication extends BaseModel
             'anonymized_at' => 'datetime',
             'lock_version' => 'integer',
         ];
+    }
+
+    public function career(): BelongsTo
+    {
+        return $this->belongsTo(
+            Career::class,
+        );
+    }
+
+    public function consentVersion(): BelongsTo
+    {
+        return $this->belongsTo(
+            ConsentVersion::class,
+            'consent_version_id',
+        );
+    }
+
+    public function notes(): HasMany
+    {
+        return $this->hasMany(
+            ApplicationNote::class,
+            'application_id',
+        )->latest('id');
+    }
+
+    public function statusEvents(): HasMany
+    {
+        return $this->hasMany(
+            ApplicationStatusEvent::class,
+            'application_id',
+        )
+            ->orderBy('created_at')
+            ->orderBy('id');
+    }
+
+    public function isAnonymized(): bool
+    {
+        return $this->anonymized_at !== null;
     }
 }

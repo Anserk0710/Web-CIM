@@ -630,6 +630,8 @@ Verify rendered HTML for:
 
 ## Career Application
 
+Catatan implementasi bertahap: route POST `careers.apply` dan `inquiries.store` baru didaftarkan setelah handler beserta workflow terkait tersedia. Sebelum itu, halaman publik menampilkan pemberitahuan formulir belum tersedia; konfigurasi privasi/consent saja tidak mengaktifkan submission.
+
 Public:
 
 - Form.

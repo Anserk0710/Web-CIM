@@ -1,4 +1,4 @@
-<?php
+<?php // path: app/Http/Controllers/PublicSite/SitemapController.php
 
 namespace App\Http\Controllers\PublicSite;
 
@@ -12,8 +12,13 @@ class SitemapController extends Controller
     {
         $products = Product::query()
             ->published()
+            ->whereHas('publishedRevision')
+            ->with(
+                'publishedRevision:id,product_id,updated_at',
+            )
             ->orderBy('id')
             ->get([
+                'id',
                 'public_slug',
                 'updated_at',
             ]);
@@ -28,6 +33,10 @@ class SitemapController extends Controller
             ->header(
                 'Content-Type',
                 'application/xml; charset=UTF-8',
+            )
+            ->header(
+                'X-Content-Type-Options',
+                'nosniff',
             );
     }
 }

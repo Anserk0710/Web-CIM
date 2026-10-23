@@ -1,9 +1,13 @@
 <?php
 
+// path: app/Models/Inquiry.php
+
 namespace App\Models;
 
 use App\Enums\InquiryStatus;
 use App\Enums\InquiryType;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Inquiry extends BaseModel
 {
@@ -34,5 +38,33 @@ class Inquiry extends BaseModel
             'anonymized_at' => 'datetime',
             'lock_version' => 'integer',
         ];
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
+    }
+
+    public function ecatalogEntry(): BelongsTo
+    {
+        return $this->belongsTo(
+            EcatalogEntry::class,
+            'ecatalog_entry_id',
+        );
+    }
+
+    public function notes(): HasMany
+    {
+        return $this->hasMany(
+            InquiryNote::class,
+            'inquiry_id',
+        )
+            ->latest('created_at')
+            ->latest('id');
+    }
+
+    public function isAnonymized(): bool
+    {
+        return $this->anonymized_at !== null;
     }
 }

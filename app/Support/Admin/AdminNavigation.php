@@ -48,6 +48,18 @@ class AdminNavigation
             ],
 
             [
+                'label' => 'Applications',
+                'href' => '/admin/applications',
+                'ability' => 'application.read',
+            ],
+
+            [
+                'label' => 'Inquiries',
+                'href' => '/admin/inquiries',
+                'ability' => 'inquiry.read',
+            ],
+
+            [
                 'label' => 'Taxonomies',
                 'href' => '/admin/taxonomies',
                 'ability' => 'taxonomy.read',
@@ -81,6 +93,12 @@ class AdminNavigation
                 'label' => 'Audit',
                 'href' => '/admin/audit',
                 'ability' => 'audit.read',
+            ],
+
+            [
+                'label' => 'Operational Notifications',
+                'href' => '/admin/operations/notifications',
+                'ability' => 'notification.read',
             ],
         ];
 

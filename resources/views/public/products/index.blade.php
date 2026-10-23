@@ -9,6 +9,54 @@
 
 @section('canonical', route('products.index'))
 
+@section('structured_data')
+    @php
+        $productListSchema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'ItemList',
+
+            'itemListElement' => $products
+                ->getCollection()
+                ->values()
+                ->map(
+                    function ($product, $index) use ($products) {
+                        $revision = $product->publishedRevision;
+
+                        if (
+                            $revision === null
+                            || !$product->public_slug
+                        ) {
+                            return null;
+                        }
+
+                        return [
+                            '@type' => 'ListItem',
+
+                            'position' => (
+                                ($products->currentPage() - 1)
+                                * $products->perPage()
+                            ) + $index + 1,
+
+                            'name' => $revision->name,
+
+                            'url' => route(
+                                'products.show',
+                                $product->public_slug,
+                            ),
+                        ];
+                    }
+                )
+                ->filter()
+                ->values()
+                ->all(),
+        ];
+    @endphp
+
+    <script type="application/ld+json">
+        @json($productListSchema)
+    </script>
+@endsection
+
 @section('content')
     <section class="border-b bg-cim-ice/40">
         <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">

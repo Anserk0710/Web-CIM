@@ -10,7 +10,10 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\CareerController;
 use App\Http\Controllers\Admin\EcatalogController;
+use App\Http\Controllers\Admin\InquiryController;
+use App\Http\Controllers\Admin\InquiryWorkflowController;
 use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\NotificationOutboxController;
 use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductPreviewController;
@@ -582,4 +585,41 @@ Route::prefix('admin')
                 'show',
             ],
         )->name('admin.audit.show');
+
+        Route::get(
+            '/inquiries/export',
+            [InquiryController::class, 'export'],
+        )->name('admin.inquiries.export');
+
+        Route::get(
+            '/inquiries',
+            [InquiryController::class, 'index'],
+        )->name('admin.inquiries.index');
+
+        Route::get(
+            '/inquiries/{inquiry}',
+            [InquiryController::class, 'show'],
+        )->name('admin.inquiries.show');
+
+        Route::post(
+            '/inquiries/{inquiry}/status',
+            [InquiryWorkflowController::class, 'status'],
+        )->name('admin.inquiries.status');
+
+        Route::post(
+            '/inquiries/{inquiry}/notes',
+            [InquiryWorkflowController::class, 'note'],
+        )->name('admin.inquiries.notes');
+
+        Route::get(
+            '/operations/notifications',
+            [NotificationOutboxController::class, 'index'],
+        )->name('admin.operations.notifications.index');
+
+        Route::post(
+            '/operations/notifications/{notification}/retry',
+            [NotificationOutboxController::class, 'retry'],
+        )->name('admin.operations.notifications.retry');
     });
+
+require __DIR__.'/admin-applications.php';

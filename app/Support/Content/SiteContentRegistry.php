@@ -29,19 +29,50 @@ final class SiteContentRegistry
         return [
             'HOME' => [
                 'hero',
+                'metrics',
                 'capabilities',
                 'lifecycle',
+                'featured_products',
+                'coverage',
+                'activity_preview',
+                'cta',
             ],
 
             'COMPANY' => [
                 'hero',
+                'story',
+                'metrics',
+                'vision_mission',
                 'values',
                 'milestones',
+                'coverage',
+                'cta',
+            ],
+
+            'PRODUCTS' => [
+                'hero',
+            ],
+
+            'ECATALOG' => [
+                'hero',
+            ],
+
+            'ACTIVITY' => [
+                'hero',
             ],
 
             'CAREER' => [
                 'hero',
                 'career_branding',
+            ],
+
+            'CONTACT' => [
+                'hero',
+                'contact_intro',
+            ],
+
+            'PRIVACY' => [
+                'policy',
             ],
         ];
     }

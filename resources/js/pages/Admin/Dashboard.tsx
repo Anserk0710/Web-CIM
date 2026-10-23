@@ -19,61 +19,58 @@ export default function Dashboard({
 }: DashboardProps) {
     return (
         <>
-            <Head title="CMS Dashboard" />
+            <Head title="Dasbor CMS - PT Cahya Intan Medika" />
 
             <AdminLayout>
                 <section>
                     <p className="text-sm font-semibold text-cim-blue">
-                        {phase}
+                        Panel Kelola & Manajemen Konten
                     </p>
 
                     <h1 className="mt-2 text-3xl font-bold tracking-tight text-cim-navy">
-                        Security Foundation
+                        Selamat Datang di Panel CMS CIM
                     </h1>
 
                     <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-                        Dashboard hanya menampilkan surface
-                        yang diizinkan. Counts domain pribadi
-                        tidak dikirim pada Phase 2.
+                        Kelola katalog produk alat kesehatan, buku e-katalog, informasi lowongan kerja,
+                        pesan pertanyaan masuk, serta artikel kegiatan perusahaan dalam satu sistem terpadu yang aman.
                     </p>
 
                     <div className="mt-8 grid gap-4 md:grid-cols-3">
                         <article className="rounded-xl border bg-background p-5">
                             <UserCheck className="size-5 text-cim-blue" />
 
-                            <h2 className="mt-4 font-semibold">
-                                Authentication
+                            <h2 className="mt-4 font-semibold text-cim-navy">
+                                Keamanan & Akses Akun
                             </h2>
 
                             <p className="mt-2 text-sm text-muted-foreground">
-                                Login, logout, reset dan change
-                                password aktif.
+                                Akses sistem terlindungi dengan autentikasi ganda, pengelolaan kata sandi,
+                                dan perlindungan sesi pengguna.
                             </p>
                         </article>
 
                         <article className="rounded-xl border bg-background p-5">
                             <ShieldCheck className="size-5 text-cim-blue" />
 
-                            <h2 className="mt-4 font-semibold">
-                                RBAC
+                            <h2 className="mt-4 font-semibold text-cim-navy">
+                                Pengaturan Peran Staf
                             </h2>
 
                             <p className="mt-2 text-sm text-muted-foreground">
-                                Authorization server-side
-                                deny-by-default.
+                                Hak akses setiap pengguna dibatasi secara otomatis sesuai wewenang dan tanggung jawab kerja.
                             </p>
                         </article>
 
                         <article className="rounded-xl border bg-background p-5">
                             <KeyRound className="size-5 text-cim-blue" />
 
-                            <h2 className="mt-4 font-semibold">
-                                Audit
+                            <h2 className="mt-4 font-semibold text-cim-navy">
+                                Riwayat & Catatan Aktivitas
                             </h2>
 
                             <p className="mt-2 text-sm text-muted-foreground">
-                                Mutation sensitif memiliki
-                                audit trail append-only.
+                                Setiap perubahan penting pada data tercatat otomatis untuk menjaga transparansi dan keamanan informasi.
                             </p>
                         </article>
                     </div>

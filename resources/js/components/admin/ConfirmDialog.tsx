@@ -18,8 +18,8 @@ export function ConfirmDialog({
     open,
     title,
     description,
-    confirmLabel = 'Confirm',
-    cancelLabel = 'Cancel',
+    confirmLabel = 'Konfirmasi',
+    cancelLabel = 'Batal',
     destructive = false,
     busy = false,
     onConfirm,
@@ -84,7 +84,7 @@ export function ConfirmDialog({
                         disabled={busy}
                     >
                         {busy
-                            ? 'Processing...'
+                            ? 'Memproses...'
                             : confirmLabel}
                     </Button>
                 </div>

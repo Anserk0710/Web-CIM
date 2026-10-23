@@ -46,7 +46,7 @@ class ForgotPasswordController extends Controller
 
         return back()->with(
             'status',
-            'Jika alamat email terdaftar dan aktif, tautan reset password telah dikirim.',
+            'Jika alamat email terdaftar dan aktif di sistem, tautan atur ulang kata sandi telah dikirimkan ke email Anda.',
         );
     }
 }

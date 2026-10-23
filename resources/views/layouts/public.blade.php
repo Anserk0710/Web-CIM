@@ -103,7 +103,7 @@
                     @if(request()->routeIs('home')) aria-current="page" @endif
                     class="{{ request()->routeIs('home') ? 'text-cim-blue' : 'text-slate-700 hover:text-cim-blue' }}"
                 >
-                    Home
+                    Beranda
                 </a>
 
                 <a
@@ -111,7 +111,7 @@
                     @if(request()->routeIs('company')) aria-current="page" @endif
                     class="{{ request()->routeIs('company') ? 'text-cim-blue' : 'text-slate-700 hover:text-cim-blue' }}"
                 >
-                    Company
+                    Profil Perusahaan
                 </a>
 
                 <a
@@ -119,7 +119,7 @@
                     @if(request()->routeIs('products.*')) aria-current="page" @endif
                     class="{{ request()->routeIs('products.*') ? 'text-cim-blue' : 'text-slate-700 hover:text-cim-blue' }}"
                 >
-                    Products
+                    Produk
                 </a>
 
                 <a
@@ -127,7 +127,7 @@
                     @if(request()->routeIs('ecatalog.*')) aria-current="page" @endif
                     class="{{ request()->routeIs('ecatalog.*') ? 'text-cim-blue' : 'text-slate-700 hover:text-cim-blue' }}"
                 >
-                    E-Catalog
+                    E-Katalog
                 </a>
 
                 <a
@@ -135,7 +135,7 @@
                     @if(request()->routeIs('activities.*')) aria-current="page" @endif
                     class="{{ request()->routeIs('activities.*') ? 'text-cim-blue' : 'text-slate-700 hover:text-cim-blue' }}"
                 >
-                    Activity
+                    Kegiatan & Berita
                 </a>
 
                 <a
@@ -143,7 +143,7 @@
                     @if(request()->routeIs('careers.*')) aria-current="page" @endif
                     class="{{ request()->routeIs('careers.*') ? 'text-cim-blue' : 'text-slate-700 hover:text-cim-blue' }}"
                 >
-                    Career
+                    Karir
                 </a>
             </nav>
 
@@ -152,7 +152,7 @@
                     href="{{ route('contact') }}"
                     class="inline-flex items-center justify-center rounded-lg bg-cim-navy px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-cim-blue"
                 >
-                    Contact Us
+                    Hubungi Kami
                 </a>
             </div>
 
@@ -185,17 +185,17 @@
             class="border-t border-border bg-white px-4 py-4 lg:hidden"
         >
             <div class="mx-auto flex max-w-7xl flex-col gap-1">
-                <a href="{{ route('home') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">Home</a>
-                <a href="{{ route('company') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">Company</a>
-                <a href="{{ route('products.index') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">Products</a>
-                <a href="{{ route('ecatalog.public.index') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">E-Catalog</a>
-                <a href="{{ route('activities.index') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">Activity</a>
-                <a href="{{ route('careers.index') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">Career</a>
+                <a href="{{ route('home') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">Beranda</a>
+                <a href="{{ route('company') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">Profil Perusahaan</a>
+                <a href="{{ route('products.index') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">Produk</a>
+                <a href="{{ route('ecatalog.public.index') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">E-Katalog</a>
+                <a href="{{ route('activities.index') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">Kegiatan & Berita</a>
+                <a href="{{ route('careers.index') }}" class="rounded-lg px-4 py-3 hover:bg-cim-ice/40">Karir</a>
                 <a
                     href="{{ route('contact') }}"
                     class="mt-2 rounded-lg bg-cim-navy px-4 py-3 text-center font-semibold text-white hover:bg-cim-blue"
                 >
-                    Contact Us
+                    Hubungi Kami
                 </a>
             </div>
         </nav>
@@ -223,18 +223,18 @@
                 <h2 class="font-semibold text-cim-navy">Navigasi</h2>
 
                 <ul class="mt-3 space-y-2 text-sm text-slate-600">
-                    <li><a class="hover:text-cim-blue" href="{{ route('company') }}">Company</a></li>
-                    <li><a class="hover:text-cim-blue" href="{{ route('products.index') }}">Products</a></li>
-                    <li><a class="hover:text-cim-blue" href="{{ route('ecatalog.public.index') }}">E-Catalog</a></li>
-                    <li><a class="hover:text-cim-blue" href="{{ route('activities.index') }}">Activity</a></li>
-                    <li><a class="hover:text-cim-blue" href="{{ route('careers.index') }}">Career</a></li>
-                    <li><a class="hover:text-cim-blue" href="{{ route('contact') }}">Contact</a></li>
-                    <li><a class="hover:text-cim-blue" href="{{ route('privacy') }}">Privacy Policy</a></li>
+                    <li><a class="hover:text-cim-blue" href="{{ route('company') }}">Profil Perusahaan</a></li>
+                    <li><a class="hover:text-cim-blue" href="{{ route('products.index') }}">Produk</a></li>
+                    <li><a class="hover:text-cim-blue" href="{{ route('ecatalog.public.index') }}">E-Katalog</a></li>
+                    <li><a class="hover:text-cim-blue" href="{{ route('activities.index') }}">Kegiatan & Berita</a></li>
+                    <li><a class="hover:text-cim-blue" href="{{ route('careers.index') }}">Karir</a></li>
+                    <li><a class="hover:text-cim-blue" href="{{ route('contact') }}">Hubungi Kami</a></li>
+                    <li><a class="hover:text-cim-blue" href="{{ route('privacy') }}">Kebijakan Privasi</a></li>
                 </ul>
             </section>
 
             <section>
-                <h2 class="font-semibold text-cim-navy">Contact</h2>
+                <h2 class="font-semibold text-cim-navy">Kontak</h2>
 
                 <ul class="mt-3 space-y-2 text-sm text-slate-600">
                     @if(data_get($publicSite, 'contact.email'))
@@ -290,7 +290,7 @@
                 </p>
 
                 <a href="{{ route('privacy') }}" class="hover:text-cim-blue">
-                    Privacy Policy
+                    Kebijakan Privasi
                 </a>
             </div>
         </div>

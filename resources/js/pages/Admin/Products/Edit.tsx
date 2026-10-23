@@ -17,6 +17,10 @@ import {
     ProductForm,
 } from '@/components/products/ProductForm';
 
+import {
+    humanizeStatus,
+} from '@/lib/humanize';
+
 import AdminLayout from '@/layouts/AdminLayout';
 
 import {
@@ -90,12 +94,12 @@ export default function Edit({
 
     return (
         <>
-            <Head title={`Edit ${form.name}`} />
+            <Head title={`Kelola ${form.name}`} />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Products',
+                        label: 'Produk',
                         href: '/admin/products',
                     },
                     {
@@ -105,15 +109,15 @@ export default function Edit({
             >
                 <PageHeader
                     title={form.name}
-                    description={`Status: ${product.status}`}
+                    description={`Status Publikasi: ${humanizeStatus(product.status)}`}
                     actions={(
                         <div className="flex flex-wrap gap-2">
                             <Link
                                 href={`/admin/products/${product.id}/preview`}
                                 target="_blank"
-                                className="inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium"
+                                className="inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium hover:bg-muted"
                             >
-                                Preview WORKING
+                                Pratinjau Draf
                             </Link>
 
                             {product.public_url && (
@@ -123,9 +127,9 @@ export default function Edit({
                                     }
                                     target="_blank"
                                     rel="noopener"
-                                    className="inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium"
+                                    className="inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium hover:bg-muted"
                                 >
-                                    Open live
+                                    Lihat di Website
                                 </a>
                             )}
 
@@ -134,7 +138,7 @@ export default function Edit({
                                     type="button"
                                     onClick={publish}
                                 >
-                                    Publish
+                                    Terbitkan
                                 </Button>
                             )}
 
@@ -148,7 +152,7 @@ export default function Edit({
                                             unpublish
                                         }
                                     >
-                                        Unpublish
+                                        Tarik dari Publikasi
                                     </Button>
                                 )}
 
@@ -158,7 +162,7 @@ export default function Edit({
                                     variant="outline"
                                     onClick={archive}
                                 >
-                                    Archive
+                                    Arsipkan
                                 </Button>
                             )}
                         </div>
@@ -181,7 +185,7 @@ export default function Edit({
                     options={options}
                     action={`/admin/products/${product.id}`}
                     method="put"
-                    submitLabel="Save draft"
+                    submitLabel="Simpan Perubahan Draf"
                 />
             </AdminLayout>
         </>

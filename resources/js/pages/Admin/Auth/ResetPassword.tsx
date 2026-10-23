@@ -44,13 +44,17 @@ export default function ResetPassword({
 
     return (
         <>
-            <Head title="Reset Password" />
+            <Head title="Buat Kata Sandi Baru" />
 
             <AuthLayout>
                 <section className="rounded-2xl border bg-background p-6 shadow-sm sm:p-8">
                     <h1 className="text-2xl font-bold text-cim-navy">
-                        Buat password baru
+                        Buat Kata Sandi Baru
                     </h1>
+
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                        Silakan tentukan kata sandi baru yang kuat dan aman untuk akun Anda.
+                    </p>
 
                     <form
                         onSubmit={submit}
@@ -61,7 +65,7 @@ export default function ResetPassword({
                                 htmlFor="email"
                                 className="mb-2 block text-sm font-medium"
                             >
-                                Email
+                                Alamat Email
                             </label>
 
                             <input
@@ -72,7 +76,7 @@ export default function ResetPassword({
                                     'email',
                                     event.target.value,
                                 )}
-                                className="w-full rounded-lg border border-input px-3 py-2"
+                                className="w-full rounded-lg border border-input px-3 py-2 text-sm"
                                 required
                             />
 
@@ -88,7 +92,7 @@ export default function ResetPassword({
                                 htmlFor="password"
                                 className="mb-2 block text-sm font-medium"
                             >
-                                Password baru
+                                Kata Sandi Baru
                             </label>
 
                             <input
@@ -100,9 +104,15 @@ export default function ResetPassword({
                                     'password',
                                     event.target.value,
                                 )}
-                                className="w-full rounded-lg border border-input px-3 py-2"
+                                className="w-full rounded-lg border border-input px-3 py-2 text-sm"
                                 required
                             />
+
+                            {form.errors.password && (
+                                <p className="mt-2 text-sm text-destructive">
+                                    {form.errors.password}
+                                </p>
+                            )}
                         </div>
 
                         <div>
@@ -110,7 +120,7 @@ export default function ResetPassword({
                                 htmlFor="password_confirmation"
                                 className="mb-2 block text-sm font-medium"
                             >
-                                Konfirmasi password
+                                Ulangi Kata Sandi Baru
                             </label>
 
                             <input
@@ -125,7 +135,7 @@ export default function ResetPassword({
                                     'password_confirmation',
                                     event.target.value,
                                 )}
-                                className="w-full rounded-lg border border-input px-3 py-2"
+                                className="w-full rounded-lg border border-input px-3 py-2 text-sm"
                                 required
                             />
                         </div>
@@ -135,7 +145,7 @@ export default function ResetPassword({
                             className="w-full"
                             disabled={form.processing}
                         >
-                            Simpan password baru
+                            {form.processing ? 'Menyimpan...' : 'Simpan Kata Sandi Baru'}
                         </Button>
                     </form>
                 </section>

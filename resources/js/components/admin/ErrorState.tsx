@@ -4,7 +4,7 @@ type Props = {
 };
 
 export function ErrorState({
-    title = 'Something Went Wrong',
+    title = 'Terjadi Kesalahan',
     message,
 }: Props) {
     return (

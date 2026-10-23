@@ -33,7 +33,7 @@ class ProductPublicationController extends Controller
 
         return back()->with(
             'success',
-            'Product berhasil dipublish.',
+            'Produk berhasil diterbitkan ke situs web.',
         );
     }
 
@@ -57,7 +57,7 @@ class ProductPublicationController extends Controller
 
         return back()->with(
             'success',
-            'Product berhasil di-unpublish.',
+            'Produk berhasil dikembalikan ke status draf.',
         );
     }
 
@@ -81,7 +81,7 @@ class ProductPublicationController extends Controller
 
         return back()->with(
             'success',
-            'Product berhasil diarsipkan.',
+            'Produk berhasil diarsipkan.',
         );
     }
 }

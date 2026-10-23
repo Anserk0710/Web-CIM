@@ -86,7 +86,7 @@ class ActivityCategoryController extends Controller
 
         return back()->with(
             'success',
-            'Activity category dibuat.',
+            'Kategori kegiatan berhasil ditambahkan.',
         );
     }
 
@@ -147,7 +147,7 @@ class ActivityCategoryController extends Controller
                     ]
                 ) {
                     throw ValidationException::withMessages([
-                        'lock_version' => 'Category telah berubah.',
+                        'lock_version' => 'Data kategori telah diperbarui oleh pengguna lain.',
                     ]);
                 }
 
@@ -177,7 +177,7 @@ class ActivityCategoryController extends Controller
 
         return back()->with(
             'success',
-            'Activity category diperbarui.',
+            'Kategori kegiatan berhasil diperbarui.',
         );
     }
 }

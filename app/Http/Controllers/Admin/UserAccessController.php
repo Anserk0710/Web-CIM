@@ -28,7 +28,7 @@ class UserAccessController extends Controller
 
         return back()->with(
             'success',
-            'Status user berhasil diperbarui.',
+            'Status keaktifan pengguna berhasil diperbarui.',
         );
     }
 }

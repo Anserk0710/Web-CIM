@@ -41,16 +41,26 @@ export default function ChangePassword() {
 
     return (
         <>
-            <Head title="Ganti Password" />
+            <Head title="Ganti Kata Sandi" />
 
-            <AdminLayout>
-                <section className="max-w-xl rounded-2xl border bg-background p-6">
+            <AdminLayout
+                breadcrumbs={[
+                    {
+                        label: 'Ganti Kata Sandi',
+                    },
+                ]}
+            >
+                <section className="max-w-xl rounded-2xl border bg-background p-6 shadow-sm">
                     <h1 className="text-2xl font-bold text-cim-navy">
-                        Ganti password
+                        Ganti Kata Sandi Akun
                     </h1>
 
+                    <p className="mt-1 text-sm text-muted-foreground">
+                        Pastikan menggunakan kombinasi kata sandi yang aman untuk melindungi akses akun pengelola Anda.
+                    </p>
+
                     {flash.success && (
-                        <div className="mt-5 rounded-lg bg-cim-ice p-3 text-sm text-cim-navy">
+                        <div className="mt-5 rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-900">
                             {flash.success}
                         </div>
                     )}
@@ -64,7 +74,7 @@ export default function ChangePassword() {
                                 htmlFor="current_password"
                                 className="mb-2 block text-sm font-medium"
                             >
-                                Password saat ini
+                                Kata Sandi Saat Ini
                             </label>
 
                             <input
@@ -78,7 +88,8 @@ export default function ChangePassword() {
                                     'current_password',
                                     event.target.value,
                                 )}
-                                className="w-full rounded-lg border border-input px-3 py-2"
+                                className="w-full rounded-lg border border-input px-3 py-2 text-sm"
+                                required
                             />
 
                             {form.errors.current_password && (
@@ -96,7 +107,7 @@ export default function ChangePassword() {
                                 htmlFor="password"
                                 className="mb-2 block text-sm font-medium"
                             >
-                                Password baru
+                                Kata Sandi Baru
                             </label>
 
                             <input
@@ -107,8 +118,15 @@ export default function ChangePassword() {
                                     'password',
                                     event.target.value,
                                 )}
-                                className="w-full rounded-lg border border-input px-3 py-2"
+                                className="w-full rounded-lg border border-input px-3 py-2 text-sm"
+                                required
                             />
+
+                            {form.errors.password && (
+                                <p className="mt-2 text-sm text-destructive">
+                                    {form.errors.password}
+                                </p>
+                            )}
                         </div>
 
                         <div>
@@ -116,7 +134,7 @@ export default function ChangePassword() {
                                 htmlFor="password_confirmation"
                                 className="mb-2 block text-sm font-medium"
                             >
-                                Konfirmasi password
+                                Ulangi Kata Sandi Baru
                             </label>
 
                             <input
@@ -130,7 +148,8 @@ export default function ChangePassword() {
                                     'password_confirmation',
                                     event.target.value,
                                 )}
-                                className="w-full rounded-lg border border-input px-3 py-2"
+                                className="w-full rounded-lg border border-input px-3 py-2 text-sm"
+                                required
                             />
                         </div>
 
@@ -138,7 +157,7 @@ export default function ChangePassword() {
                             type="submit"
                             disabled={form.processing}
                         >
-                            Simpan password
+                            {form.processing ? 'Menyimpan...' : 'Perbarui Kata Sandi'}
                         </Button>
                     </form>
                 </section>

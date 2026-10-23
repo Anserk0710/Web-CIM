@@ -18,85 +18,85 @@ class AdminNavigation
 
         $items = [
             [
-                'label' => 'Dashboard',
+                'label' => 'Dasbor',
                 'href' => '/admin',
                 'ability' => 'access-admin',
             ],
 
             [
-                'label' => 'Products',
+                'label' => 'Produk',
                 'href' => '/admin/products',
                 'ability' => 'product.read',
             ],
 
             [
-                'label' => 'E-Catalog',
+                'label' => 'E-Katalog',
                 'href' => '/admin/ecatalog',
                 'ability' => 'ecatalog.read',
             ],
 
             [
-                'label' => 'Activities',
+                'label' => 'Berita & Kegiatan',
                 'href' => '/admin/activities',
                 'ability' => 'activity.read',
             ],
 
             [
-                'label' => 'Careers',
+                'label' => 'Karir & Lowongan',
                 'href' => '/admin/careers',
                 'ability' => 'career.read',
             ],
 
             [
-                'label' => 'Applications',
+                'label' => 'Lamaran Masuk',
                 'href' => '/admin/applications',
                 'ability' => 'application.read',
             ],
 
             [
-                'label' => 'Inquiries',
+                'label' => 'Pesan Masuk',
                 'href' => '/admin/inquiries',
                 'ability' => 'inquiry.read',
             ],
 
             [
-                'label' => 'Taxonomies',
+                'label' => 'Kategori Produk',
                 'href' => '/admin/taxonomies',
                 'ability' => 'taxonomy.read',
             ],
 
             [
-                'label' => 'Media',
+                'label' => 'Galeri Media',
                 'href' => '/admin/media',
                 'ability' => 'media.read',
             ],
 
             [
-                'label' => 'Settings',
+                'label' => 'Pengaturan Situs',
                 'href' => '/admin/settings',
                 'ability' => 'settings.read',
             ],
 
             [
-                'label' => 'Users',
+                'label' => 'Pengguna',
                 'href' => '/admin/users',
                 'ability' => 'user.read',
             ],
 
             [
-                'label' => 'Roles',
+                'label' => 'Peran & Hak Akses',
                 'href' => '/admin/roles',
                 'ability' => 'role.read',
             ],
 
             [
-                'label' => 'Audit',
+                'label' => 'Catatan Aktivitas',
                 'href' => '/admin/audit',
                 'ability' => 'audit.read',
             ],
 
             [
-                'label' => 'Operational Notifications',
+                'label' => 'Notifikasi Operasional',
                 'href' => '/admin/operations/notifications',
                 'ability' => 'notification.read',
             ],

@@ -40,7 +40,7 @@ class InquiryWorkflowController extends Controller
 
         return back()->with(
             'success',
-            'Status inquiry berhasil diperbarui.',
+            'Status tindak lanjut pesan berhasil diperbarui.',
         );
     }
 
@@ -65,7 +65,7 @@ class InquiryWorkflowController extends Controller
 
         return back()->with(
             'success',
-            'Internal note berhasil ditambahkan.',
+            'Catatan internal berhasil ditambahkan.',
         );
     }
 }

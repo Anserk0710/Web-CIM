@@ -11,6 +11,12 @@ import {
 } from '@/components/admin/PageHeader';
 
 import AdminLayout from '@/layouts/AdminLayout';
+import {
+    formatIndonesianDate,
+    humanizeEntity,
+    humanizeEvent,
+    humanizeStatus,
+} from '@/lib/humanize';
 
 type NotificationRow = {
     id: number;
@@ -42,23 +48,6 @@ type Props = {
     };
     canRetry: boolean;
 };
-
-function formatDate(
-    value: string | null,
-): string {
-    if (!value) {
-        return '—';
-    }
-
-    return new Intl.DateTimeFormat(
-        'id-ID',
-        {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-            timeZone: 'Asia/Makassar',
-        },
-    ).format(new Date(value));
-}
 
 function statusClass(
     status: NotificationRow['status'],
@@ -117,27 +106,27 @@ export default function Notifications({
 
     return (
         <>
-            <Head title="Operational Notifications" />
+            <Head title="Pengiriman Notifikasi Email" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Operational Notifications',
+                        label: 'Pengiriman Notifikasi',
                     },
                 ]}
             >
                 <PageHeader
-                    title="Operational Notifications"
-                    description="Monitor email delivery, failed attempts, and manual retries."
+                    title="Pengiriman Notifikasi & Email"
+                    description="Pantau status antrean pengiriman email sistem, percobaan pengiriman, dan kirim ulang jika ada kendala."
                 />
 
                 <div className="my-6 flex flex-wrap gap-2">
                     {[
-                        ['', 'All'],
-                        ['PENDING', 'Pending'],
-                        ['PROCESSING', 'Processing'],
-                        ['SENT', 'Sent'],
-                        ['FAILED', 'Failed'],
+                        ['', 'Semua'],
+                        ['PENDING', 'Menunggu Antrean'],
+                        ['PROCESSING', 'Sedang Dikirim'],
+                        ['SENT', 'Berhasil Terkirim'],
+                        ['FAILED', 'Gagal Dikirim'],
                     ].map(([value, label]) => (
                         <button
                             key={value}
@@ -149,7 +138,7 @@ export default function Notifications({
                                 filterByStatus(value)
                             }
                             className={[
-                                'rounded-lg border px-3 py-2 text-sm font-medium',
+                                'rounded-lg border px-3 py-2 text-sm font-medium transition-colors',
                                 filters.status === value
                                     ? 'border-cim-blue bg-cim-blue text-white'
                                     : 'bg-background hover:bg-muted',
@@ -164,13 +153,13 @@ export default function Notifications({
                     <table className="w-full min-w-[950px] border-collapse text-sm">
                         <thead className="bg-muted/40 text-left">
                             <tr>
-                                <th className="p-3">Event</th>
-                                <th className="p-3">Entity</th>
-                                <th className="p-3">Recipient</th>
-                                <th className="p-3">Status</th>
-                                <th className="p-3">Attempts</th>
-                                <th className="p-3">Updated</th>
-                                <th className="p-3">Action</th>
+                                <th className="p-3">Peristiwa / Notifikasi</th>
+                                <th className="p-3">Data Terkait</th>
+                                <th className="p-3">Penerima Email</th>
+                                <th className="p-3">Status Pengiriman</th>
+                                <th className="p-3">Percobaan</th>
+                                <th className="p-3">Terakhir Diperbarui</th>
+                                <th className="p-3">Tindakan</th>
                             </tr>
                         </thead>
 
@@ -182,58 +171,58 @@ export default function Notifications({
                                         className="border-t align-top"
                                     >
                                         <td className="p-3">
-                                            <p className="font-medium">
-                                                {notification.event_type}
+                                            <p className="font-medium text-cim-navy">
+                                                {humanizeEvent(notification.event_type)}
                                             </p>
 
                                             <p className="mt-1 text-xs text-muted-foreground">
-                                                #{notification.id}
+                                                Nomor antrean: #{notification.id}
                                             </p>
                                         </td>
 
                                         <td className="p-3">
-                                            {notification.entity_type}
+                                            {humanizeEntity(notification.entity_type)}
                                             {' #'}
                                             {notification.entity_id}
                                         </td>
 
-                                        <td className="p-3 break-all">
-                                            {notification.recipient ?? 'Not configured'}
+                                        <td className="p-3 break-all font-mono text-xs">
+                                            {notification.recipient ?? 'Alamat email belum diatur'}
                                         </td>
 
                                         <td className="p-3">
                                             <span
                                                 className={[
-                                                    'inline-flex rounded-full border px-2 py-1 text-xs font-semibold',
+                                                    'inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold',
                                                     statusClass(
                                                         notification.status,
                                                     ),
                                                 ].join(' ')}
                                             >
-                                                {notification.status}
+                                                {humanizeStatus(notification.status)}
                                             </span>
 
                                             {notification.last_error && (
                                                 <p className="mt-2 max-w-xs text-xs text-red-700">
-                                                    {notification.last_error}
+                                                    Kendala: {notification.last_error}
                                                 </p>
                                             )}
                                         </td>
 
                                         <td className="p-3">
-                                            {notification.attempts}
+                                            {notification.attempts} kali
                                         </td>
 
                                         <td className="p-3">
                                             <p>
-                                                {formatDate(
+                                                {formatIndonesianDate(
                                                     notification.last_attempt_at,
                                                 )}
                                             </p>
 
                                             {notification.sent_at && (
                                                 <p className="mt-1 text-xs text-green-700">
-                                                    Sent: {formatDate(
+                                                    Terkirim: {formatIndonesianDate(
                                                         notification.sent_at,
                                                     )}
                                                 </p>
@@ -249,9 +238,9 @@ export default function Notifications({
                                                         onClick={() =>
                                                             retry(notification)
                                                         }
-                                                        className="rounded-lg border border-cim-blue px-3 py-2 text-xs font-semibold text-cim-blue hover:bg-cim-blue hover:text-white"
+                                                        className="rounded-lg border border-cim-blue px-3 py-2 text-xs font-semibold text-cim-blue hover:bg-cim-blue hover:text-white transition-colors"
                                                     >
-                                                        Retry
+                                                        Coba Kirim Ulang
                                                     </button>
                                                 )}
                                         </td>
@@ -265,7 +254,7 @@ export default function Notifications({
                                         colSpan={7}
                                         className="p-10 text-center text-muted-foreground"
                                     >
-                                        No notification records found.
+                                        Belum ada riwayat antrean pengiriman notifikasi yang tercatat.
                                     </td>
                                 </tr>
                             )}
@@ -274,16 +263,16 @@ export default function Notifications({
                 </div>
 
                 <nav
-                    aria-label="Notification pagination"
+                    aria-label="Navigasi halaman notifikasi"
                     className="mt-6 flex items-center justify-between gap-4"
                 >
                     <p className="text-sm text-muted-foreground">
-                        Page {notifications.current_page}
-                        {' of '}
+                        Halaman {notifications.current_page}
+                        {' dari '}
                         {notifications.last_page}
-                        {' · '}
+                        {' · Total '}
                         {notifications.total}
-                        {' records'}
+                        {' data'}
                     </p>
 
                     <div className="flex gap-2">
@@ -293,11 +282,11 @@ export default function Notifications({
                                 preserveScroll
                                 className="rounded-lg border px-4 py-2 text-sm hover:bg-muted"
                             >
-                                Previous
+                                Sebelumnya
                             </Link>
                         ) : (
                             <span className="rounded-lg border px-4 py-2 text-sm opacity-50">
-                                Previous
+                                Sebelumnya
                             </span>
                         )}
 
@@ -307,11 +296,11 @@ export default function Notifications({
                                 preserveScroll
                                 className="rounded-lg border px-4 py-2 text-sm hover:bg-muted"
                             >
-                                Next
+                                Selanjutnya
                             </Link>
                         ) : (
                             <span className="rounded-lg border px-4 py-2 text-sm opacity-50">
-                                Next
+                                Selanjutnya
                             </span>
                         )}
                     </div>
@@ -320,3 +309,4 @@ export default function Notifications({
         </>
     );
 }
+

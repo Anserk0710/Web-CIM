@@ -11,6 +11,10 @@ import {
     PageHeader,
 } from '@/components/admin/PageHeader';
 
+import {
+    humanizeStatus,
+} from '@/lib/humanize';
+
 import AdminLayout from '@/layouts/AdminLayout';
 
 type Product = {
@@ -39,25 +43,25 @@ export default function Index({
 }: Props) {
     return (
         <>
-            <Head title="Products" />
+            <Head title="Katalog Produk" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Products',
+                        label: 'Produk',
                     },
                 ]}
             >
                 <PageHeader
-                    title="Products"
-                    description="WORKING revision terpisah dari konten PUBLISHED yang sedang live."
+                    title="Katalog Produk Medis"
+                    description="Kelola informasi produk, gambar, brosur, dan status penerbitan produk ke situs web."
                     actions={
                         can.create ? (
                             <Link
                                 href="/admin/products/create"
-                                className="inline-flex h-10 items-center rounded-lg bg-cim-blue px-4 text-sm font-semibold text-white"
+                                className="inline-flex h-10 items-center rounded-lg bg-cim-blue px-4 text-sm font-semibold text-white hover:bg-cim-navy"
                             >
-                                Create Product
+                                Tambah Produk Baru
                             </Link>
                         ) : undefined
                     }
@@ -66,8 +70,8 @@ export default function Index({
                 {products.data.length === 0 ? (
                     <div className="mt-8">
                         <EmptyState
-                            title="Belum ada product"
-                            description="Buat product pertama untuk memulai vertical slice."
+                            title="Belum Ada Produk"
+                            description="Silakan tambahkan produk pertama Anda untuk mulai menampilkannya di katalog."
                         />
                     </div>
                 ) : (
@@ -76,19 +80,19 @@ export default function Index({
                             <thead className="border-b bg-muted/50">
                                 <tr>
                                     <th className="px-4 py-3">
-                                        Product
+                                        Nama Produk
                                     </th>
 
                                     <th className="px-4 py-3">
-                                        Status
+                                        Status Publikasi
                                     </th>
 
                                     <th className="px-4 py-3">
-                                        Public slug
+                                        Tautan / Slug Halaman
                                     </th>
 
                                     <th className="px-4 py-3">
-                                        Action
+                                        Aksi
                                     </th>
                                 </tr>
                             </thead>
@@ -104,16 +108,16 @@ export default function Index({
                                         >
                                             <td className="px-4 py-3 font-medium">
                                                 {product.name
-                                                    ?? `#${product.id}`}
+                                                    ?? `Produk #${product.id}`}
                                             </td>
 
                                             <td className="px-4 py-3">
-                                                {
-                                                    product.status
-                                                }
+                                                <span className="inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold">
+                                                    {humanizeStatus(product.status)}
+                                                </span>
                                             </td>
 
-                                            <td className="px-4 py-3">
+                                            <td className="px-4 py-3 text-muted-foreground">
                                                 {product.public_slug
                                                     ?? '—'}
                                             </td>
@@ -121,9 +125,9 @@ export default function Index({
                                             <td className="px-4 py-3">
                                                 <Link
                                                     href={`/admin/products/${product.id}/edit`}
-                                                    className="font-medium text-cim-blue"
+                                                    className="font-medium text-cim-blue hover:text-cim-navy"
                                                 >
-                                                    Edit
+                                                    Kelola & Edit
                                                 </Link>
                                             </td>
                                         </tr>

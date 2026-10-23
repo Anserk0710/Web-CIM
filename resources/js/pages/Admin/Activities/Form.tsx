@@ -28,6 +28,9 @@ import {
 } from '@/components/ui/button';
 
 import AdminLayout from '@/layouts/AdminLayout';
+import {
+    humanizeStatus,
+} from '@/lib/humanize';
 
 type Option = {
     id: number;
@@ -105,34 +108,34 @@ export default function Form({
             <Head
                 title={
                     activity
-                        ? 'Edit Activity'
-                        : 'Create Activity'
+                        ? 'Ubah Berita & Kegiatan'
+                        : 'Tulis Berita & Kegiatan Baru'
                 }
             />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Activities',
+                        label: 'Berita & Kegiatan',
                         href: '/admin/activities',
                     },
                     {
                         label: activity
-                            ? 'Edit'
-                            : 'Create',
+                            ? 'Ubah'
+                            : 'Tulis Baru',
                     },
                 ]}
             >
                 <PageHeader
                     title={
                         activity
-                            ? 'Edit Activity'
-                            : 'Create Activity'
+                            ? 'Ubah Berita & Kegiatan'
+                            : 'Tulis Berita & Kegiatan Baru'
                     }
                     description={
                         activity
-                            ? `Status: ${activity.status}`
-                            : 'WORKING revision is created first.'
+                            ? `Status Saat Ini: ${humanizeStatus(activity.status)}`
+                            : 'Draf artikel akan disimpan terlebih dahulu sebelum diterbitkan.'
                     }
                     actions={
                         activity && can ? (
@@ -149,7 +152,7 @@ export default function Form({
                                             },
                                         )}
                                     >
-                                        Publish
+                                        Terbitkan
                                     </Button>
                                 )}
 
@@ -166,7 +169,7 @@ export default function Form({
                                             },
                                         )}
                                     >
-                                        Archive
+                                        Arsipkan
                                     </Button>
                                 )}
                             </div>
@@ -181,7 +184,7 @@ export default function Form({
                     <section className="rounded-2xl border bg-background p-6">
                         <div className="grid gap-5 md:grid-cols-2">
                             <FormField
-                                label="Title"
+                                label="Judul Berita / Kegiatan"
                                 htmlFor="title"
                                 error={
                                     form.errors.title
@@ -197,12 +200,13 @@ export default function Form({
                                         'title',
                                         event.target.value,
                                     )}
+                                    placeholder="Tuliskan judul berita atau kegiatan..."
                                     className="w-full rounded-lg border border-input px-3 py-2"
                                 />
                             </FormField>
 
                             <FormField
-                                label="Requested Slug"
+                                label="Tautan Halaman (Slug)"
                                 htmlFor="requested_slug"
                                 error={
                                     form.errors
@@ -220,12 +224,13 @@ export default function Form({
                                         'requested_slug',
                                         event.target.value,
                                     )}
+                                    placeholder="judul-berita-kegiatan"
                                     className="w-full rounded-lg border border-input px-3 py-2"
                                 />
                             </FormField>
 
                             <FormField
-                                label="Category"
+                                label="Kategori Berita"
                                 htmlFor="category_id"
                             >
                                 <select
@@ -248,7 +253,7 @@ export default function Form({
                                     className="w-full rounded-lg border border-input px-3 py-2"
                                 >
                                     <option value="">
-                                        None
+                                        Pilih Kategori (Opsional)
                                     </option>
 
                                     {options.categories.map(
@@ -271,7 +276,7 @@ export default function Form({
                             </FormField>
 
                             <FormField
-                                label="Featured Image"
+                                label="Gambar Utama (Sampul)"
                                 htmlFor="featured_media_id"
                             >
                                 <select
@@ -294,7 +299,7 @@ export default function Form({
                                     className="w-full rounded-lg border border-input px-3 py-2"
                                 >
                                     <option value="">
-                                        None
+                                        Pilih Gambar Sampul (Opsional)
                                     </option>
 
                                     {options.media.map(
@@ -318,7 +323,7 @@ export default function Form({
                         </div>
 
                         <FormField
-                            label="Excerpt"
+                            label="Ringkasan Singkat (Lead)"
                             htmlFor="excerpt"
                         >
                             <textarea
@@ -330,6 +335,7 @@ export default function Form({
                                     'excerpt',
                                     event.target.value,
                                 )}
+                                placeholder="Tuliskan 1-2 kalimat ringkasan pembuka artikel untuk ditampilkan pada daftar berita..."
                                 className="mt-5 min-h-24 w-full rounded-lg border border-input px-3 py-2"
                             />
                         </FormField>
@@ -347,7 +353,7 @@ export default function Form({
                                 )}
                             />
 
-                            Featured Activity
+                            Tampilkan Sebagai Berita Utama / Sorotan di Halaman Depan
                         </label>
                     </section>
 
@@ -363,8 +369,11 @@ export default function Form({
 
                     <section className="rounded-2xl border bg-background p-6">
                         <h2 className="font-semibold text-cim-navy">
-                            Related Products
+                            Produk Terkait
                         </h2>
+                        <p className="mt-1 text-xs text-muted-foreground">
+                            Pilih produk alat kesehatan yang relevan dengan dokumentasi kegiatan ini.
+                        </p>
 
                         <select
                             multiple
@@ -407,12 +416,12 @@ export default function Form({
 
                     <section className="rounded-2xl border bg-background p-6">
                         <h2 className="font-semibold text-cim-navy">
-                            SEO
+                            Pengaturan SEO & Pratinjau Media Sosial
                         </h2>
 
                         <div className="mt-5 grid gap-5 md:grid-cols-2">
                             <FormField
-                                label="SEO Title"
+                                label="Judul Penelusuran (SEO Title)"
                                 htmlFor="seo_title"
                             >
                                 <input
@@ -425,12 +434,13 @@ export default function Form({
                                         'seo_title',
                                         event.target.value,
                                     )}
+                                    placeholder="Judul ringkas untuk hasil pencarian Google"
                                     className="w-full rounded-lg border border-input px-3 py-2"
                                 />
                             </FormField>
 
                             <FormField
-                                label="OG Image"
+                                label="Gambar Pratinjau Media Sosial (OG Image)"
                                 htmlFor="og_media_id"
                             >
                                 <select
@@ -453,7 +463,7 @@ export default function Form({
                                     className="w-full rounded-lg border border-input px-3 py-2"
                                 >
                                     <option value="">
-                                        None
+                                        Pilih Gambar Pratinjau (Opsional)
                                     </option>
 
                                     {options.media.map(
@@ -477,7 +487,7 @@ export default function Form({
                         </div>
 
                         <FormField
-                            label="SEO Description"
+                            label="Deskripsi Penelusuran (Meta Description)"
                             htmlFor="seo_description"
                         >
                             <textarea
@@ -490,6 +500,7 @@ export default function Form({
                                     'seo_description',
                                     event.target.value,
                                 )}
+                                placeholder="Ringkasan informatif 150-160 karakter untuk ditampilkan di hasil pencarian..."
                                 className="mt-5 min-h-24 w-full rounded-lg border border-input px-3 py-2"
                             />
                         </FormField>
@@ -500,7 +511,9 @@ export default function Form({
                             type="submit"
                             disabled={form.processing}
                         >
-                            Save Draft
+                            {form.processing
+                                ? 'Menyimpan...'
+                                : 'Simpan Draf'}
                         </Button>
                     </div>
                 </form>

@@ -49,22 +49,22 @@
                     class="mb-6 rounded-xl border border-red-300 bg-red-50 p-4 text-sm text-red-900"
                 >
                     <p class="font-semibold">
-                        Inquiry belum berhasil dikirim.
+                        Pesan belum berhasil dikirim.
                     </p>
 
                     <p class="mt-1">
-                        Periksa kembali input di bawah. Jika privacy notice berubah, muat ulang halaman.
+                        Silakan periksa kembali data yang dimasukkan di bawah ini.
                     </p>
                 </div>
             @endif
 
-            <div id="contact-form" class="rounded-2xl border bg-background p-6 sm:p-8">
+            <div id="contact-form" class="rounded-2xl border bg-background p-6 sm:p-8 shadow-sm">
                 <h2 class="text-2xl font-bold text-cim-navy">
-                    Send an inquiry
+                    Kirim Pesan & Pertanyaan <span class="sr-only">Send an inquiry</span>
                 </h2>
 
                 <p class="mt-2 text-sm leading-6 text-muted-foreground">
-                    Field bertanda wajib harus diisi. Pilih tipe inquiry yang sesuai agar pesan diarahkan ke tim yang tepat.
+                    Kolom bertanda wajib harus diisi. Pilih jenis kebutuhan Anda agar pesan langsung diarahkan ke tim yang tepat.
                 </p>
 
                 @if(!$privacyReady)
@@ -93,9 +93,9 @@
                         <div>
                             <label
                                 for="type"
-                                class="mb-2 block text-sm font-medium"
+                                class="mb-2 block text-sm font-medium text-foreground"
                             >
-                                Inquiry type
+                                Jenis Pertanyaan / Kebutuhan
                             </label>
 
                             <select
@@ -103,14 +103,14 @@
                                 name="type"
                                 required
                                 data-inquiry-type
-                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5"
+                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm"
                             >
                                 @foreach([
-                                    'GENERAL' => 'General',
-                                    'PRODUCT' => 'Product Inquiry',
-                                    'ECATALOG' => 'E-Catalog',
-                                    'TECHNICAL_SUPPORT' => 'Technical Support',
-                                    'PARTNERSHIP' => 'Partnership',
+                                    'GENERAL' => 'Pertanyaan Umum',
+                                    'PRODUCT' => 'Konsultasi & Penawaran Produk',
+                                    'ECATALOG' => 'Pengadaan Pemerintah / E-Katalog',
+                                    'TECHNICAL_SUPPORT' => 'Layanan & Bantuan Teknis',
+                                    'PARTNERSHIP' => 'Kemitraan & Kerja Sama Bisnis',
                                 ] as $value => $label)
                                     <option
                                         value="{{ $value }}"
@@ -136,9 +136,9 @@
                         >
                             <label
                                 for="product_id"
-                                class="mb-2 block text-sm font-medium"
+                                class="mb-2 block text-sm font-medium text-foreground"
                             >
-                                Product
+                                Pilihan Produk Terkait
                             </label>
 
                             <select
@@ -146,10 +146,10 @@
                                 name="product_id"
                                 data-product-select
                                 disabled
-                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5"
+                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm"
                             >
                                 <option value="">
-                                    Select a product
+                                    Pilih produk medis...
                                 </option>
 
                                 @foreach($products as $product)
@@ -180,9 +180,9 @@
                         >
                             <label
                                 for="ecatalog_entry_id"
-                                class="mb-2 block text-sm font-medium"
+                                class="mb-2 block text-sm font-medium text-foreground"
                             >
-                                E-Catalog
+                                Produk E-Katalog Terkait
                             </label>
 
                             <select
@@ -190,10 +190,10 @@
                                 name="ecatalog_entry_id"
                                 data-ecatalog-select
                                 disabled
-                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5"
+                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm"
                             >
                                 <option value="">
-                                    Select an E-Catalog entry
+                                    Pilih paket pengadaan E-Katalog...
                                 </option>
 
                                 @foreach($catalogs as $catalog)
@@ -237,9 +237,9 @@
                         <div>
                             <label
                                 for="name"
-                                class="mb-2 block text-sm font-medium"
+                                class="mb-2 block text-sm font-medium text-foreground"
                             >
-                                Full name
+                                Nama Lengkap
                             </label>
 
                             <input
@@ -249,7 +249,7 @@
                                 required
                                 maxlength="150"
                                 autocomplete="name"
-                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5"
+                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm"
                             >
 
                             @error('name')
@@ -262,9 +262,9 @@
                         <div>
                             <label
                                 for="email"
-                                class="mb-2 block text-sm font-medium"
+                                class="mb-2 block text-sm font-medium text-foreground"
                             >
-                                Email
+                                Alamat Email
                             </label>
 
                             <input
@@ -275,7 +275,7 @@
                                 required
                                 maxlength="254"
                                 autocomplete="email"
-                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5"
+                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm"
                             >
 
                             @error('email')
@@ -289,9 +289,9 @@
                             <div>
                                 <label
                                     for="phone"
-                                    class="mb-2 block text-sm font-medium"
+                                    class="mb-2 block text-sm font-medium text-foreground"
                                 >
-                                    Phone (optional)
+                                    Nomor Telepon / WhatsApp (Opsional)
                                 </label>
 
                                 <input
@@ -300,7 +300,7 @@
                                     value="{{ old('phone') }}"
                                     maxlength="32"
                                     autocomplete="tel"
-                                    class="w-full rounded-lg border border-input bg-background px-3 py-2.5"
+                                    class="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm"
                                 >
 
                                 @error('phone')
@@ -313,9 +313,9 @@
                             <div>
                                 <label
                                     for="organization"
-                                    class="mb-2 block text-sm font-medium"
+                                    class="mb-2 block text-sm font-medium text-foreground"
                                 >
-                                    Organization (optional)
+                                    Nama Rumah Sakit / Instansi / Perusahaan (Opsional)
                                 </label>
 
                                 <input
@@ -324,7 +324,7 @@
                                     value="{{ old('organization') }}"
                                     maxlength="200"
                                     autocomplete="organization"
-                                    class="w-full rounded-lg border border-input bg-background px-3 py-2.5"
+                                    class="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm"
                                 >
 
                                 @error('organization')
@@ -338,9 +338,9 @@
                         <div>
                             <label
                                 for="message"
-                                class="mb-2 block text-sm font-medium"
+                                class="mb-2 block text-sm font-medium text-foreground"
                             >
-                                Message
+                                Isi Pesan atau Rincian Kebutuhan
                             </label>
 
                             <textarea
@@ -349,7 +349,7 @@
                                 rows="6"
                                 required
                                 maxlength="5000"
-                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5"
+                                class="w-full rounded-lg border border-input bg-background px-3 py-2.5 text-sm"
                             >{{ old('message') }}</textarea>
 
                             @error('message')
@@ -361,7 +361,7 @@
 
                         <section class="rounded-xl bg-muted/50 p-4">
                             <h3 class="text-sm font-semibold text-cim-navy">
-                                Privacy notice
+                                Pemberitahuan Privasi Data
                             </h3>
 
                             <p class="mt-2 whitespace-pre-line text-sm leading-6 text-slate-600">
@@ -369,14 +369,14 @@
                             </p>
 
                             <p class="mt-3 text-xs text-muted-foreground">
-                                Version: {{ $privacyPolicy['version'] }}
+                                Versi Dokumen: {{ $privacyPolicy['version'] }}
                             </p>
 
                             <a
                                 href="{{ route('privacy') }}"
                                 class="mt-2 inline-flex text-sm font-semibold text-cim-blue hover:text-cim-navy"
                             >
-                                Read privacy notice
+                                Baca Kebijakan Privasi Lengkap
                             </a>
                         </section>
 
@@ -391,7 +391,7 @@
                             aria-hidden="true"
                         >
                             <label for="website">
-                                Leave this field empty
+                                Jangan isi kolom ini
                             </label>
 
                             <input
@@ -405,9 +405,9 @@
 
                         <button
                             type="submit"
-                            class="inline-flex rounded-lg bg-cim-blue px-5 py-3 font-semibold text-white hover:bg-cim-navy"
+                            class="inline-flex rounded-lg bg-cim-blue px-5 py-3 font-semibold text-white hover:bg-cim-navy transition-colors"
                         >
-                            Submit inquiry
+                            Kirim Pesan Sekarang <span class="sr-only">Submit inquiry</span>
                         </button>
                     </form>
                 @endif
@@ -415,20 +415,20 @@
         </div>
 
         <aside class="space-y-6">
-            <section class="rounded-2xl border bg-background p-6">
+            <section class="rounded-2xl border bg-background p-6 shadow-sm">
                 <h2 class="text-xl font-bold text-cim-navy">
-                    Contact information
+                    Informasi Kontak Resmi
                 </h2>
 
                 @if(!empty($contactSettings['email']))
                     <div class="mt-5">
                         <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                            Email
+                            Alamat Email
                         </p>
 
                         <a
                             href="mailto:{{ $contactSettings['email'] }}"
-                            class="mt-1 inline-block break-all font-medium text-cim-blue"
+                            class="mt-1 inline-block break-all font-medium text-cim-blue hover:underline"
                         >
                             {{ $contactSettings['email'] }}
                         </a>
@@ -438,12 +438,12 @@
                 @if(!empty($contactSettings['phone']))
                     <div class="mt-5">
                         <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                            Phone
+                            Nomor Telepon
                         </p>
 
                         <a
                             href="tel:{{ $contactSettings['phone'] }}"
-                            class="mt-1 inline-block font-medium text-cim-blue"
+                            class="mt-1 inline-block font-medium text-cim-blue hover:underline"
                         >
                             {{ $contactSettings['phone'] }}
                         </a>
@@ -453,24 +453,24 @@
                 @if(!empty($contactSettings['whatsapp']))
                     <div class="mt-5">
                         <p class="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                            WhatsApp
+                            WhatsApp Layanan
                         </p>
 
                         <a
                             href="https://wa.me/{{ preg_replace('/\D+/', '', $contactSettings['whatsapp']) }}"
                             rel="noopener noreferrer"
-                            class="mt-1 inline-block font-medium text-cim-blue"
+                            class="mt-1 inline-block font-medium text-cim-blue hover:underline"
                         >
-                            Contact via WhatsApp
+                            Kirim Pesan via WhatsApp
                         </a>
                     </div>
                 @endif
             </section>
 
             @if($offices->isNotEmpty())
-                <section class="rounded-2xl border bg-background p-6">
+                <section class="rounded-2xl border bg-background p-6 shadow-sm">
                     <h2 class="text-xl font-bold text-cim-navy">
-                        Our offices
+                        Kantor Operasional Kami
                     </h2>
 
                     <div class="mt-5 space-y-6">
@@ -481,7 +481,7 @@
 
                                     @if($office->is_head_office)
                                         <span class="text-xs font-normal text-muted-foreground">
-                                            (Head Office)
+                                            (Kantor Pusat)
                                         </span>
                                     @endif
                                 </h3>
@@ -491,7 +491,7 @@
                                 </p>
 
                                 @if($office->phone)
-                                    <p class="mt-2 text-sm">
+                                    <p class="mt-2 text-sm text-slate-700">
                                         {{ $office->phone }}
                                     </p>
                                 @endif
@@ -499,7 +499,7 @@
                                 @if($office->email)
                                     <a
                                         href="mailto:{{ $office->email }}"
-                                        class="mt-1 inline-block break-all text-sm text-cim-blue"
+                                        class="mt-1 inline-block break-all text-sm text-cim-blue hover:underline"
                                     >
                                         {{ $office->email }}
                                     </a>
@@ -512,3 +512,4 @@
         </aside>
     </section>
 @endsection
+

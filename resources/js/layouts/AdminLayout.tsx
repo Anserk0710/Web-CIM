@@ -110,7 +110,7 @@ export default function AdminLayout({
                                 aria-hidden="true"
                             />
 
-                            Password
+                            Ubah Kata Sandi
                         </Link>
 
                         <Link
@@ -124,7 +124,7 @@ export default function AdminLayout({
                                 aria-hidden="true"
                             />
 
-                            Logout
+                            Keluar
                         </Link>
                     </nav>
                 </aside>

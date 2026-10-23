@@ -96,7 +96,7 @@ class ProductTaxonomyController extends Controller
 
         return back()->with(
             'success',
-            'Taxonomy berhasil dibuat.',
+            'Klasifikasi produk berhasil ditambahkan.',
         );
     }
 
@@ -163,7 +163,7 @@ class ProductTaxonomyController extends Controller
                     !== (int) $data['lock_version']
                 ) {
                     throw ValidationException::withMessages([
-                        'lock_version' => 'Taxonomy telah diubah oleh user lain.',
+                        'lock_version' => 'Data telah diperbarui oleh pengguna lain. Silakan muat ulang halaman.',
                     ]);
                 }
 
@@ -196,7 +196,7 @@ class ProductTaxonomyController extends Controller
 
         return back()->with(
             'success',
-            'Taxonomy berhasil diperbarui.',
+            'Klasifikasi produk berhasil diperbarui.',
         );
     }
 

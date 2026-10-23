@@ -42,7 +42,7 @@ class CareerApplicationController extends Controller
             )
             ->with(
                 'success',
-                'Lamaran berhasil dikirim. Tim HR akan meninjau data Anda.',
+                'Terima kasih, berkas lamaran Anda berhasil dikirim. Tim rekrutmen kami akan segera meninjau profil Anda.',
             );
     }
 }

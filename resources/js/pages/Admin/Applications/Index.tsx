@@ -18,6 +18,10 @@ import {
 } from '@/components/admin/PageHeader';
 
 import AdminLayout from '@/layouts/AdminLayout';
+import {
+    formatDateTimeIndonesian,
+    humanizeStatus,
+} from '@/lib/humanize';
 
 type CareerOption = {
     id: number;
@@ -59,25 +63,6 @@ type Props = {
     };
 };
 
-function formatDate(
-    value: string | null,
-): string {
-    if (!value) {
-        return '';
-    }
-
-    return new Intl.DateTimeFormat(
-        'id-ID',
-        {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-            timeZone: 'Asia/Makassar',
-        },
-    ).format(
-        new Date(value),
-    );
-}
-
 export default function Index({
     applications,
     careers,
@@ -87,7 +72,7 @@ export default function Index({
     const columns: DataTableColumn<ApplicationRow>[] = [
         {
             key: 'applicant',
-            header: 'Applicant',
+            header: 'Nama Pelamar',
 
             render: (application) => (
                 <div>
@@ -96,12 +81,12 @@ export default function Index({
                         className="font-semibold text-cim-blue hover:text-cim-navy"
                     >
                         {application.full_name
-                            ?? `Application #${application.id}`}
+                            ?? `Berkas Lamaran #${application.id}`}
                     </Link>
 
                     <p className="mt-1 text-xs text-muted-foreground">
                         {application.email
-                            ?? 'Anonymized'}
+                            ?? 'Data telah disamarkan'}
                     </p>
                 </div>
             ),
@@ -109,7 +94,7 @@ export default function Index({
 
         {
             key: 'career',
-            header: 'Career',
+            header: 'Posisi Lowongan',
 
             render: (application) =>
                 application.career.title,
@@ -117,21 +102,21 @@ export default function Index({
 
         {
             key: 'status',
-            header: 'Status',
+            header: 'Status Lamaran',
 
             render: (application) => (
                 <span className="rounded-full border px-2.5 py-1 text-xs font-semibold">
-                    {application.status}
+                    {humanizeStatus(application.status)}
                 </span>
             ),
         },
 
         {
             key: 'submitted',
-            header: 'Submitted',
+            header: 'Tanggal Masuk',
 
             render: (application) =>
-                formatDate(
+                formatDateTimeIndonesian(
                     application.created_at,
                 ),
         },
@@ -173,18 +158,18 @@ export default function Index({
 
     return (
         <>
-            <Head title="Career Applications" />
+            <Head title="Lamaran Masuk" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Applications',
+                        label: 'Lamaran Masuk',
                     },
                 ]}
             >
                 <PageHeader
-                    title="Career Applications"
-                    description="Applicant data is private. CV access requires a separate download permission."
+                    title="Lamaran Masuk"
+                    description="Data pribadi pelamar dijaga kerahasiaannya. Pengunduhan berkas CV membutuhkan izin khusus."
                 />
 
                 <form
@@ -194,7 +179,7 @@ export default function Index({
                     <input
                         name="q"
                         defaultValue={filters.q}
-                        placeholder="Search name or email..."
+                        placeholder="Cari nama pelamar atau alamat email..."
                         maxLength={100}
                         className="rounded-lg border border-input px-3 py-2"
                     />
@@ -205,7 +190,7 @@ export default function Index({
                         className="rounded-lg border border-input px-3 py-2"
                     >
                         <option value="">
-                            All status
+                            Semua Status
                         </option>
 
                         {statuses.map(
@@ -214,7 +199,7 @@ export default function Index({
                                     key={status}
                                     value={status}
                                 >
-                                    {status}
+                                    {humanizeStatus(status)}
                                 </option>
                             ),
                         )}
@@ -229,7 +214,7 @@ export default function Index({
                         className="rounded-lg border border-input px-3 py-2"
                     >
                         <option value="">
-                            All careers
+                            Semua Posisi Lowongan
                         </option>
 
                         {careers.map(
@@ -248,7 +233,7 @@ export default function Index({
                         type="submit"
                         className="rounded-lg bg-cim-blue px-5 py-2 text-sm font-semibold text-white hover:bg-cim-navy"
                     >
-                        Filter
+                        Saring Data
                     </button>
                 </form>
 
@@ -258,22 +243,22 @@ export default function Index({
                     rowKey={(application) =>
                         application.id
                     }
-                    emptyTitle="No applications"
-                    emptyDescription="Belum ada application yang sesuai dengan filter."
+                    emptyTitle="Belum Ada Lamaran Masuk"
+                    emptyDescription="Tidak ada data berkas lamaran yang sesuai dengan kriteria penyaringan."
                 />
 
                 {applications.last_page > 1 && (
                     <nav
-                        aria-label="Application pagination"
+                        aria-label="Paginasi lamaran"
                         className="mt-6 flex items-center justify-between gap-4"
                     >
                         <div className="text-sm text-muted-foreground">
-                            Page {applications.current_page}
-                            {' '}of{' '}
+                            Halaman {applications.current_page}
+                            {' '}dari{' '}
                             {applications.last_page}
-                            {'  '}
+                            {' · Total '}
                             {applications.total}
-                            {' '}applications
+                            {' berkas lamaran'}
                         </div>
 
                         <div className="flex gap-2">
@@ -286,11 +271,11 @@ export default function Index({
                                     preserveScroll
                                     className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
                                 >
-                                    Previous
+                                    Sebelumnya
                                 </Link>
                             ) : (
                                 <span className="rounded-lg border px-4 py-2 text-sm text-muted-foreground opacity-50">
-                                    Previous
+                                    Sebelumnya
                                 </span>
                             )}
 
@@ -303,11 +288,11 @@ export default function Index({
                                     preserveScroll
                                     className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
                                 >
-                                    Next
+                                    Selanjutnya
                                 </Link>
                             ) : (
                                 <span className="rounded-lg border px-4 py-2 text-sm text-muted-foreground opacity-50">
-                                    Next
+                                    Selanjutnya
                                 </span>
                             )}
                         </div>

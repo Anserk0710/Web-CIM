@@ -14,6 +14,9 @@ import {
 } from '@/components/admin/PageHeader';
 
 import AdminLayout from '@/layouts/AdminLayout';
+import {
+    humanizeStatus,
+} from '@/lib/humanize';
 
 type Activity = {
     id: number;
@@ -46,22 +49,22 @@ export default function Index({
     const columns: DataTableColumn<Activity>[] = [
         {
             key: 'title',
-            header: 'Activity',
+            header: 'Judul Berita & Kegiatan',
             render: (activity) => (
                 <Link
                     href={`/admin/activities/${activity.id}/edit`}
-                    className="font-semibold text-cim-blue"
+                    className="font-semibold text-cim-blue hover:text-cim-navy"
                 >
                     {activity
                         .working_revision
                         ?.title
-                        ?? `#${activity.id}`}
+                        ?? `Artikel #${activity.id}`}
                 </Link>
             ),
         },
         {
             key: 'slug',
-            header: 'Requested Slug',
+            header: 'Tautan Slug',
             render: (activity) =>
                 activity
                     .working_revision
@@ -70,41 +73,44 @@ export default function Index({
         },
         {
             key: 'status',
-            header: 'Status',
-            render: (activity) =>
-                activity.status,
+            header: 'Status Publikasi',
+            render: (activity) => (
+                <span className="rounded-full border px-2.5 py-1 text-xs font-semibold">
+                    {humanizeStatus(activity.status)}
+                </span>
+            ),
         },
     ];
 
     return (
         <>
-            <Head title="Activities" />
+            <Head title="Berita & Kegiatan" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Activities',
+                        label: 'Berita & Kegiatan',
                     },
                 ]}
             >
                 <PageHeader
-                    title="Activities"
-                    description="Structured block content dengan WORKING/PUBLISHED revision."
+                    title="Berita & Kegiatan"
+                    description="Kelola publikasi berita, artikel informatif, dan dokumentasi kegiatan PT Cahya Intan Medika."
                     actions={(
                         <div className="flex gap-2">
                             <Link
                                 href="/admin/activities/categories"
-                                className="inline-flex h-10 items-center rounded-lg border px-4 text-sm font-medium"
+                                className="inline-flex h-10 items-center rounded-lg border bg-background px-4 text-sm font-medium hover:bg-muted"
                             >
-                                Categories
+                                Kategori Berita
                             </Link>
 
                             {canCreate && (
                                 <Link
                                     href="/admin/activities/create"
-                                    className="inline-flex h-10 items-center rounded-lg bg-cim-blue px-4 text-sm font-semibold text-white"
+                                    className="inline-flex h-10 items-center rounded-lg bg-cim-blue px-4 text-sm font-semibold text-white hover:bg-cim-navy"
                                 >
-                                    Create Activity
+                                    Tulis Berita Baru
                                 </Link>
                             )}
                         </div>
@@ -143,7 +149,7 @@ export default function Index({
                     <input
                         name="q"
                         defaultValue={filters.q}
-                        placeholder="Search title..."
+                        placeholder="Cari judul berita atau kegiatan..."
                         className="flex-1 rounded-lg border border-input px-3 py-2"
                     />
 
@@ -153,24 +159,27 @@ export default function Index({
                         className="rounded-lg border border-input px-3 py-2"
                     >
                         <option value="">
-                            All
+                            Semua Status
                         </option>
 
                         <option value="DRAFT">
-                            DRAFT
+                            Draf
                         </option>
 
                         <option value="PUBLISHED">
-                            PUBLISHED
+                            Diterbitkan
                         </option>
 
                         <option value="ARCHIVED">
-                            ARCHIVED
+                            Diarsipkan
                         </option>
                     </select>
 
-                    <button className="rounded-lg bg-cim-blue px-5 py-2 text-sm font-semibold text-white">
-                        Filter
+                    <button
+                        type="submit"
+                        className="rounded-lg bg-cim-blue px-5 py-2 text-sm font-semibold text-white hover:bg-cim-navy"
+                    >
+                        Saring Data
                     </button>
                 </form>
 
@@ -180,8 +189,8 @@ export default function Index({
                     rowKey={(activity) =>
                         activity.id
                     }
-                    emptyTitle="Belum ada Activity"
-                    emptyDescription="Buat Activity pertama."
+                    emptyTitle="Belum Ada Berita & Kegiatan"
+                    emptyDescription="Belum ada artikel atau dokumentasi kegiatan yang dibuat."
                 />
             </AdminLayout>
         </>

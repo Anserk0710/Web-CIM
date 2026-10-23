@@ -14,6 +14,10 @@ import {
 } from '@/components/admin/PageHeader';
 
 import AdminLayout from '@/layouts/AdminLayout';
+import {
+    humanizeAvailability,
+    humanizeStatus,
+} from '@/lib/humanize';
 
 type Entry = {
     id: number;
@@ -55,11 +59,11 @@ export default function Index({
     const columns: DataTableColumn<Entry>[] = [
         {
             key: 'code',
-            header: 'Code',
+            header: 'Kode Katalog',
             render: (entry) => (
                 <Link
                     href={`/admin/ecatalog/${entry.id}/edit`}
-                    className="font-semibold text-cim-blue"
+                    className="font-semibold text-cim-blue hover:text-cim-navy"
                 >
                     {entry.catalog_code}
                 </Link>
@@ -67,10 +71,10 @@ export default function Index({
         },
         {
             key: 'title',
-            header: 'Procurement',
+            header: 'Nama Pengadaan & Produk',
             render: (entry) => (
                 <div>
-                    <p className="font-medium">
+                    <p className="font-medium text-cim-navy">
                         {entry.procurement_title}
                     </p>
 
@@ -78,46 +82,52 @@ export default function Index({
                         {entry.product
                             .published_revision
                             ?.name
-                            ?? `Product #${entry.product.id}`}
+                            ?? `Produk #${entry.product.id}`}
                     </p>
                 </div>
             ),
         },
         {
             key: 'availability',
-            header: 'Availability',
-            render: (entry) =>
-                entry.availability,
+            header: 'Ketersediaan Stok',
+            render: (entry) => (
+                <span className="rounded-full border px-2.5 py-1 text-xs font-semibold">
+                    {humanizeAvailability(entry.availability)}
+                </span>
+            ),
         },
         {
             key: 'status',
-            header: 'Status',
-            render: (entry) =>
-                entry.status,
+            header: 'Status Publikasi',
+            render: (entry) => (
+                <span className="rounded-full border px-2.5 py-1 text-xs font-semibold">
+                    {humanizeStatus(entry.status)}
+                </span>
+            ),
         },
     ];
 
     return (
         <>
-            <Head title="E-Catalog" />
+            <Head title="E-Katalog" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'E-Catalog',
+                        label: 'E-Katalog',
                     },
                 ]}
             >
                 <PageHeader
-                    title="E-Catalog"
-                    description="Procurement records terhubung ke satu Product."
+                    title="E-Katalog Pengadaan"
+                    description="Kelola data e-katalog LKPP yang terhubung langsung dengan produk alat kesehatan."
                     actions={
                         can.create ? (
                             <Link
                                 href="/admin/ecatalog/create"
-                                className="inline-flex h-10 items-center rounded-lg bg-cim-blue px-4 text-sm font-semibold text-white"
+                                className="inline-flex h-10 items-center rounded-lg bg-cim-blue px-4 text-sm font-semibold text-white hover:bg-cim-navy"
                             >
-                                Create E-Catalog
+                                Tambah E-Katalog
                             </Link>
                         ) : undefined
                     }
@@ -155,7 +165,7 @@ export default function Index({
                     <input
                         name="q"
                         defaultValue={filters.q}
-                        placeholder="Search..."
+                        placeholder="Cari kode katalog atau nama pengadaan..."
                         className="flex-1 rounded-lg border border-input px-3 py-2"
                     />
 
@@ -165,24 +175,27 @@ export default function Index({
                         className="rounded-lg border border-input px-3 py-2"
                     >
                         <option value="">
-                            All status
+                            Semua Status
                         </option>
 
                         <option value="DRAFT">
-                            DRAFT
+                            Draf
                         </option>
 
                         <option value="PUBLISHED">
-                            PUBLISHED
+                            Diterbitkan
                         </option>
 
                         <option value="ARCHIVED">
-                            ARCHIVED
+                            Diarsipkan
                         </option>
                     </select>
 
-                    <button className="rounded-lg bg-cim-blue px-5 py-2 text-sm font-semibold text-white">
-                        Filter
+                    <button
+                        type="submit"
+                        className="rounded-lg bg-cim-blue px-5 py-2 text-sm font-semibold text-white hover:bg-cim-navy"
+                    >
+                        Saring Data
                     </button>
                 </form>
 
@@ -190,8 +203,8 @@ export default function Index({
                     rows={entries.data}
                     columns={columns}
                     rowKey={(entry) => entry.id}
-                    emptyTitle="Belum ada E-Catalog"
-                    emptyDescription="Buat record procurement pertama."
+                    emptyTitle="Belum Ada Data E-Katalog"
+                    emptyDescription="Belum ada data katalog pengadaan yang tercatat dalam sistem."
                 />
             </AdminLayout>
         </>

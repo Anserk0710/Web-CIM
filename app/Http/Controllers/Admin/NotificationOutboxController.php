@@ -95,7 +95,7 @@ class NotificationOutboxController extends Controller
         ) {
             return back()->with(
                 'status',
-                'Hanya notifikasi gagal yang dapat di-retry.',
+                'Hanya notifikasi dengan status gagal yang dapat dicoba kirim ulang.',
             );
         }
 
@@ -107,13 +107,13 @@ class NotificationOutboxController extends Controller
         if (! $retried) {
             return back()->with(
                 'status',
-                'Status notifikasi berubah. Muat ulang daftar sebelum mencoba lagi.',
+                'Status pengiriman notifikasi telah berubah. Silakan muat ulang halaman sebelum mencoba lagi.',
             );
         }
 
         return back()->with(
             'success',
-            'Notifikasi dijadwalkan ulang. Periksa statusnya setelah worker memproses antrean.',
+            'Pengiriman notifikasi berhasil dijadwalkan ulang. Sistem akan segera memproses antrean ini.',
         );
     }
 }

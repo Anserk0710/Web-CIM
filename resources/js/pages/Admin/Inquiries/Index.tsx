@@ -20,6 +20,11 @@ import {
 } from '@/components/admin/PageHeader';
 
 import AdminLayout from '@/layouts/AdminLayout';
+import {
+    formatDateTimeIndonesian,
+    humanizeInquiryType,
+    humanizeStatus,
+} from '@/lib/humanize';
 
 type InquiryRow = {
     id: number;
@@ -58,23 +63,6 @@ type Props = {
     canExport: boolean;
 };
 
-function formatDate(
-    value: string | null,
-): string {
-    if (!value) {
-        return '—';
-    }
-
-    return new Intl.DateTimeFormat(
-        'id-ID',
-        {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-            timeZone: 'Asia/Makassar',
-        },
-    ).format(new Date(value));
-}
-
 export default function Index({
     inquiries,
     types,
@@ -85,7 +73,7 @@ export default function Index({
     const columns: DataTableColumn<InquiryRow>[] = [
         {
             key: 'contact',
-            header: 'Contact',
+            header: 'Pengirim',
 
             render: (inquiry) => (
                 <div>
@@ -94,11 +82,11 @@ export default function Index({
                         className="font-semibold text-cim-blue hover:text-cim-navy"
                     >
                         {inquiry.name
-                            ?? `Inquiry #${inquiry.id}`}
+                            ?? `Pesan #${inquiry.id}`}
                     </Link>
 
                     <p className="mt-1 break-all text-xs text-muted-foreground">
-                        {inquiry.email ?? 'Anonymized'}
+                        {inquiry.email ?? 'Data telah disamarkan'}
                     </p>
 
                     {inquiry.organization && (
@@ -112,26 +100,26 @@ export default function Index({
 
         {
             key: 'type',
-            header: 'Type',
+            header: 'Kategori Pesan',
 
-            render: (inquiry) => inquiry.type,
+            render: (inquiry) => humanizeInquiryType(inquiry.type),
         },
 
         {
             key: 'related',
-            header: 'Related content',
+            header: 'Konten Terkait',
 
             render: (inquiry) => (
-                <div className="space-y-1">
+                <div className="space-y-1 text-xs">
                     {inquiry.product_name && (
                         <p>
-                            Product: {inquiry.product_name}
+                            <span className="font-medium text-slate-700">Produk:</span> {inquiry.product_name}
                         </p>
                     )}
 
                     {inquiry.catalog_title && (
                         <p>
-                            E-Catalog: {inquiry.catalog_title}
+                            <span className="font-medium text-slate-700">Katalog:</span> {inquiry.catalog_title}
                         </p>
                     )}
 
@@ -148,17 +136,17 @@ export default function Index({
 
             render: (inquiry) => (
                 <span className="inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold">
-                    {inquiry.status}
+                    {humanizeStatus(inquiry.status)}
                 </span>
             ),
         },
 
         {
             key: 'created_at',
-            header: 'Received',
+            header: 'Waktu Diterima',
 
             render: (inquiry) =>
-                formatDate(inquiry.created_at),
+                formatDateTimeIndonesian(inquiry.created_at),
         },
     ];
 
@@ -202,25 +190,25 @@ export default function Index({
 
     return (
         <>
-            <Head title="Contact Inquiries" />
+            <Head title="Pesan Masuk" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Inquiries',
+                        label: 'Pesan Masuk',
                     },
                 ]}
             >
                 <PageHeader
-                    title="Contact Inquiries"
-                    description="Search, review, and manage public contact inquiries."
+                    title="Pesan & Pertanyaan Masuk"
+                    description="Kelola pesan, permohonan penawaran, dan pertanyaan dari pengunjung situs publik."
                     actions={
                         canExport ? (
                             <a
                                 href={exportHref}
                                 className="inline-flex h-10 items-center justify-center rounded-lg border bg-background px-4 text-sm font-semibold hover:bg-muted"
                             >
-                                Export CSV
+                                Ekspor CSV
                             </a>
                         ) : undefined
                     }
@@ -233,7 +221,7 @@ export default function Index({
                     <input
                         name="q"
                         defaultValue={filters.q}
-                        placeholder="Search name, email, organization, message..."
+                        placeholder="Cari nama, email, instansi, atau pesan..."
                         maxLength={100}
                         className="min-w-0 rounded-lg border border-input px-3 py-2"
                     />
@@ -244,7 +232,7 @@ export default function Index({
                         className="rounded-lg border border-input px-3 py-2"
                     >
                         <option value="">
-                            All types
+                            Semua Kategori
                         </option>
 
                         {types.map((type) => (
@@ -252,7 +240,7 @@ export default function Index({
                                 key={type}
                                 value={type}
                             >
-                                {type}
+                                {humanizeInquiryType(type)}
                             </option>
                         ))}
                     </select>
@@ -263,7 +251,7 @@ export default function Index({
                         className="rounded-lg border border-input px-3 py-2"
                     >
                         <option value="">
-                            All statuses
+                            Semua Status
                         </option>
 
                         {statuses.map((status) => (
@@ -271,7 +259,7 @@ export default function Index({
                                 key={status}
                                 value={status}
                             >
-                                {status}
+                                {humanizeStatus(status)}
                             </option>
                         ))}
                     </select>
@@ -282,19 +270,19 @@ export default function Index({
                         className="rounded-lg border border-input px-3 py-2"
                     >
                         <option value="created_at">
-                            Received date
+                            Urutkan: Tanggal Masuk
                         </option>
 
                         <option value="name">
-                            Name
+                            Urutkan: Nama Pengirim
                         </option>
 
                         <option value="type">
-                            Type
+                            Urutkan: Kategori Pesan
                         </option>
 
                         <option value="status">
-                            Status
+                            Urutkan: Status Pesan
                         </option>
                     </select>
 
@@ -304,11 +292,11 @@ export default function Index({
                         className="rounded-lg border border-input px-3 py-2"
                     >
                         <option value="desc">
-                            Descending
+                            Terbaru ke Terlama (Menurun)
                         </option>
 
                         <option value="asc">
-                            Ascending
+                            Terlama ke Terbaru (Menaik)
                         </option>
                     </select>
 
@@ -316,7 +304,7 @@ export default function Index({
                         type="submit"
                         className="rounded-lg bg-cim-blue px-5 py-2 text-sm font-semibold text-white hover:bg-cim-navy"
                     >
-                        Filter
+                        Saring Data
                     </button>
                 </form>
 
@@ -324,22 +312,22 @@ export default function Index({
                     rows={inquiries.data}
                     columns={columns}
                     rowKey={(inquiry) => inquiry.id}
-                    emptyTitle="No inquiries"
-                    emptyDescription="Belum ada inquiry yang sesuai dengan filter."
+                    emptyTitle="Belum Ada Pesan Masuk"
+                    emptyDescription="Tidak ada pesan yang sesuai dengan kriteria penyaringan."
                 />
 
                 {inquiries.last_page > 1 && (
                     <nav
-                        aria-label="Inquiry pagination"
+                        aria-label="Paginasi pesan masuk"
                         className="mt-6 flex items-center justify-between gap-4"
                     >
                         <p className="text-sm text-muted-foreground">
-                            Page {inquiries.current_page}
-                            {' of '}
+                            Halaman {inquiries.current_page}
+                            {' dari '}
                             {inquiries.last_page}
-                            {' · '}
+                            {' · Total '}
                             {inquiries.total}
-                            {' inquiries'}
+                            {' pesan'}
                         </p>
 
                         <div className="flex gap-2">
@@ -349,11 +337,11 @@ export default function Index({
                                     preserveScroll
                                     className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
                                 >
-                                    Previous
+                                    Sebelumnya
                                 </Link>
                             ) : (
                                 <span className="rounded-lg border px-4 py-2 text-sm text-muted-foreground opacity-50">
-                                    Previous
+                                    Sebelumnya
                                 </span>
                             )}
 
@@ -363,11 +351,11 @@ export default function Index({
                                     preserveScroll
                                     className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted"
                                 >
-                                    Next
+                                    Selanjutnya
                                 </Link>
                             ) : (
                                 <span className="rounded-lg border px-4 py-2 text-sm text-muted-foreground opacity-50">
-                                    Next
+                                    Selanjutnya
                                 </span>
                             )}
                         </div>

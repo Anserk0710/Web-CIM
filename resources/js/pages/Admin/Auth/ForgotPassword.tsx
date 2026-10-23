@@ -38,20 +38,20 @@ export default function ForgotPassword() {
 
     return (
         <>
-            <Head title="Lupa Password" />
+            <Head title="Pemulihan Kata Sandi" />
 
             <AuthLayout>
                 <section className="rounded-2xl border bg-background p-6 shadow-sm sm:p-8">
                     <h1 className="text-2xl font-bold text-cim-navy">
-                        Reset password
+                        Atur Ulang Kata Sandi
                     </h1>
 
                     <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                        Masukkan email akun Anda. Respons tidak mengungkap apakah akun terdaftar.
+                        Masukkan alamat email akun pengelola Anda. Tautan pemulihan akan dikirimkan ke email tersebut.
                     </p>
 
                     {flash.status && (
-                        <div className="mt-5 rounded-lg bg-cim-ice p-3 text-sm text-cim-navy">
+                        <div className="mt-5 rounded-lg border border-sky-200 bg-sky-50 p-3 text-sm text-sky-900">
                             {flash.status}
                         </div>
                     )}
@@ -65,7 +65,7 @@ export default function ForgotPassword() {
                                 htmlFor="email"
                                 className="mb-2 block text-sm font-medium"
                             >
-                                Email
+                                Alamat Email
                             </label>
 
                             <input
@@ -77,7 +77,7 @@ export default function ForgotPassword() {
                                     'email',
                                     event.target.value,
                                 )}
-                                className="w-full rounded-lg border border-input bg-background px-3 py-2"
+                                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                                 required
                             />
 
@@ -93,7 +93,7 @@ export default function ForgotPassword() {
                             className="w-full"
                             disabled={form.processing}
                         >
-                            Kirim tautan reset
+                            {form.processing ? 'Mengirim...' : 'Kirim Tautan Pemulihan Kata Sandi'}
                         </Button>
                     </form>
 
@@ -101,7 +101,7 @@ export default function ForgotPassword() {
                         href="/admin/login"
                         className="mt-6 block text-center text-sm font-medium text-cim-blue hover:underline"
                     >
-                        Kembali ke login
+                        Kembali ke halaman masuk
                     </Link>
                 </section>
             </AuthLayout>

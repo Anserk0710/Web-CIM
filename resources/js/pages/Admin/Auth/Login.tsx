@@ -44,7 +44,7 @@ export default function Login() {
 
     return (
         <>
-            <Head title="CMS Login" />
+            <Head title="Masuk ke CMS" />
 
             <AuthLayout>
                 <section className="rounded-2xl border bg-background p-6 shadow-sm sm:p-8">
@@ -53,11 +53,11 @@ export default function Login() {
                     </h1>
 
                     <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                        Gunakan akun internal yang telah diberikan akses.
+                        Gunakan akun internal Anda untuk mengakses panel pengelolaan.
                     </p>
 
                     {flash.status && (
-                        <div className="mt-5 rounded-lg bg-cim-ice p-3 text-sm text-cim-navy">
+                        <div className="mt-5 rounded-lg border border-sky-200 bg-sky-50 p-3 text-sm text-sky-900">
                             {flash.status}
                         </div>
                     )}
@@ -71,7 +71,7 @@ export default function Login() {
                                 htmlFor="email"
                                 className="mb-2 block text-sm font-medium"
                             >
-                                Email
+                                Alamat Email
                             </label>
 
                             <input
@@ -83,7 +83,7 @@ export default function Login() {
                                     'email',
                                     event.target.value,
                                 )}
-                                className="w-full rounded-lg border border-input bg-background px-3 py-2"
+                                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                                 required
                             />
 
@@ -99,7 +99,7 @@ export default function Login() {
                                 htmlFor="password"
                                 className="mb-2 block text-sm font-medium"
                             >
-                                Password
+                                Kata Sandi
                             </label>
 
                             <input
@@ -111,22 +111,23 @@ export default function Login() {
                                     'password',
                                     event.target.value,
                                 )}
-                                className="w-full rounded-lg border border-input bg-background px-3 py-2"
+                                className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
                                 required
                             />
                         </div>
 
-                        <label className="flex items-center gap-2 text-sm">
+                        <label className="flex items-center gap-2 text-sm cursor-pointer">
                             <input
                                 type="checkbox"
                                 checked={form.data.remember}
+                                className="rounded border-input text-cim-blue focus:ring-cim-blue"
                                 onChange={(event) => form.setData(
                                     'remember',
                                     event.target.checked,
                                 )}
                             />
 
-                            Ingat saya
+                            Ingat sesi saya
                         </label>
 
                         <Button
@@ -135,8 +136,8 @@ export default function Login() {
                             disabled={form.processing}
                         >
                             {form.processing
-                                ? 'Memproses...'
-                                : 'Masuk'}
+                                ? 'Memproses Masuk...'
+                                : 'Masuk ke Sistem'}
                         </Button>
                     </form>
 
@@ -145,7 +146,7 @@ export default function Login() {
                             href="/admin/forgot-password"
                             className="text-sm font-medium text-cim-blue hover:underline"
                         >
-                            Lupa password?
+                            Lupa kata sandi?
                         </Link>
                     </div>
                 </section>

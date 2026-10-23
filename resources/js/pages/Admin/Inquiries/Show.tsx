@@ -23,6 +23,11 @@ import {
 } from '@/components/ui/button';
 
 import AdminLayout from '@/layouts/AdminLayout';
+import {
+    formatDateTimeIndonesian,
+    humanizeInquiryType,
+    humanizeStatus,
+} from '@/lib/humanize';
 
 type Transition = {
     value: string;
@@ -91,23 +96,6 @@ type Props = {
         update: boolean;
     };
 };
-
-function formatDate(
-    value: string | null,
-): string {
-    if (!value) {
-        return '—';
-    }
-
-    return new Intl.DateTimeFormat(
-        'id-ID',
-        {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-            timeZone: 'Asia/Makassar',
-        },
-    ).format(new Date(value));
-}
 
 export default function Show({
     inquiry,
@@ -189,13 +177,13 @@ export default function Show({
     return (
         <>
             <Head
-                title={`Inquiry #${inquiry.id}`}
+                title={`Pesan Masuk #${inquiry.id}`}
             />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Inquiries',
+                        label: 'Pesan Masuk',
                         href: '/admin/inquiries',
                     },
                     {
@@ -206,9 +194,9 @@ export default function Show({
                 <PageHeader
                     title={
                         inquiry.name
-                        ?? `Inquiry #${inquiry.id}`
+                        ?? `Pesan Masuk #${inquiry.id}`
                     }
-                    description={`${inquiry.type} · ${inquiry.status}`}
+                    description={`${humanizeInquiryType(inquiry.type)} · ${humanizeStatus(inquiry.status)}`}
                 />
 
                 {inquiry.anonymized_at && (
@@ -216,11 +204,11 @@ export default function Show({
                         role="status"
                         className="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950"
                     >
-                        Inquiry telah dianonimkan pada{' '}
-                        {formatDate(
+                        Pesan ini telah disamarkan pada{' '}
+                        {formatDateTimeIndonesian(
                             inquiry.anonymized_at,
-                        )}.
-                        Identitas, message, dan notes tidak ditampilkan.
+                        )}{' '}
+                        demi perlindungan data pribadi. Identitas pengirim, isi pesan, dan catatan internal tidak lagi ditampilkan.
                     </div>
                 )}
 
@@ -228,33 +216,33 @@ export default function Show({
                     <div className="space-y-6">
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Contact details
+                                Informasi Kontak Pengirim
                             </h2>
 
                             <dl className="mt-5 grid gap-5 sm:grid-cols-2">
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Name
+                                        Nama Pengirim
                                     </dt>
 
                                     <dd className="mt-1 break-words">
-                                        {inquiry.name ?? 'Anonymized'}
+                                        {inquiry.name ?? 'Data telah disamarkan'}
                                     </dd>
                                 </div>
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Email
+                                        Alamat Email
                                     </dt>
 
                                     <dd className="mt-1 break-all">
-                                        {inquiry.email ?? 'Anonymized'}
+                                        {inquiry.email ?? 'Data telah disamarkan'}
                                     </dd>
                                 </div>
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Phone
+                                        Nomor Telepon / WhatsApp
                                     </dt>
 
                                     <dd className="mt-1">
@@ -264,7 +252,7 @@ export default function Show({
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Organization
+                                        Instansi / Perusahaan
                                     </dt>
 
                                     <dd className="mt-1">
@@ -274,17 +262,17 @@ export default function Show({
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Received
+                                        Waktu Diterima
                                     </dt>
 
                                     <dd className="mt-1">
-                                        {formatDate(inquiry.created_at)}
+                                        {formatDateTimeIndonesian(inquiry.created_at)}
                                     </dd>
                                 </div>
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Privacy version
+                                        Versi Kebijakan Privasi
                                     </dt>
 
                                     <dd className="mt-1">
@@ -296,23 +284,23 @@ export default function Show({
 
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Message
+                                Isi Pesan
                             </h2>
 
                             <p className="mt-4 whitespace-pre-wrap break-words text-sm leading-7 text-slate-700">
-                                {inquiry.message ?? 'No message available.'}
+                                {inquiry.message ?? 'Tidak ada isi pesan yang disertakan.'}
                             </p>
                         </section>
 
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Related content
+                                Konten Terkait
                             </h2>
 
                             <dl className="mt-5 space-y-5">
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Product
+                                        Produk Terkait
                                     </dt>
 
                                     <dd className="mt-1">
@@ -322,7 +310,7 @@ export default function Show({
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        E-Catalog
+                                        Katalog Digital Terkait
                                     </dt>
 
                                     <dd className="mt-1">
@@ -336,7 +324,7 @@ export default function Show({
 
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Internal notes
+                                Catatan Tim Internal
                             </h2>
 
                             {can.update
@@ -347,7 +335,7 @@ export default function Show({
                                         className="mt-5"
                                     >
                                         <FormField
-                                            label="Add internal note"
+                                            label="Tulis catatan internal"
                                             htmlFor="inquiry_note"
                                             error={noteForm.errors.body}
                                         >
@@ -360,6 +348,7 @@ export default function Show({
                                                         event.target.value,
                                                     )
                                                 }
+                                                placeholder="Tambahkan catatan tindak lanjut pesan..."
                                                 maxLength={5000}
                                                 className="min-h-28 w-full rounded-lg border border-input px-3 py-2"
                                             />
@@ -377,8 +366,8 @@ export default function Show({
                                                 disabled={noteForm.processing}
                                             >
                                                 {noteForm.processing
-                                                    ? 'Saving...'
-                                                    : 'Add note'}
+                                                    ? 'Menyimpan...'
+                                                    : 'Simpan Catatan'}
                                             </Button>
                                         </div>
                                     </form>
@@ -387,7 +376,7 @@ export default function Show({
                             <div className="mt-6 space-y-4">
                                 {inquiry.notes.length === 0 ? (
                                     <p className="text-sm text-muted-foreground">
-                                        No notes available.
+                                        Belum ada catatan internal.
                                     </p>
                                 ) : (
                                     inquiry.notes.map((note) => (
@@ -402,7 +391,7 @@ export default function Show({
                                             <p className="mt-3 text-xs text-muted-foreground">
                                                 {note.author.name}
                                                 {' · '}
-                                                {formatDate(note.created_at)}
+                                                {formatDateTimeIndonesian(note.created_at)}
                                             </p>
                                         </article>
                                     ))
@@ -414,15 +403,15 @@ export default function Show({
                     <aside className="space-y-6">
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Workflow
+                                Alur Penanganan Pesan
                             </h2>
 
                             <p className="mt-3 text-sm text-muted-foreground">
-                                Current status
+                                Status Saat Ini
                             </p>
 
                             <p className="mt-1 text-xl font-bold text-cim-navy">
-                                {inquiry.status}
+                                {humanizeStatus(inquiry.status)}
                             </p>
 
                             {can.update
@@ -434,7 +423,7 @@ export default function Show({
                                         className="mt-6 space-y-4"
                                     >
                                         <FormField
-                                            label="Next status"
+                                            label="Ubah Status Pesan"
                                             htmlFor="target_status"
                                             error={statusForm.errors.target_status}
                                         >
@@ -455,7 +444,7 @@ export default function Show({
                                                             key={transition.value}
                                                             value={transition.value}
                                                         >
-                                                            {transition.label}
+                                                            {humanizeStatus(transition.value)}
                                                         </option>
                                                     ),
                                                 )}
@@ -465,8 +454,8 @@ export default function Show({
                                         <FormField
                                             label={
                                                 selectedTransition?.requires_reason
-                                                    ? 'Reopen reason (required)'
-                                                    : 'Reason (optional)'
+                                                    ? 'Alasan Pembukaan Kembali (Wajib diisi)'
+                                                    : 'Alasan / Catatan Perubahan (Opsional)'
                                             }
                                             htmlFor="status_reason"
                                             error={statusForm.errors.reason}
@@ -480,6 +469,7 @@ export default function Show({
                                                         event.target.value,
                                                     )
                                                 }
+                                                placeholder="Tuliskan alasan atau keterangan perubahan status..."
                                                 maxLength={2000}
                                                 className="min-h-24 w-full rounded-lg border border-input px-3 py-2"
                                             />
@@ -497,8 +487,8 @@ export default function Show({
                                             className="w-full"
                                         >
                                             {statusForm.processing
-                                                ? 'Updating...'
-                                                : 'Update status'}
+                                                ? 'Memperbarui...'
+                                                : 'Perbarui Status'}
                                         </Button>
                                     </form>
                                 )}
@@ -506,13 +496,13 @@ export default function Show({
 
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Status history
+                                Riwayat Perubahan Status
                             </h2>
 
                             <ol className="mt-5 space-y-5 border-l pl-5">
                                 {history.length === 0 ? (
                                     <li className="text-sm text-muted-foreground">
-                                        No status changes recorded.
+                                        Belum ada riwayat perubahan status.
                                     </li>
                                 ) : (
                                     history.map((event) => (
@@ -526,20 +516,20 @@ export default function Show({
                                             />
 
                                             <p className="text-sm font-semibold text-cim-navy">
-                                                {event.from_status ?? '—'}
+                                                {event.from_status ? humanizeStatus(event.from_status) : 'Pesan Baru Diterima'}
                                                 {' → '}
-                                                {event.to_status ?? '—'}
+                                                {event.to_status ? humanizeStatus(event.to_status) : '—'}
                                             </p>
 
                                             <p className="mt-1 text-xs text-muted-foreground">
-                                                {event.actor?.name ?? 'System'}
+                                                {event.actor?.name ?? 'Sistem Otomatis'}
                                                 {' · '}
-                                                {formatDate(event.created_at)}
+                                                {formatDateTimeIndonesian(event.created_at)}
                                             </p>
 
                                             {event.reason_note_id && (
                                                 <p className="mt-2 text-xs text-muted-foreground">
-                                                    Reason recorded in note #{event.reason_note_id}.
+                                                    Alasan tercatat pada catatan internal #{event.reason_note_id}.
                                                 </p>
                                             )}
                                         </li>
@@ -550,27 +540,27 @@ export default function Show({
 
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Resolution
+                                Penyelesaian & Moderasi
                             </h2>
 
                             <dl className="mt-4 space-y-4 text-sm">
                                 <div>
                                     <dt className="text-muted-foreground">
-                                        Resolved at
+                                        Waktu Diselesaikan
                                     </dt>
 
                                     <dd className="mt-1 font-medium">
-                                        {formatDate(inquiry.resolved_at)}
+                                        {formatDateTimeIndonesian(inquiry.resolved_at) || '—'}
                                     </dd>
                                 </div>
 
                                 <div>
                                     <dt className="text-muted-foreground">
-                                        Marked as spam
+                                        Waktu Ditandai Spam
                                     </dt>
 
                                     <dd className="mt-1 font-medium">
-                                        {formatDate(inquiry.spam_marked_at)}
+                                        {formatDateTimeIndonesian(inquiry.spam_marked_at) || '—'}
                                     </dd>
                                 </div>
                             </dl>
@@ -583,7 +573,7 @@ export default function Show({
                         href="/admin/inquiries"
                         className="text-sm font-semibold text-cim-blue hover:text-cim-navy"
                     >
-                        ← Back to Inquiries
+                        ← Kembali ke Daftar Pesan Masuk
                     </Link>
                 </div>
             </AdminLayout>

@@ -107,7 +107,7 @@ class ProductController extends Controller
             )
             ->with(
                 'success',
-                'Draft product berhasil dibuat.',
+                'Draf produk berhasil dibuat.',
             );
     }
 
@@ -203,7 +203,7 @@ class ProductController extends Controller
 
         return back()->with(
             'success',
-            'Draft berhasil disimpan.',
+            'Perubahan draf produk berhasil disimpan.',
         );
     }
 

@@ -1,6 +1,7 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { DataTable, type DataTableColumn } from '@/components/admin/DataTable';
 import { PageHeader } from '@/components/admin/PageHeader';
+import { humanizeStatus } from '@/lib/humanize';
 import AdminLayout from '@/layouts/AdminLayout';
 
 type Career = {
@@ -33,11 +34,11 @@ export default function Index({
     const columns: DataTableColumn<Career>[] = [
         {
             key: 'title',
-            header: 'Career',
+            header: 'Posisi Lowongan',
             render: (career) => (
                 <Link
                     href={`/admin/careers/${career.id}/edit`}
-                    className="font-semibold text-cim-blue"
+                    className="font-semibold text-cim-blue hover:text-cim-navy"
                 >
                     {career.title}
                 </Link>
@@ -46,42 +47,46 @@ export default function Index({
 
         {
             key: 'department',
-            header: 'Department',
+            header: 'Departemen',
             render: (career) => career.department
         },
         {
             key: 'location',
-            header: 'Location',
+            header: 'Lokasi Penempatan',
             render: (career) => career.location
         },
         {
             key: 'status',
-            header: 'Status',
-            render: (career) => career.status
+            header: 'Status Lowongan',
+            render: (career) => (
+                <span className="inline-flex rounded-full border px-2.5 py-0.5 text-xs font-semibold">
+                    {humanizeStatus(career.status)}
+                </span>
+            )
         },
     ];
 
     return (
         <>
-            <Head title="Careers" />
+            <Head title="Karir & Lowongan Pekerjaan" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Careers',
+                        label: 'Karir & Lowongan',
                     },
                 ]}
             >
                 <PageHeader
-                    title="Careers"
-                    description="Dates disimpan UTC dan ditampilkan sebagai WITA."
+                    title="Lowongan Pekerjaan"
+                    description="Kelola pengumuman posisi karir, persyaratan kualifikasi, dan masa aktif pendaftaran."
                     actions={
                         canCreate ? (
                             <Link
                                 href="/admin/careers/create"
-                                className="inline-flex h-10 items-center rounded-lg bg-cim-blue px-4 text-sm font-semibold text-white"
+                                className="inline-flex h-10 items-center rounded-lg bg-cim-blue px-4 text-sm font-semibold text-white hover:bg-cim-navy"
                             >
-                                Create Career
+                                Tambah Lowongan Baru
                             </Link>
                         ) : undefined
                     }
@@ -119,7 +124,7 @@ export default function Index({
                     <input
                         name="q"
                         defaultValue={filters.q}
-                        placeholder="Search..."
+                        placeholder="Cari posisi, departemen, atau lokasi..."
                         className="flex-1 rounded-lg border border-input px-3 py-2"
                     />
 
@@ -129,7 +134,7 @@ export default function Index({
                         className="rounded-lg border border-input px-3 py-2"
                     >
                         <option value="">
-                            All
+                            Semua Status
                         </option>
 
                         {[
@@ -142,13 +147,13 @@ export default function Index({
                                 key={status}
                                 value={status}
                             >
-                                {status}
+                                {humanizeStatus(status)}
                             </option>
                         ))}
                     </select>
 
-                    <button className="rounded-lg bg-cim-blue px-5 py-2 text-sm font-semibold text-white">
-                        Filter
+                    <button className="rounded-lg bg-cim-blue px-5 py-2 text-sm font-semibold text-white hover:bg-cim-navy">
+                        Terapkan Filter
                     </button>
                 </form>
 
@@ -158,8 +163,8 @@ export default function Index({
                     rowKey={(career) =>
                         career.id
                     }
-                    emptyTitle="Belum ada Career"
-                    emptyDescription="Buat lowongan pertama."
+                    emptyTitle="Belum Ada Lowongan Pekerjaan"
+                    emptyDescription="Silakan tambahkan informasi lowongan pekerjaan pertama Anda."
                 />
             </AdminLayout>
         </>

@@ -3,6 +3,7 @@ import { type FormEvent } from 'react';
 import { PageHeader } from '@/components/admin/PageHeader';
 import { Button } from '@/components/ui/button';
 import AdminLayout from '@/layouts/AdminLayout';
+import { humanizeFieldKey, humanizeSectionKey } from '@/lib/humanize';
 
 type Section = {
     key: string;
@@ -195,22 +196,22 @@ export default function PageContent({
 
     return (
         <>
-            <Head title={`${page.key} Content`} />
+            <Head title={`Konten ${page.title}`} />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Settings',
+                        label: 'Pengaturan',
                         href: '/admin/settings',
                     },
                     {
-                        label: page.key,
+                        label: page.title,
                     },
                 ]}
             >
                 <PageHeader
-                    title={`${page.title} Content`}
-                    description="Structured content only. Privacy version must be changed whenever the published notice changes."
+                    title={`Konten Halaman: ${page.title}`}
+                    description="Kelola teks, gambar pengantar, dan susunan bagian pada halaman situs web ini."
                 />
 
                 <form
@@ -220,18 +221,24 @@ export default function PageContent({
                     {form.data.sections.map((section, index) => (
                         <article
                             key={section.key}
-                            className="rounded-xl border bg-background p-6"
+                            className="rounded-xl border bg-background p-6 shadow-sm"
                         >
-                            <div className="flex items-center justify-between gap-4">
-                                <h2 className="font-semibold text-cim-navy">
-                                    {section.key}
-                                </h2>
+                            <div className="flex items-center justify-between gap-4 border-b pb-4">
+                                <div>
+                                    <h2 className="text-lg font-semibold text-cim-navy">
+                                        {humanizeSectionKey(section.key)}
+                                    </h2>
+                                    <span className="font-mono text-xs text-muted-foreground">
+                                        ID Bagian: {section.key}
+                                    </span>
+                                </div>
 
-                                <label className="flex items-center gap-2 text-sm">
+                                <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
                                     <input
                                         type="checkbox"
                                         checked={section.is_enabled}
                                         disabled={!canUpdate || form.processing}
+                                        className="rounded border-input text-cim-blue focus:ring-cim-blue"
                                         onChange={(event) => {
                                             const next = [
                                                 ...form.data.sections,
@@ -246,8 +253,7 @@ export default function PageContent({
                                             form.setData('sections', next);
                                         }}
                                     />
-
-                                    Enabled
+                                    <span>Tampilkan Bagian Ini di Situs</span>
                                 </label>
                             </div>
 
@@ -256,10 +262,15 @@ export default function PageContent({
                                     ([key, value]) => (
                                         <label
                                             key={key}
-                                            className="block"
+                                            className={[
+                                                'block',
+                                                key === 'body' || key === 'description' || isJsonField(key)
+                                                    ? 'md:col-span-2'
+                                                    : '',
+                                            ].join(' ')}
                                         >
-                                            <span className="mb-2 block text-sm font-medium">
-                                                {key.replaceAll('_', ' ')}
+                                            <span className="mb-2 block text-sm font-medium text-foreground">
+                                                {humanizeFieldKey(key)}
                                             </span>
 
                                             <textarea
@@ -291,24 +302,19 @@ export default function PageContent({
                                                         next,
                                                     );
                                                 }}
-                                                className={[
-                                                    'min-h-24 w-full rounded-lg border border-input px-3 py-2',
-                                                    key === 'body'
-                                                        ? 'md:col-span-2'
-                                                        : '',
-                                                ].join(' ')}
+                                                className="min-h-24 w-full rounded-lg border border-input px-3 py-2 text-sm font-sans"
                                             />
 
                                             {isJsonField(key) && (
                                                 <span className="mt-1 block text-xs text-muted-foreground">
-                                                    Masukkan JSON array yang valid. Contoh: [{"{"}"title":"Contoh","body":"Deskripsi"{"}"}]
+                                                    Format data JSON array, contoh: [{"{"}"judul":"Butir 1","keterangan":"Penjelasan"{"}"}]
                                                 </span>
                                             )}
 
                                             {form.errors[
                                                 `sections.${index}.data.${key}` as keyof typeof form.errors
                                             ] && (
-                                                    <span className="mt-1 block text-sm text-destructive">
+                                                    <span className="mt-1 block text-xs text-destructive">
                                                         {
                                                             form.errors[
                                                             `sections.${index}.data.${key}` as keyof typeof form.errors
@@ -330,8 +336,8 @@ export default function PageContent({
                                 disabled={form.processing}
                             >
                                 {form.processing
-                                    ? 'Saving...'
-                                    : 'Save Page Content'}
+                                    ? 'Menyimpan...'
+                                    : 'Simpan Konten Halaman'}
                             </Button>
                         </div>
                     )}
@@ -339,4 +345,4 @@ export default function PageContent({
             </AdminLayout>
         </>
     );
-}
+}

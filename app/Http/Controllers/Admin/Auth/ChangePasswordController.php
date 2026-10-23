@@ -41,7 +41,7 @@ class ChangePasswordController extends Controller
             )
         ) {
             throw ValidationException::withMessages([
-                'current_password' => 'Password saat ini tidak valid.',
+                'current_password' => 'Kata sandi saat ini tidak sesuai.',
             ]);
         }
 
@@ -80,7 +80,7 @@ class ChangePasswordController extends Controller
 
         return back()->with(
             'success',
-            'Password berhasil diubah.',
+            'Kata sandi Anda berhasil diperbarui.',
         );
     }
 }

@@ -43,7 +43,7 @@ class CareerApplicationWorkflowController extends Controller
 
         return back()->with(
             'success',
-            'Status application berhasil diperbarui.',
+            'Status seleksi lamaran kerja berhasil diperbarui.',
         );
     }
 
@@ -68,7 +68,7 @@ class CareerApplicationWorkflowController extends Controller
 
         return back()->with(
             'success',
-            'Note berhasil ditambahkan.',
+            'Catatan internal berhasil ditambahkan.',
         );
     }
 }

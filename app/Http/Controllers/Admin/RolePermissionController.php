@@ -29,7 +29,7 @@ class RolePermissionController extends Controller
 
         return back()->with(
             'success',
-            'Permission role berhasil diperbarui.',
+            'Hak akses peran berhasil diperbarui.',
         );
     }
 }

@@ -143,7 +143,7 @@ class EcatalogController extends Controller
             )
             ->with(
                 'success',
-                'E-Catalog berhasil dibuat.',
+                'Data produk E-Katalog berhasil dibuat.',
             );
     }
 
@@ -266,7 +266,7 @@ class EcatalogController extends Controller
 
         return back()->with(
             'success',
-            'E-Catalog berhasil disimpan.',
+            'Perubahan data E-Katalog berhasil disimpan.',
         );
     }
 
@@ -290,7 +290,7 @@ class EcatalogController extends Controller
 
         return back()->with(
             'success',
-            'E-Catalog berhasil dipublish.',
+            'Produk E-Katalog berhasil diterbitkan.',
         );
     }
 
@@ -314,7 +314,7 @@ class EcatalogController extends Controller
 
         return back()->with(
             'success',
-            'E-Catalog berhasil diarsipkan.',
+            'Produk E-Katalog berhasil diarsipkan.',
         );
     }
 
@@ -336,7 +336,7 @@ class EcatalogController extends Controller
             ->route('admin.ecatalog.index')
             ->with(
                 'success',
-                'Draft E-Catalog dihapus.',
+                'Draf produk E-Katalog berhasil dihapus.',
             );
     }
 

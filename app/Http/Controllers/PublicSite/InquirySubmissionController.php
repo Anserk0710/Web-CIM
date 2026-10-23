@@ -26,7 +26,7 @@ class InquirySubmissionController extends Controller
             )
             ->with(
                 'success',
-                'Inquiry berhasil dikirim. Tim kami akan menindaklanjutinya.',
+                'Terima kasih, pesan dan pertanyaan Anda berhasil dikirim. Tim kami akan segera menindaklanjutinya.',
             );
     }
 }

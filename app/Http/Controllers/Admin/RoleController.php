@@ -82,7 +82,7 @@ class RoleController extends Controller
 
         return back()->with(
             'success',
-            'Role dibuat.',
+            'Peran baru berhasil ditambahkan.',
         );
     }
 
@@ -98,7 +98,7 @@ class RoleController extends Controller
 
         if ($role->is_system) {
             throw new AuthorizationException(
-                'System role semantics cannot be edited.',
+                'Peran bawaan sistem tidak dapat diubah demi keamanan.',
             );
         }
 
@@ -116,7 +116,7 @@ class RoleController extends Controller
                     )
                 ) {
                     throw ValidationException::withMessages([
-                        'lock_version' => 'Role telah berubah.',
+                        'lock_version' => 'Data peran telah diperbarui oleh pengguna lain.',
                     ]);
                 }
 
@@ -146,7 +146,7 @@ class RoleController extends Controller
 
         return back()->with(
             'success',
-            'Role diperbarui.',
+            'Data peran berhasil diperbarui.',
         );
     }
 }

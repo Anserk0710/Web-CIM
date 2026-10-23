@@ -58,10 +58,10 @@ export default function Index({
     const columns: DataTableColumn<UserRow>[] = [
         {
             key: 'user',
-            header: 'User',
+            header: 'Pengguna',
             render: (user) => (
                 <div>
-                    <p className='font-medium'>
+                    <p className='font-medium text-cim-navy'>
                         {user.name}
                     </p>
                     <p className='text-xs text-muted-foreground'>
@@ -72,109 +72,96 @@ export default function Index({
         },
         {
             key: 'status',
-            header: 'Status',
-            render: (user) => user.is_active
-                ? 'Active'
-                : 'Inactive',
+            header: 'Status Akun',
+            render: (user) => (
+                <span
+                    className={[
+                        'inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold',
+                        user.is_active
+                            ? 'border-green-300 bg-green-50 text-green-800'
+                            : 'border-slate-300 bg-slate-100 text-slate-700',
+                    ].join(' ')}
+                >
+                    {user.is_active ? 'Aktif' : 'Nonaktif'}
+                </span>
+            ),
         },
         {
             key: 'roles',
-            header: 'Roles',
+            header: 'Peran Hak Akses',
             render: (user) => (
-                <div className="flex flex-wrap gap-2">
-                    {user.roles.map(
-                        (role) => (
+                <div className="flex flex-wrap gap-1.5">
+                    {user.roles.length > 0 ? (
+                        user.roles.map((role) => (
                             <span
                                 key={role.id}
-                                className="rounded-full bg-muted px-2 py-1 text-xs"
+                                className="rounded-md border bg-muted/60 px-2.5 py-1 text-xs font-medium"
                             >
                                 {role.name}
                             </span>
-                        ),
+                        ))
+                    ) : (
+                        <span className="text-xs text-muted-foreground italic">
+                            Belum memiliki peran
+                        </span>
                     )}
                 </div>
             ),
         },
         {
             key: 'actions',
-            header: 'Action',
+            header: 'Tindakan',
             render: (user) => (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                     {can.disable && (
                         <Button
                             type="button"
-                            variant="outline"
+                            variant={user.is_active ? 'outline' : 'default'}
                             size="sm"
                             onClick={() => router.patch(
                                 `/admin/users/${user.id}/active`,
                                 {
-                                    is_active:
-                                        !user
-                                            .is_active,
-
-                                    lock_version:
-                                        user
-                                            .lock_version,
+                                    is_active: !user.is_active,
+                                    lock_version: user.lock_version,
                                 },
                             )}
                         >
-                            {user.is_active
-                                ? 'Deactivate'
-                                : 'Activate'}
+                            {user.is_active ? 'Nonaktifkan' : 'Aktifkan Akun'}
                         </Button>
                     )}
 
                     {can.assignRoles && (
-                        <select
-                            multiple
-                            defaultValue={
-                                user.roles.map(
-                                    (role) =>
-                                        String(
-                                            role.id,
-                                        ),
-                                )
-                            }
-                            onBlur={(event) => router.put(
-                                `/admin/users/${user.id}/roles`,
-                                {
-                                    role_ids:
-                                        Array.from(
-                                            event
-                                                .currentTarget
-                                                .selectedOptions,
-                                        ).map(
-                                            (
-                                                option,
-                                            ) =>
-                                                Number(
-                                                    option
-                                                        .value,
-                                                ),
-                                        ),
-
-                                    lock_version:
-                                        user
-                                            .lock_version,
-                                },
-                            )}
-                            className="min-h-20 rounded-lg border border-input p-2 text-xs"
-                        >
-                            {roles.map(
-                                (role) => (
+                        <div className="flex items-center gap-1.5">
+                            <select
+                                multiple
+                                title="Pilih peran pengguna (tahan Ctrl / Cmd untuk memilih beberapa)"
+                                aria-label="Atur peran pengguna"
+                                defaultValue={
+                                    user.roles.map(
+                                        (role) => String(role.id),
+                                    )
+                                }
+                                onBlur={(event) => router.put(
+                                    `/admin/users/${user.id}/roles`,
+                                    {
+                                        role_ids: Array.from(
+                                            event.currentTarget.selectedOptions,
+                                        ).map((option) => Number(option.value)),
+                                        lock_version: user.lock_version,
+                                    },
+                                )}
+                                className="min-h-16 rounded-lg border border-input p-1.5 text-xs focus:ring-1 focus:ring-cim-blue"
+                            >
+                                {roles.map((role) => (
                                     <option
-                                        key={
-                                            role.id
-                                        }
-                                        value={
-                                            role.id
-                                        }
+                                        key={role.id}
+                                        value={role.id}
                                     >
                                         {role.name}
                                     </option>
-                                ),
-                            )}
-                        </select>
+                                ))}
+                            </select>
+                        </div>
                     )}
                 </div>
             ),
@@ -183,18 +170,18 @@ export default function Index({
 
     return (
         <>
-            <Head title="Users" />
+            <Head title="Kelola Pengguna" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Users',
+                        label: 'Pengguna',
                     },
                 ]}
             >
                 <PageHeader
-                    title="Users"
-                    description="Account activation and role assignment are server-authorized."
+                    title="Pengguna & Hak Akses"
+                    description="Kelola akun pengelola CMS, status keaktifan akun, dan penetapan peran pengguna."
                 />
 
                 {can.create && (
@@ -203,34 +190,27 @@ export default function Index({
                         className="my-6 grid gap-3 rounded-xl border bg-background p-4 sm:grid-cols-[1fr_1fr_auto]"
                     >
                         <input
-                            value={
-                                createForm
-                                    .data.name
-                            }
-                            onChange={(event) => createForm.setData(
-                                'name',
-                                event.target.value,
-                            )}
-                            placeholder="Name"
-                            className="rounded-lg border border-input px-3 py-2"
+                            value={createForm.data.name}
+                            onChange={(event) => createForm.setData('name', event.target.value)}
+                            placeholder="Nama Lengkap"
+                            className="rounded-lg border border-input px-3 py-2 text-sm"
+                            required
                         />
 
                         <input
                             type="email"
-                            value={
-                                createForm
-                                    .data.email
-                            }
-                            onChange={(event) => createForm.setData(
-                                'email',
-                                event.target.value,
-                            )}
-                            placeholder="Email"
-                            className="rounded-lg border border-input px-3 py-2"
+                            value={createForm.data.email}
+                            onChange={(event) => createForm.setData('email', event.target.value)}
+                            placeholder="Alamat Email"
+                            className="rounded-lg border border-input px-3 py-2 text-sm"
+                            required
                         />
 
-                        <Button type="submit">
-                            Create
+                        <Button
+                            type="submit"
+                            disabled={createForm.processing}
+                        >
+                            {createForm.processing ? 'Menyimpan...' : 'Tambah Pengguna'}
                         </Button>
                     </form>
                 )}
@@ -238,11 +218,9 @@ export default function Index({
                 <DataTable
                     rows={users.data}
                     columns={columns}
-                    rowKey={(user) =>
-                        user.id
-                    }
-                    emptyTitle="No users"
-                    emptyDescription="Create first CMS user."
+                    rowKey={(user) => user.id}
+                    emptyTitle="Belum Ada Pengguna"
+                    emptyDescription="Silakan tambahkan akun pengguna baru di atas."
                 />
             </AdminLayout>
         </>

@@ -64,6 +64,30 @@ function newBlock(
     };
 }
 
+const BLOCK_LABELS: Record<string, string> = {
+    paragraph: 'Paragraf Teks',
+    heading: 'Subjudul',
+    image: 'Gambar Tunggal',
+    gallery: 'Galeri Foto',
+    quote: 'Kutipan Teks',
+    video: 'Tautan Video',
+    cta: 'Tombol Aksi (CTA)',
+    related_product: 'Produk Terkait',
+    divider: 'Garis Pembatas',
+};
+
+const BLOCK_BUTTONS = [
+    { type: 'paragraph', label: '+ Paragraf' },
+    { type: 'heading', label: '+ Subjudul' },
+    { type: 'image', label: '+ Gambar' },
+    { type: 'gallery', label: '+ Galeri' },
+    { type: 'quote', label: '+ Kutipan' },
+    { type: 'video', label: '+ Video' },
+    { type: 'cta', label: '+ Tombol Aksi' },
+    { type: 'related_product', label: '+ Produk Terkait' },
+    { type: 'divider', label: '+ Pembatas' },
+];
+
 export function ActivityBlockEditor({
     blocks,
     media,
@@ -145,37 +169,27 @@ export function ActivityBlockEditor({
             <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h2 className="font-semibold text-cim-navy">
-                        Structured Blocks
+                        Blok Konten Artikel
                     </h2>
 
                     <p className="mt-1 text-xs text-muted-foreground">
-                        Maximum 100 blocks. Raw HTML is not accepted.
+                        Maksimal 100 blok konten. Penataan artikel menggunakan blok visual terstruktur.
                     </p>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                    {[
-                        'paragraph',
-                        'heading',
-                        'image',
-                        'gallery',
-                        'quote',
-                        'video',
-                        'cta',
-                        'related_product',
-                        'divider',
-                    ].map((type) => (
+                    {BLOCK_BUTTONS.map((item) => (
                         <Button
-                            key={type}
+                            key={item.type}
                             type="button"
                             variant="outline"
                             size="sm"
                             onClick={() => onChange([
                                 ...blocks,
-                                newBlock(type),
+                                newBlock(item.type),
                             ])}
                         >
-                            + {type}
+                            {item.label}
                         </Button>
                     ))}
                 </div>
@@ -189,8 +203,8 @@ export function ActivityBlockEditor({
                             className="rounded-xl border p-4"
                         >
                             <div className="flex flex-wrap items-center justify-between gap-3">
-                                <strong className="text-sm uppercase tracking-wide">
-                                    {block.type}
+                                <strong className="text-sm font-semibold text-cim-navy">
+                                    {BLOCK_LABELS[block.type] ?? block.type}
                                 </strong>
 
                                 <div className="flex gap-2">
@@ -240,7 +254,7 @@ export function ActivityBlockEditor({
                                             )
                                         }
                                     >
-                                        Remove
+                                        Hapus Blok
                                     </Button>
                                 </div>
                             </div>
@@ -268,13 +282,14 @@ export function ActivityBlockEditor({
                                                     .value,
                                             )
                                         }
+                                        placeholder="Tuliskan isi teks atau kutipan di sini..."
                                         className="mt-4 min-h-28 w-full rounded-lg border border-input px-3 py-2"
                                     />
                                 )}
 
                             {block.type
                                 === 'heading' && (
-                                    <div className="mt-4 grid gap-3 sm:grid-cols-[120px_1fr]">
+                                    <div className="mt-4 grid gap-3 sm:grid-cols-[140px_1fr]">
                                         <select
                                             value={
                                                 Number(
@@ -295,18 +310,18 @@ export function ActivityBlockEditor({
                                                     ),
                                                 )
                                             }
-                                            className="rounded-lg border border-input px-3 py-2"
+                                            className="rounded-lg border border-input px-3 py-2 text-sm"
                                         >
                                             <option value={2}>
-                                                H2
+                                                Subjudul H2
                                             </option>
 
                                             <option value={3}>
-                                                H3
+                                                Subjudul H3
                                             </option>
 
                                             <option value={4}>
-                                                H4
+                                                Subjudul H4
                                             </option>
                                         </select>
 
@@ -327,7 +342,7 @@ export function ActivityBlockEditor({
                                                         .value,
                                                 )
                                             }
-                                            placeholder="Heading text"
+                                            placeholder="Tuliskan teks subjudul..."
                                             className="rounded-lg border border-input px-3 py-2"
                                         />
                                     </div>
@@ -359,7 +374,7 @@ export function ActivityBlockEditor({
                                             className="rounded-lg border border-input px-3 py-2"
                                         >
                                             <option value="">
-                                                Select image
+                                                Pilih Gambar dari Media
                                             </option>
 
                                             {media.map(
@@ -397,7 +412,7 @@ export function ActivityBlockEditor({
                                                         .value,
                                                 )
                                             }
-                                            placeholder="Alt text"
+                                            placeholder="Deskripsi gambar (alt text)"
                                             className="rounded-lg border border-input px-3 py-2"
                                         />
 
@@ -418,7 +433,7 @@ export function ActivityBlockEditor({
                                                         .value,
                                                 )
                                             }
-                                            placeholder="Caption"
+                                            placeholder="Keterangan gambar (kapsi)"
                                             className="rounded-lg border border-input px-3 py-2"
                                         />
                                     </div>
@@ -500,7 +515,7 @@ export function ActivityBlockEditor({
                             className="mt-4 w-full rounded-lg border border-input px-3 py-2"
                         >
                             <option value="">
-                                Select Product
+                                Pilih Produk Terkait
                             </option>
 
                             {products.map(
@@ -541,7 +556,7 @@ export function ActivityBlockEditor({
                                         .value,
                                 )
                             }
-                            placeholder="YouTube/Vimeo URL"
+                            placeholder="Tautan Video YouTube atau Vimeo (https://...)"
                             className="mt-4 w-full rounded-lg border border-input px-3 py-2"
                         />
                     )}
@@ -566,7 +581,7 @@ export function ActivityBlockEditor({
                                             .value,
                                     )
                                 }
-                                placeholder="Button label"
+                                placeholder="Teks tombol aksi"
                                 className="rounded-lg border border-input px-3 py-2"
                             />
 
@@ -587,7 +602,7 @@ export function ActivityBlockEditor({
                                             .value,
                                     )
                                 }
-                                placeholder="/internal or https://..."
+                                placeholder="Tautan tujuan (/kontak atau https://...)"
                                 className="rounded-lg border border-input px-3 py-2"
                             />
                         </div>

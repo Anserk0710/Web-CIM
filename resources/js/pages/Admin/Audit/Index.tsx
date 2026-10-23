@@ -2,6 +2,10 @@ import { Head, Link, router } from '@inertiajs/react';
 import { DataTable, type DataTableColumn } from '@/components/admin/DataTable';
 import { PageHeader } from '@/components/admin/PageHeader';
 import AdminLayout from '@/layouts/AdminLayout';
+import {
+    formatDateTimeIndonesian,
+    humanizeAuditResult,
+} from '@/lib/humanize';
 
 type Audit = {
     id: number;
@@ -37,11 +41,11 @@ export default function Index({
     const columns: DataTableColumn<Audit>[] = [
         {
             key: 'action',
-            header: 'Action',
+            header: 'Aktivitas / Tindakan',
             render: (audit) => (
                 <Link
                     href={`/admin/audit/${audit.id}`}
-                    className="font-semibold text-cim-blue"
+                    className="font-semibold text-cim-blue hover:text-cim-navy"
                 >
                     {audit.action}
                 </Link>
@@ -49,15 +53,15 @@ export default function Index({
         },
         {
             key: 'actor',
-            header: 'Actor',
+            header: 'Pelaku Tindakan',
             render: (audit) =>
                 audit.actor
                     ? audit.actor.name
-                    : 'System / Guest',
+                    : 'Sistem / Pengunjung Publik',
         },
         {
             key: 'entity',
-            header: 'Entity',
+            header: 'Objek / Data Terkait',
             render: (audit) =>
                 audit.entity_type
                     ? `${audit.entity_type} #${audit.entity_id ?? '—'}`
@@ -65,32 +69,35 @@ export default function Index({
         },
         {
             key: 'result',
-            header: 'Result',
-            render: (audit) =>
-                audit.result,
+            header: 'Status Hasil',
+            render: (audit) => (
+                <span className="rounded-full border px-2.5 py-1 text-xs font-semibold">
+                    {humanizeAuditResult(audit.result)}
+                </span>
+            ),
         },
         {
             key: 'created',
-            header: 'Created',
+            header: 'Waktu Kejadian',
             render: (audit) =>
-                audit.created_at,
+                formatDateTimeIndonesian(audit.created_at),
         },
     ];
 
     return (
         <>
-            <Head title="Audit Log" />
+            <Head title="Catatan Aktivitas" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Audit',
+                        label: 'Catatan Aktivitas',
                     },
                 ]}
             >
                 <PageHeader
-                    title="Audit Log"
-                    description="Append-only sensitive action history."
+                    title="Catatan Aktivitas (Audit Log)"
+                    description="Riwayat lengkap seluruh tindakan penting dan perubahan data yang tercatat permanen dalam sistem."
                 />
 
                 <form
@@ -139,7 +146,7 @@ export default function Index({
                         defaultValue={
                             filters.action
                         }
-                        placeholder="Action"
+                        placeholder="Cari jenis tindakan..."
                         className="rounded-lg border border-input px-3 py-2"
                     />
 
@@ -148,7 +155,7 @@ export default function Index({
                         defaultValue={
                             filters.entity_type
                         }
-                        placeholder="Entity type"
+                        placeholder="Jenis data (misal: Product, User)..."
                         className="rounded-lg border border-input px-3 py-2"
                     />
 
@@ -160,24 +167,27 @@ export default function Index({
                         className="rounded-lg border border-input px-3 py-2"
                     >
                         <option value="">
-                            All result
+                            Semua Status Hasil
                         </option>
 
                         <option value="SUCCESS">
-                            SUCCESS
+                            Berhasil (SUCCESS)
                         </option>
 
                         <option value="DENIED">
-                            DENIED
+                            Akses Ditolak (DENIED)
                         </option>
 
                         <option value="FAILURE">
-                            FAILURE
+                            Gagal (FAILURE)
                         </option>
                     </select>
 
-                    <button className="rounded-lg bg-cim-blue px-5 py-2 text-sm font-semibold text-white">
-                        Filter
+                    <button
+                        type="submit"
+                        className="rounded-lg bg-cim-blue px-5 py-2 text-sm font-semibold text-white hover:bg-cim-navy"
+                    >
+                        Saring Data
                     </button>
                 </form>
 
@@ -187,8 +197,8 @@ export default function Index({
                     rowKey={(audit) =>
                         audit.id
                     }
-                    emptyTitle="Audit log kosong"
-                    emptyDescription="Sensitive actions akan tampil di sini."
+                    emptyTitle="Belum Ada Catatan Aktivitas"
+                    emptyDescription="Setiap tindakan penting dan perubahan data akan tercatat secara permanen di sini."
                 />
             </AdminLayout>
         </>

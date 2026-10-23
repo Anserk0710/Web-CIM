@@ -127,7 +127,7 @@ class ActivityController extends Controller
             )
             ->with(
                 'success',
-                'Activity draft dibuat.',
+                'Draf berita kegiatan berhasil dibuat.',
             );
     }
 
@@ -249,7 +249,7 @@ class ActivityController extends Controller
 
         return back()->with(
             'success',
-            'Activity draft disimpan.',
+            'Perubahan draf berita kegiatan berhasil disimpan.',
         );
     }
 
@@ -273,7 +273,7 @@ class ActivityController extends Controller
 
         return back()->with(
             'success',
-            'Activity dipublish.',
+            'Berita kegiatan berhasil diterbitkan ke situs web.',
         );
     }
 
@@ -297,7 +297,7 @@ class ActivityController extends Controller
 
         return back()->with(
             'success',
-            'Activity diarsipkan.',
+            'Berita kegiatan berhasil diarsipkan.',
         );
     }
 

@@ -3,6 +3,7 @@ import { type FormEvent } from 'react';
 import { FormField } from '@/components/admin/FormField';
 import { PageHeader } from '@/components/admin/PageHeader';
 import { Button } from '@/components/ui/button';
+import { humanizeEmploymentType, humanizeStatus } from '@/lib/humanize';
 import AdminLayout from '@/layouts/AdminLayout';
 
 type FormData = {
@@ -67,34 +68,34 @@ export default function Form({
             <Head
                 title={
                     career
-                        ? 'Edit Career'
-                        : 'Create Career'
+                        ? `Kelola Lowongan - ${career.id}`
+                        : 'Tambah Lowongan Baru'
                 }
             />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Careers',
+                        label: 'Karir & Lowongan',
                         href: '/admin/careers',
                     },
                     {
                         label: career
-                            ? 'Edit'
-                            : 'Create',
+                            ? 'Ubah Lowongan'
+                            : 'Tambah Baru',
                     },
                 ]}
             >
                 <PageHeader
                     title={
                         career
-                            ? 'Edit Career'
-                            : 'Create Career'
+                            ? `Kelola Lowongan: ${form.data.title || `#${career.id}`}`
+                            : 'Tambah Lowongan Baru'
                     }
                     description={
                         career
-                            ? `Status: ${career.status}`
-                            : 'New Career starts as DRAFT.'
+                            ? `Status Lowongan: ${humanizeStatus(career.status)}`
+                            : 'Lowongan baru akan tersimpan sebagai Draf terlebih dahulu sebelum dibuka.'
                     }
                     actions={
                         career && can ? (
@@ -113,7 +114,7 @@ export default function Form({
                                                 },
                                             )}
                                         >
-                                            Open
+                                            Buka Lowongan
                                         </Button>
                                     )}
 
@@ -132,7 +133,7 @@ export default function Form({
                                                 },
                                             )}
                                         >
-                                            Close
+                                            Tutup Lowongan
                                         </Button>
                                     )}
 
@@ -149,7 +150,7 @@ export default function Form({
                                             },
                                         )}
                                     >
-                                        Archive
+                                        Arsipkan
                                     </Button>
                                 )}
                             </div>
@@ -163,7 +164,7 @@ export default function Form({
                 >
                     <div className="grid gap-5 md:grid-cols-2">
                         <FormField
-                            label="Title"
+                            label="Posisi / Judul Lowongan"
                             htmlFor="title"
                             error={form.errors.title}
                             required
@@ -180,7 +181,7 @@ export default function Form({
                         </FormField>
 
                         <FormField
-                            label="Slug"
+                            label="Tautan / Slug Halaman"
                             htmlFor="slug"
                             error={form.errors.slug}
                             required
@@ -197,7 +198,7 @@ export default function Form({
                         </FormField>
 
                         <FormField
-                            label="Department"
+                            label="Departemen"
                             htmlFor="department"
                             required
                         >
@@ -215,7 +216,7 @@ export default function Form({
                         </FormField>
 
                         <FormField
-                            label="Location"
+                            label="Lokasi Penempatan"
                             htmlFor="location"
                             required
                         >
@@ -233,7 +234,7 @@ export default function Form({
                         </FormField>
 
                         <FormField
-                            label="Employment Type"
+                            label="Jenis Ikatan Kerja"
                             htmlFor="employment_type"
                             required
                         >
@@ -255,7 +256,7 @@ export default function Form({
                                             key={type}
                                             value={type}
                                         >
-                                            {type}
+                                            {humanizeEmploymentType(type)}
                                         </option>
                                     ),
                                 )}
@@ -265,7 +266,7 @@ export default function Form({
                         <div />
 
                         <FormField
-                            label="Opens At (WITA)"
+                            label="Waktu Mulai Dibuka (WITA)"
                             htmlFor="opens_at_local"
                         >
                             <input
@@ -286,7 +287,7 @@ export default function Form({
                         </FormField>
 
                         <FormField
-                            label="Closes At (WITA)"
+                            label="Batas Waktu Pendaftaran (WITA)"
                             htmlFor="closes_at_local"
                             error={
                                 form.errors
@@ -313,9 +314,9 @@ export default function Form({
 
                     {(
                         [
-                            ['summary', 'Summary'],
-                            ['responsibilities', 'Responsibilities'],
-                            ['requirements', 'Requirements'],
+                            ['summary', 'Ringkasan Posisi'],
+                            ['responsibilities', 'Tanggung Jawab Pekerjaan'],
+                            ['requirements', 'Kualifikasi & Persyaratan'],
                         ] as [string, string][]
                     ).map(([field, label]) => (
                         <FormField
@@ -346,7 +347,7 @@ export default function Form({
 
                     <div className="grid gap-5 md:grid-cols-2">
                         <FormField
-                            label="SEO Title"
+                            label="Judul Meta (SEO Title)"
                             htmlFor="seo_title"
                         >
                             <input
@@ -363,7 +364,7 @@ export default function Form({
                         </FormField>
 
                         <FormField
-                            label="SEO Description"
+                            label="Deskripsi Meta (SEO Description)"
                             htmlFor="seo_description"
                         >
                             <textarea
@@ -386,11 +387,13 @@ export default function Form({
                             type="submit"
                             disabled={form.processing}
                         >
-                            Save
+                            {form.processing
+                                ? 'Menyimpan...'
+                                : 'Simpan Lowongan'}
                         </Button>
                     </div>
                 </form>
             </AdminLayout>
         </>
-    )
+    );
 }

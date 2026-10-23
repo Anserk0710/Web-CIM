@@ -31,7 +31,7 @@ class CareerApplicationHandoverController extends Controller
 
         return back()->with(
             'success',
-            'HR handover tercatat. Data pribadi dijadwalkan untuk dibersihkan 30 hari setelah handover.',
+            'Serah terima ke tim HR berhasil dicatat. Sesuai kebijakan privasi, berkas lamaran dijadwalkan dibersihkan otomatis dalam 30 hari.',
         );
     }
 }

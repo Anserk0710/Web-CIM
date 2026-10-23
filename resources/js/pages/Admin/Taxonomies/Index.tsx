@@ -65,7 +65,7 @@ function TaxonomySection({
     }
 
     return (
-        <section className="rounded-xl border bg-background p-5">
+        <section className="rounded-xl border bg-background p-5 shadow-sm">
             <h2 className="text-lg font-semibold text-cim-navy">
                 {title}
             </h2>
@@ -76,32 +76,37 @@ function TaxonomySection({
                     className="mt-4 grid gap-3"
                 >
                     <input
-                        placeholder="Name"
+                        placeholder={`Nama ${title}`}
                         value={form.data.name}
-                        onChange={(event) => form.setData(
-                            'name',
-                            event.target.value,
-                        )}
-                        className="rounded-lg border border-input px-3 py-2"
+                        onChange={(event) => {
+                            const val = event.target.value;
+                            form.setData({
+                                ...form.data,
+                                name: val,
+                                slug: val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+                            });
+                        }}
+                        className="rounded-lg border border-input px-3 py-2 text-sm"
                         required
                     />
 
                     <input
-                        placeholder="slug"
+                        placeholder={`Kode URL / Slug`}
                         value={form.data.slug}
                         onChange={(event) => form.setData(
                             'slug',
                             event.target.value,
                         )}
-                        className="rounded-lg border border-input px-3 py-2"
+                        className="rounded-lg border border-input px-3 py-2 text-sm font-mono text-xs"
                         required
                     />
 
                     <Button
                         type="submit"
                         disabled={form.processing}
+                        size="sm"
                     >
-                        Add {title}
+                        {form.processing ? 'Menyimpan...' : `Tambah ${title}`}
                     </Button>
                 </form>
             )}
@@ -110,25 +115,36 @@ function TaxonomySection({
                 {items.map((item) => (
                     <div
                         key={item.id}
-                        className="flex justify-between gap-4 p-3"
+                        className="flex items-center justify-between gap-4 p-3"
                     >
                         <div>
-                            <p className="font-medium">
+                            <p className="font-medium text-cim-navy text-sm">
                                 {item.name}
                             </p>
 
-                            <p className="text-xs text-muted-foreground">
-                                {item.slug}
+                            <p className="text-xs text-muted-foreground font-mono">
+                                /{item.slug}
                             </p>
                         </div>
 
-                        <span className="text-xs">
-                            {item.is_active
-                                ? 'Active'
-                                : 'Inactive'}
+                        <span
+                            className={[
+                                'inline-flex rounded-full border px-2 py-0.5 text-xs font-semibold',
+                                item.is_active
+                                    ? 'border-green-300 bg-green-50 text-green-800'
+                                    : 'border-slate-300 bg-slate-100 text-slate-700',
+                            ].join(' ')}
+                        >
+                            {item.is_active ? 'Aktif' : 'Nonaktif'}
                         </span>
                     </div>
                 ))}
+
+                {items.length === 0 && (
+                    <p className="p-4 text-center text-xs text-muted-foreground">
+                        Belum ada data {title.toLowerCase()}.
+                    </p>
+                )}
             </div>
         </section>
     );
@@ -142,37 +158,37 @@ export default function Index({
 }: Props) {
     return (
         <>
-            <Head title="Taxonomies" />
+            <Head title="Kategori & Klasifikasi Produk" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Taxonomies',
+                        label: 'Kategori & Klasifikasi',
                     },
                 ]}
             >
                 <PageHeader
-                    title="Product Taxonomies"
-                    description="Category adalah primary taxonomy; Brand dan Type merupakan controlled masters."
+                    title="Kategori & Klasifikasi Produk"
+                    description="Kelola kategori utama, merek pabrikan (brand), dan tipe spesifikasi alat medis untuk katalog."
                 />
 
                 <div className="mt-8 grid gap-5 lg:grid-cols-3">
                     <TaxonomySection
-                        title="Category"
+                        title="Kategori Produk"
                         kind="category"
                         items={categories}
                         canManage={canManage}
                     />
 
                     <TaxonomySection
-                        title="Brand"
+                        title="Merek / Brand"
                         kind="brand"
                         items={brands}
                         canManage={canManage}
                     />
 
                     <TaxonomySection
-                        title="Type"
+                        title="Tipe / Klasifikasi"
                         kind="type"
                         items={types}
                         canManage={canManage}
@@ -181,4 +197,4 @@ export default function Index({
             </AdminLayout>
         </>
     );
-}
+}

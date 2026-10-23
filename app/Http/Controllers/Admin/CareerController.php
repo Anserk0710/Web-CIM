@@ -141,7 +141,7 @@ class CareerController extends Controller
             )
             ->with(
                 'success',
-                'Career draft dibuat.',
+                'Draf lowongan kerja berhasil dibuat.',
             );
     }
 
@@ -265,7 +265,7 @@ class CareerController extends Controller
 
         return back()->with(
             'success',
-            'Career disimpan.',
+            'Data lowongan kerja berhasil disimpan.',
         );
     }
 
@@ -289,7 +289,7 @@ class CareerController extends Controller
 
         return back()->with(
             'success',
-            'Career dibuka.',
+            'Lowongan kerja berhasil dibuka dan dipublikasikan.',
         );
     }
 
@@ -313,7 +313,7 @@ class CareerController extends Controller
 
         return back()->with(
             'success',
-            'Career ditutup.',
+            'Lowongan kerja berhasil ditutup.',
         );
     }
 
@@ -337,7 +337,7 @@ class CareerController extends Controller
 
         return back()->with(
             'success',
-            'Career diarsipkan.',
+            'Lowongan kerja berhasil diarsipkan.',
         );
     }
 

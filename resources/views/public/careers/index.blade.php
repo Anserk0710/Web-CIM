@@ -11,11 +11,11 @@
     <section class="bg-gradient-to-br from-cim-ice/60 to-white">
         <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
             <p class="text-sm font-bold uppercase tracking-[0.16em] text-cim-blue">
-                Career
+                Karir
             </p>
 
             <h1 class="mt-3 text-4xl font-bold tracking-tight text-cim-navy sm:text-5xl">
-                {{ $hero['title'] ?? $page?->title ?? 'Career' }}
+                {{ $hero['title'] ?? $page?->title ?? 'Karir' }}
             </h1>
 
             @if(!empty($hero['description']))
@@ -41,7 +41,7 @@
         @if($benefits !== [])
             <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
                 <h2 class="text-2xl font-bold text-cim-navy">
-                    {{ $branding['heading'] ?? 'Career at CIM' }}
+                    {{ $branding['heading'] ?? 'Karir di PT Cahya Intan Medika' }}
                 </h2>
 
                 <div class="mt-6 grid gap-4 md:grid-cols-3">
@@ -69,28 +69,28 @@
         <div class="flex flex-wrap items-end justify-between gap-4">
             <div>
                 <h2 class="text-3xl font-bold text-cim-navy">
-                    Open Positions
+                    Lowongan Pekerjaan Tersedia
                 </h2>
 
                 <p class="mt-2 text-sm text-slate-600">
-                    Lowongan yang ditampilkan hanya yang sedang menerima lamaran.
+                    Daftar posisi aktif yang saat ini sedang membuka penerimaan lamaran.
                 </p>
             </div>
 
             <span class="rounded-full bg-cim-ice px-4 py-2 text-sm font-semibold text-cim-navy">
-                {{ $careers->total() }} posisi
+                {{ $careers->total() }} posisi aktif
             </span>
         </div>
 
         <form method="GET" action="{{ route('careers.index') }}" class="mt-6 flex flex-col gap-3 sm:flex-row">
-            <label for="q" class="sr-only">Cari posisi</label>
+            <label for="q" class="sr-only">Cari lowongan posisi</label>
 
             <input id="q" name="q" value="{{ $filters['q'] }}" maxlength="100"
-                placeholder="Cari posisi, departemen, atau lokasi"
+                placeholder="Cari posisi, departemen, atau lokasi penempatan..."
                 class="min-w-0 flex-1 rounded-lg border border-input px-4 py-3">
 
             <button type="submit" class="rounded-lg bg-cim-blue px-5 py-3 font-semibold text-white hover:bg-cim-navy">
-                Search
+                Cari Lowongan
             </button>
         </form>
 
@@ -101,22 +101,30 @@
                 </h3>
 
                 <p class="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-600">
-                    Saat ini tidak ada lowongan yang menerima lamaran. Silakan kunjungi halaman Company untuk mengetahui
-                    informasi perusahaan.
+                    Saat ini belum ada posisi baru yang dibuka. Silakan kunjungi profil perusahaan untuk mengetahui lebih banyak tentang PT Cahya Intan Medika.
                 </p>
 
                 <a href="{{ route('company') }}"
                     class="mt-5 inline-flex rounded-lg bg-cim-navy px-5 py-3 font-semibold text-white hover:bg-cim-blue">
-                    About CIM
+                    Tentang PT Cahya Intan Medika
                 </a>
             </div>
         @else
             <div class="mt-8 grid gap-5 md:grid-cols-2">
                 @foreach($careers as $career)
+                    @php
+                        $employmentLabel = match($career->employment_type?->value ?? '') {
+                            'FULL_TIME' => 'Penuh Waktu (Full Time)',
+                            'PART_TIME' => 'Paruh Waktu (Part Time)',
+                            'CONTRACT' => 'Kontrak (Contract)',
+                            'INTERNSHIP' => 'Magang (Internship)',
+                            default => str_replace('_', ' ', $career->employment_type?->value ?? ''),
+                        };
+                    @endphp
                     <article class="rounded-2xl border bg-white p-6">
                         <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
                             <span class="rounded-full bg-cim-ice px-3 py-1 text-cim-navy">
-                                {{ str_replace('_', ' ', $career->employment_type->value) }}
+                                {{ $employmentLabel }}
                             </span>
 
                             <span class="text-slate-500">
@@ -142,14 +150,14 @@
 
                         @if($career->closes_at)
                             <p class="mt-4 text-sm text-slate-500">
-                                Batas waktu:
+                                Batas waktu lamaran:
                                 {{ $career->closes_at->timezone('Asia/Makassar')->format('d-m-Y H:i') }} WITA
                             </p>
                         @endif
 
                         <a href="{{ route('careers.show', $career->slug) }}"
                             class="mt-5 inline-flex font-semibold text-cim-blue hover:text-cim-navy">
-                            View vacancy
+                            Lihat Detail Lowongan
                         </a>
                     </article>
                 @endforeach

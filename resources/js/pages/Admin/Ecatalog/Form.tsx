@@ -21,6 +21,10 @@ import {
 } from '@/components/ui/button';
 
 import AdminLayout from '@/layouts/AdminLayout';
+import {
+    humanizeAvailability,
+    humanizeStatus,
+} from '@/lib/humanize';
 
 type ProductOption = {
     id: number;
@@ -94,34 +98,34 @@ export default function Form({
             <Head
                 title={
                     entry
-                        ? 'Edit E-Catalog'
-                        : 'Create E-Catalog'
+                        ? 'Ubah E-Katalog'
+                        : 'Tambah E-Katalog Baru'
                 }
             />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'E-Catalog',
+                        label: 'E-Katalog',
                         href: '/admin/ecatalog',
                     },
                     {
                         label: entry
-                            ? 'Edit'
-                            : 'Create',
+                            ? 'Ubah'
+                            : 'Tambah Baru',
                     },
                 ]}
             >
                 <PageHeader
                     title={
                         entry
-                            ? 'Edit E-Catalog'
-                            : 'Create E-Catalog'
+                            ? 'Ubah E-Katalog'
+                            : 'Tambah E-Katalog Baru'
                     }
                     description={
                         entry
-                            ? `Status: ${entry.status}`
-                            : 'New record starts as DRAFT.'
+                            ? `Status Saat Ini: ${humanizeStatus(entry.status)}`
+                            : 'Data baru akan tersimpan terlebih dahulu sebagai Draf.'
                     }
                     actions={
                         entry && can ? (
@@ -138,7 +142,7 @@ export default function Form({
                                             },
                                         )}
                                     >
-                                        Publish
+                                        Terbitkan
                                     </Button>
                                 )}
 
@@ -155,7 +159,7 @@ export default function Form({
                                             },
                                         )}
                                     >
-                                        Archive
+                                        Arsipkan
                                     </Button>
                                 )}
 
@@ -168,7 +172,7 @@ export default function Form({
                                             onClick={() => {
                                                 if (
                                                     window.confirm(
-                                                        'Delete draft E-Catalog?',
+                                                        'Apakah Anda yakin ingin menghapus draf E-Katalog ini?',
                                                     )
                                                 ) {
                                                     router.delete(
@@ -177,7 +181,7 @@ export default function Form({
                                                 }
                                             }}
                                         >
-                                            Delete
+                                            Hapus Draf
                                         </Button>
                                     )}
                             </div>
@@ -191,7 +195,7 @@ export default function Form({
                 >
                     <div className="grid gap-5 md:grid-cols-2">
                         <FormField
-                            label="Product"
+                            label="Produk Alat Kesehatan Terkait"
                             htmlFor="product_id"
                             error={form.errors.product_id}
                             required
@@ -213,7 +217,7 @@ export default function Form({
                                 className="w-full rounded-lg border border-input px-3 py-2"
                             >
                                 <option value="">
-                                    Select Product
+                                    Pilih Produk Terkait
                                 </option>
 
                                 {products.map(
@@ -230,7 +234,7 @@ export default function Form({
                         </FormField>
 
                         <FormField
-                            label="Catalog Code"
+                            label="Kode E-Katalog LKPP"
                             htmlFor="catalog_code"
                             error={
                                 form.errors.catalog_code
@@ -246,12 +250,13 @@ export default function Form({
                                     'catalog_code',
                                     event.target.value,
                                 )}
+                                placeholder="Contoh: E-CAT-2026-001"
                                 className="w-full rounded-lg border border-input px-3 py-2"
                             />
                         </FormField>
 
                         <FormField
-                            label="Procurement Title"
+                            label="Nama Pengadaan / Paket"
                             htmlFor="procurement_title"
                             error={
                                 form.errors
@@ -269,12 +274,13 @@ export default function Form({
                                     'procurement_title',
                                     event.target.value,
                                 )}
+                                placeholder="Nama paket pengadaan sesuai LKPP"
                                 className="w-full rounded-lg border border-input px-3 py-2"
                             />
                         </FormField>
 
                         <FormField
-                            label="Procurement Category"
+                            label="Kategori Pengadaan"
                             htmlFor="procurement_category"
                         >
                             <input
@@ -287,12 +293,13 @@ export default function Form({
                                     'procurement_category',
                                     event.target.value,
                                 )}
+                                placeholder="Contoh: Alat Kesehatan Radiologi"
                                 className="w-full rounded-lg border border-input px-3 py-2"
                             />
                         </FormField>
 
                         <FormField
-                            label="Availability"
+                            label="Ketersediaan Stok"
                             htmlFor="availability"
                             required
                         >
@@ -313,7 +320,7 @@ export default function Form({
                                             key={value}
                                             value={value}
                                         >
-                                            {value}
+                                            {humanizeAvailability(value)}
                                         </option>
                                     ),
                                 )}
@@ -321,7 +328,7 @@ export default function Form({
                         </FormField>
 
                         <FormField
-                            label="Unit / Package"
+                            label="Satuan / Kemasan Produk"
                             htmlFor="unit_package"
                         >
                             <input
@@ -333,12 +340,13 @@ export default function Form({
                                     'unit_package',
                                     event.target.value,
                                 )}
+                                placeholder="Contoh: Unit / Set / Box"
                                 className="w-full rounded-lg border border-input px-3 py-2"
                             />
                         </FormField>
 
                         <FormField
-                            label="Effective At"
+                            label="Tanggal Mulai Berlaku"
                             htmlFor="effective_at"
                         >
                             <input
@@ -358,7 +366,7 @@ export default function Form({
                         </FormField>
 
                         <FormField
-                            label="Expires At"
+                            label="Tanggal Berakhir Masa Berlaku"
                             htmlFor="expires_at"
                             error={
                                 form.errors.expires_at
@@ -381,7 +389,7 @@ export default function Form({
                         </FormField>
 
                         <FormField
-                            label="Reference URL"
+                            label="Tautan Resmi E-Katalog (LKPP)"
                             htmlFor="reference_url"
                             error={
                                 form.errors.reference_url
@@ -397,12 +405,13 @@ export default function Form({
                                     'reference_url',
                                     event.target.value,
                                 )}
+                                placeholder="https://e-katalog.lkpp.go.id/..."
                                 className="w-full rounded-lg border border-input px-3 py-2"
                             />
                         </FormField>
 
                         <FormField
-                            label="Sort Order"
+                            label="Urutan Tampilan"
                             htmlFor="sort_order"
                         >
                             <input
@@ -424,7 +433,7 @@ export default function Form({
                     </div>
 
                     <FormField
-                        label="Notes"
+                        label="Catatan / Keterangan Spesifikasi"
                         htmlFor="notes"
                     >
                         <textarea
@@ -434,13 +443,14 @@ export default function Form({
                                 'notes',
                                 event.target.value,
                             )}
+                            placeholder="Tambahkan informasi spesifikasi, nomor izin edar AKL/AKD, atau catatan pengadaan..."
                             className="min-h-28 w-full rounded-lg border border-input px-3 py-2"
                         />
                     </FormField>
 
                     <div className="grid gap-5 md:grid-cols-2">
                         <FormField
-                            label="SEO Title"
+                            label="Judul Penelusuran (SEO Title)"
                             htmlFor="seo_title"
                         >
                             <input
@@ -452,12 +462,13 @@ export default function Form({
                                     'seo_title',
                                     event.target.value,
                                 )}
+                                placeholder="Judul ringkas untuk hasil mesin pencari"
                                 className="w-full rounded-lg border border-input px-3 py-2"
                             />
                         </FormField>
 
                         <FormField
-                            label="SEO Description"
+                            label="Deskripsi Penelusuran (Meta Description)"
                             htmlFor="seo_description"
                         >
                             <textarea
@@ -470,6 +481,7 @@ export default function Form({
                                     'seo_description',
                                     event.target.value,
                                 )}
+                                placeholder="Ringkasan informatif 150-160 karakter untuk hasil pencarian"
                                 className="min-h-24 w-full rounded-lg border border-input px-3 py-2"
                             />
                         </FormField>
@@ -481,8 +493,8 @@ export default function Form({
                             disabled={form.processing}
                         >
                             {form.processing
-                                ? 'Saving...'
-                                : 'Save'}
+                                ? 'Menyimpan...'
+                                : 'Simpan Data'}
                         </Button>
                     </div>
                 </form>

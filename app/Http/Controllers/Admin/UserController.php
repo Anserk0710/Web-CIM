@@ -89,7 +89,7 @@ class UserController extends Controller
 
         return back()->with(
             'success',
-            'User dibuat. Reset-password email dikirim.',
+            'Pengguna baru berhasil ditambahkan dan email pengaturan kata sandi telah dikirimkan.',
         );
     }
 
@@ -122,7 +122,7 @@ class UserController extends Controller
 
         return back()->with(
             'success',
-            'User diperbarui.',
+            'Data pengguna berhasil diperbarui.',
         );
     }
 }

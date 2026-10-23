@@ -62,23 +62,33 @@ export default function Categories({
     const columns: DataTableColumn<Category>[] = [
         {
             key: 'name',
-            header: 'Name',
-            render: (category) =>
-                category.name,
+            header: 'Nama Kategori',
+            render: (category) => (
+                <span className="font-medium text-cim-navy">
+                    {category.name}
+                </span>
+            ),
         },
         {
             key: 'slug',
-            header: 'Slug',
+            header: 'Tautan Slug',
             render: (category) =>
                 category.slug,
         },
         {
             key: 'status',
             header: 'Status',
-            render: (category) =>
-                category.is_active
-                    ? 'Active'
-                    : 'Inactive',
+            render: (category) => (
+                <span
+                    className={`inline-flex rounded-full border px-2.5 py-1 text-xs font-semibold ${
+                        category.is_active
+                            ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                            : 'border-slate-200 bg-slate-50 text-slate-600'
+                    }`}
+                >
+                    {category.is_active ? 'Aktif' : 'Nonaktif'}
+                </span>
+            ),
         },
         {
             key: 'action',
@@ -109,8 +119,8 @@ export default function Categories({
                         )}
                     >
                         {category.is_active
-                            ? 'Disable'
-                            : 'Enable'}
+                            ? 'Nonaktifkan'
+                            : 'Aktifkan'}
                     </Button>
                 ) : null,
         },
@@ -118,21 +128,22 @@ export default function Categories({
 
     return (
         <>
-            <Head title="Activity Categories" />
+            <Head title="Kategori Berita & Kegiatan" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Activities',
+                        label: 'Berita & Kegiatan',
                         href: '/admin/activities',
                     },
                     {
-                        label: 'Categories',
+                        label: 'Kategori',
                     },
                 ]}
             >
                 <PageHeader
-                    title="Activity Categories"
+                    title="Kategori Berita & Kegiatan"
+                    description="Kelola pengelompokan topik untuk artikel berita dan kegiatan perusahaan."
                 />
 
                 {canManage && (
@@ -141,7 +152,7 @@ export default function Categories({
                         className="my-6 grid gap-3 rounded-xl border bg-background p-4 sm:grid-cols-[1fr_1fr_auto]"
                     >
                         <input
-                            placeholder="Name"
+                            placeholder="Nama kategori baru..."
                             value={
                                 form.data.name
                             }
@@ -153,7 +164,7 @@ export default function Categories({
                         />
 
                         <input
-                            placeholder="slug"
+                            placeholder="slug-kategori (otomatis atau kustom)"
                             value={
                                 form.data.slug
                             }
@@ -165,7 +176,7 @@ export default function Categories({
                         />
 
                         <Button type="submit">
-                            Add
+                            Tambah Kategori
                         </Button>
                     </form>
                 )}
@@ -176,8 +187,8 @@ export default function Categories({
                     rowKey={(category) =>
                         category.id
                     }
-                    emptyTitle="No categories"
-                    emptyDescription="Create Activity category."
+                    emptyTitle="Belum Ada Kategori"
+                    emptyDescription="Tambahkan kategori pertama untuk mengelompokkan berita dan kegiatan."
                 />
             </AdminLayout>
         </>

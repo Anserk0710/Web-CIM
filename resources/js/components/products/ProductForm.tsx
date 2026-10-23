@@ -135,13 +135,13 @@ export function ProductForm({
         >
             {Object.keys(form.errors).length > 0 && (
                 <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
-                    Periksa kembali field yang belum valid.
+                    Periksa kembali data formulir yang belum sesuai.
                 </div>
             )}
 
             <section className="rounded-2xl border bg-background p-6">
                 <h2 className="font-semibold text-cim-navy">
-                    Basic information
+                    Informasi Dasar Produk
                 </h2>
 
                 <div className="mt-5 grid gap-5 md:grid-cols-2">
@@ -150,7 +150,7 @@ export function ProductForm({
                             htmlFor="name"
                             className="mb-2 block text-sm font-medium"
                         >
-                            Name
+                            Nama Produk
                         </label>
 
                         <input
@@ -176,7 +176,7 @@ export function ProductForm({
                             htmlFor="requested_slug"
                             className="mb-2 block text-sm font-medium"
                         >
-                            Requested slug
+                            Tautan / Slug Halaman
                         </label>
 
                         <input
@@ -208,7 +208,7 @@ export function ProductForm({
                             htmlFor="category_id"
                             className="mb-2 block text-sm font-medium"
                         >
-                            Primary category
+                            Kategori Utama
                         </label>
 
                         <select
@@ -229,7 +229,7 @@ export function ProductForm({
                             required
                         >
                             <option value="">
-                                Select category
+                                Pilih Kategori
                             </option>
 
                             {options.categories.map(
@@ -250,7 +250,7 @@ export function ProductForm({
                             htmlFor="brand_id"
                             className="mb-2 block text-sm font-medium"
                         >
-                            Brand
+                            Merek / Brand
                         </label>
 
                         <select
@@ -270,7 +270,7 @@ export function ProductForm({
                             className="w-full rounded-lg border border-input px-3 py-2"
                         >
                             <option value="">
-                                No brand
+                                Tanpa Merek
                             </option>
 
                             {options.brands.map(
@@ -291,7 +291,7 @@ export function ProductForm({
                             htmlFor="type_id"
                             className="mb-2 block text-sm font-medium"
                         >
-                            Type
+                            Tipe Produk
                         </label>
 
                         <select
@@ -311,7 +311,7 @@ export function ProductForm({
                             className="w-full rounded-lg border border-input px-3 py-2"
                         >
                             <option value="">
-                                No type
+                                Tanpa Tipe
                             </option>
 
                             {options.types.map(
@@ -339,7 +339,7 @@ export function ProductForm({
                             )}
                         />
 
-                        Featured product
+                        Tampilkan sebagai Produk Unggulan
                     </label>
                 </div>
 
@@ -348,7 +348,7 @@ export function ProductForm({
                         htmlFor="summary"
                         className="mb-2 block text-sm font-medium"
                     >
-                        Summary
+                        Ringkasan Singkat
                     </label>
 
                     <textarea
@@ -367,7 +367,7 @@ export function ProductForm({
                         htmlFor="description"
                         className="mb-2 block text-sm font-medium"
                     >
-                        Description
+                        Deskripsi Lengkap
                     </label>
 
                     <textarea
@@ -387,7 +387,7 @@ export function ProductForm({
             <section className="rounded-2xl border bg-background p-6">
                 <div className="flex items-center justify-between">
                     <h2 className="font-semibold text-cim-navy">
-                        Highlights
+                        Keunggulan Utama Produk
                     </h2>
 
                     <Button
@@ -402,7 +402,7 @@ export function ProductForm({
                             ],
                         )}
                     >
-                        Add highlight
+                        Tambah Poin Keunggulan
                     </Button>
                 </div>
 
@@ -414,7 +414,8 @@ export function ProductForm({
                                 className="flex gap-2"
                             >
                                 <input
-                                    aria-label={`Highlight ${index + 1}`}
+                                    aria-label={`Poin Keunggulan ${index + 1}`}
+                                    placeholder="Contoh: Akurasi pengukuran tinggi dan bergaransi resmi"
                                     value={highlight}
                                     onChange={(event) => {
                                         const next = [
@@ -447,7 +448,7 @@ export function ProductForm({
                                             ),
                                     )}
                                 >
-                                    Remove
+                                    Hapus
                                 </Button>
                             </div>
                         ),
@@ -458,7 +459,7 @@ export function ProductForm({
             <section className="rounded-2xl border bg-background p-6">
                 <div className="flex items-center justify-between">
                     <h2 className="font-semibold text-cim-navy">
-                        Specifications
+                        Spesifikasi Teknis
                     </h2>
 
                     <Button
@@ -476,7 +477,7 @@ export function ProductForm({
                             ],
                         )}
                     >
-                        Add group
+                        Tambah Kelompok
                     </Button>
                 </div>
 
@@ -489,8 +490,8 @@ export function ProductForm({
                             >
                                 <div className="flex gap-2">
                                     <input
-                                        aria-label={`Specification group ${groupIndex + 1}`}
-                                        placeholder="Group name"
+                                        aria-label={`Kelompok Spesifikasi ${groupIndex + 1}`}
+                                        placeholder="Nama Kelompok (contoh: Dimensi & Daya)"
                                         value={group.name}
                                         onChange={(event) => updateSpecGroup(
                                             groupIndex,
@@ -520,7 +521,7 @@ export function ProductForm({
                                                 ),
                                         )}
                                     >
-                                        Remove group
+                                        Hapus Kelompok
                                     </Button>
                                 </div>
 
@@ -537,7 +538,7 @@ export function ProductForm({
                                                 className="grid gap-2 md:grid-cols-[1fr_1fr_120px_auto]"
                                             >
                                                 <input
-                                                    placeholder="Label"
+                                                    placeholder="Nama Fitur / Parameter"
                                                     value={
                                                         item.label
                                                     }
@@ -568,7 +569,7 @@ export function ProductForm({
                                                 />
 
                                                 <input
-                                                    placeholder="Value"
+                                                    placeholder="Nilai / Spesifikasi"
                                                     value={
                                                         item.value
                                                     }
@@ -599,7 +600,7 @@ export function ProductForm({
                                                 />
 
                                                 <input
-                                                    placeholder="Unit"
+                                                    placeholder="Satuan (opsional)"
                                                     value={
                                                         item.unit
                                                     }
@@ -649,7 +650,7 @@ export function ProductForm({
                                                         },
                                                     )}
                                                 >
-                                                    Remove
+                                                    Hapus
                                                 </Button>
                                             </div>
                                         ),
@@ -676,7 +677,7 @@ export function ProductForm({
                                         },
                                     )}
                                 >
-                                    Add specification
+                                    Tambah Baris Spesifikasi
                                 </Button>
                             </div>
                         ),
@@ -686,12 +687,12 @@ export function ProductForm({
 
             <section className="rounded-2xl border bg-background p-6">
                 <h2 className="font-semibold text-cim-navy">
-                    Media
+                    Media Foto & Brosur
                 </h2>
 
                 <div className="mt-5">
                     <label className="mb-2 block text-sm font-medium">
-                        Gallery
+                        Galeri Foto Produk
                     </label>
 
                     <select
@@ -743,7 +744,7 @@ export function ProductForm({
                                     )}
 
                                     <input
-                                        placeholder="Alt text"
+                                        placeholder="Keterangan teks gambar (Alt text)"
                                         value={
                                             gallery.alt_text
                                         }
@@ -760,7 +761,7 @@ export function ProductForm({
                                     />
 
                                     <input
-                                        placeholder="Caption"
+                                        placeholder="Keterangan foto (Caption)"
                                         value={
                                             gallery.caption
                                         }
@@ -787,7 +788,7 @@ export function ProductForm({
                             htmlFor="brochure_media_id"
                             className="mb-2 block text-sm font-medium"
                         >
-                            Brochure PDF
+                            Berkas Brosur (PDF)
                         </label>
 
                         <select
@@ -808,7 +809,7 @@ export function ProductForm({
                             className="w-full rounded-lg border border-input px-3 py-2"
                         >
                             <option value="">
-                                No brochure
+                                Tanpa Berkas Brosur
                             </option>
 
                             {pdfs.map((media) => (
@@ -827,7 +828,7 @@ export function ProductForm({
                             htmlFor="og_media_id"
                             className="mb-2 block text-sm font-medium"
                         >
-                            OG image
+                            Gambar Pratinjau Sosial (OG Image)
                         </label>
 
                         <select
@@ -848,7 +849,7 @@ export function ProductForm({
                             className="w-full rounded-lg border border-input px-3 py-2"
                         >
                             <option value="">
-                                No OG image
+                                Tanpa Gambar Pratinjau
                             </option>
 
                             {images.map((media) => (
@@ -866,7 +867,7 @@ export function ProductForm({
 
             <section className="rounded-2xl border bg-background p-6">
                 <h2 className="font-semibold text-cim-navy">
-                    Related products
+                    Produk Terkait
                 </h2>
 
                 <select
@@ -902,7 +903,7 @@ export function ProductForm({
 
             <section className="rounded-2xl border bg-background p-6">
                 <h2 className="font-semibold text-cim-navy">
-                    SEO
+                    Optimasi Mesin Pencari (SEO)
                 </h2>
 
                 <div className="mt-5 space-y-5">
@@ -911,7 +912,7 @@ export function ProductForm({
                             htmlFor="seo_title"
                             className="mb-2 block text-sm font-medium"
                         >
-                            SEO title
+                            Judul Meta (SEO Title)
                         </label>
 
                         <input
@@ -932,7 +933,7 @@ export function ProductForm({
                             htmlFor="seo_description"
                             className="mb-2 block text-sm font-medium"
                         >
-                            SEO description
+                            Deskripsi Meta (SEO Description)
                         </label>
 
                         <textarea
@@ -957,7 +958,7 @@ export function ProductForm({
                     disabled={form.processing}
                 >
                     {form.processing
-                        ? 'Saving...'
+                        ? 'Menyimpan...'
                         : submitLabel}
                 </Button>
             </div>

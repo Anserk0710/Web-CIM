@@ -136,7 +136,7 @@ class SettingsController extends Controller
 
         return back()->with(
             'success',
-            'Site settings diperbarui.',
+            'Pengaturan situs web berhasil diperbarui.',
         );
     }
 
@@ -151,7 +151,7 @@ class SettingsController extends Controller
 
         return back()->with(
             'success',
-            'Office dibuat.',
+            'Kantor cabang baru berhasil ditambahkan.',
         );
     }
 
@@ -168,7 +168,7 @@ class SettingsController extends Controller
 
         return back()->with(
             'success',
-            'Office diperbarui.',
+            'Data kantor cabang berhasil diperbarui.',
         );
     }
 }

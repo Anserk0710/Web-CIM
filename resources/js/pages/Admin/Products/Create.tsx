@@ -28,22 +28,22 @@ export default function Create({
 }: Props) {
     return (
         <>
-            <Head title="Create Product" />
+            <Head title="Tambah Produk Baru" />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Products',
+                        label: 'Produk',
                         href: '/admin/products',
                     },
                     {
-                        label: 'Create',
+                        label: 'Tambah Baru',
                     },
                 ]}
             >
                 <PageHeader
-                    title="Create Product"
-                    description="Membuat WORKING revision. Product belum terlihat di website publik sampai dipublish."
+                    title="Tambah Produk Baru"
+                    description="Buat draf produk baru. Produk ini belum akan ditampilkan ke pengunjung situs sampai Anda menerbitkannya."
                 />
 
                 <ProductForm
@@ -51,7 +51,7 @@ export default function Create({
                     options={options}
                     action="/admin/products"
                     method="post"
-                    submitLabel="Save draft"
+                    submitLabel="Simpan Sebagai Draf"
                 />
             </AdminLayout>
         </>

@@ -4,7 +4,7 @@
         class="mt-12 rounded-2xl border border-green-300 bg-green-50 p-6 text-green-950"
     >
         <h2 class="font-semibold">
-            Application received
+            Lamaran Berhasil Diterima
         </h2>
 
         <p class="mt-2 text-sm leading-6">
@@ -20,7 +20,7 @@
         </h2>
 
         <p class="mt-2 text-sm leading-6 text-amber-900">
-            Informasi posisi tetap tersedia, tetapi formulir lamaran tidak dapat digunakan.
+            Informasi lowongan tetap dapat dibaca, namun pengiriman formulir lamaran saat ini sudah tidak aktif.
         </p>
     </section>
 @elseif(!$canApply)
@@ -30,15 +30,15 @@
         </h2>
 
         <p class="mt-2 text-sm leading-6 text-amber-900">
-            Informasi privasi atau versi persetujuan lamaran belum dikonfigurasi.
-            Silakan hubungi perusahaan melalui halaman Contact.
+            Informasi privasi atau ketentuan persetujuan lamaran belum dikonfigurasi.
+            Silakan hubungi tim kami melalui halaman Hubungi Kami.
         </p>
 
         <a
             href="{{ route('contact') }}"
             class="mt-4 inline-flex font-semibold text-cim-blue hover:text-cim-navy"
         >
-            Contact Us
+            Hubungi Kami
         </a>
     </section>
 @else
@@ -47,11 +47,11 @@
         class="mt-12 rounded-2xl border p-6 sm:p-8"
     >
         <h2 class="text-2xl font-bold text-cim-navy">
-            Apply for this position
+            Kirimkan Lamaran Pekerjaan
         </h2>
 
         <p class="mt-3 text-sm leading-6 text-slate-600">
-            CV disimpan pada private storage dan hanya dapat diakses oleh pengguna CMS yang memiliki izin.
+            Dokumen CV Anda tersimpan dengan aman pada penyimpanan privat dan hanya dapat diakses oleh staf rekrutmen yang berwenang.
         </p>
 
         @if($errors->any())
@@ -60,11 +60,11 @@
                 class="mt-5 rounded-xl border border-red-300 bg-red-50 p-4 text-sm text-red-900"
             >
                 <p class="font-semibold">
-                    Application belum dapat dikirim.
+                    Lamaran belum dapat dikirimkan.
                 </p>
 
                 <p class="mt-1">
-                    Periksa kembali field yang ditandai di bawah.
+                    Mohon periksa kembali kolom isian yang ditandai di bawah ini.
                 </p>
             </div>
         @endif
@@ -88,7 +88,7 @@
                     for="full_name"
                     class="mb-2 block text-sm font-medium"
                 >
-                    Nama lengkap
+                    Nama Lengkap
                 </label>
 
                 <input
@@ -114,7 +114,7 @@
                         for="email"
                         class="mb-2 block text-sm font-medium"
                     >
-                        Email
+                        Alamat Email
                     </label>
 
                     <input
@@ -140,7 +140,7 @@
                         for="phone"
                         class="mb-2 block text-sm font-medium"
                     >
-                        Nomor telepon
+                        Nomor Telepon / WhatsApp
                     </label>
 
                     <input
@@ -165,7 +165,7 @@
                     for="introduction"
                     class="mb-2 block text-sm font-medium"
                 >
-                    Introduction (opsional)
+                    Perkenalan Singkat (Opsional)
                 </label>
 
                 <textarea
@@ -173,6 +173,7 @@
                     name="introduction"
                     rows="5"
                     maxlength="5000"
+                    placeholder="Ceritakan secara singkat mengenai latar belakang, keahlian, dan motivasi Anda..."
                     class="w-full rounded-lg border border-input px-3 py-2.5"
                 >{{ old('introduction') }}</textarea>
 
@@ -188,7 +189,7 @@
                     for="portfolio_url"
                     class="mb-2 block text-sm font-medium"
                 >
-                    Portfolio URL (opsional)
+                    Tautan Portofolio (Opsional)
                 </label>
 
                 <input
@@ -197,6 +198,7 @@
                     name="portfolio_url"
                     value="{{ old('portfolio_url') }}"
                     maxlength="2048"
+                    placeholder="https://..."
                     class="w-full rounded-lg border border-input px-3 py-2.5"
                 >
 
@@ -212,7 +214,7 @@
                     for="linkedin_url"
                     class="mb-2 block text-sm font-medium"
                 >
-                    LinkedIn URL (opsional)
+                    Tautan Profil LinkedIn (Opsional)
                 </label>
 
                 <input
@@ -221,6 +223,7 @@
                     name="linkedin_url"
                     value="{{ old('linkedin_url') }}"
                     maxlength="2048"
+                    placeholder="https://linkedin.com/in/..."
                     class="w-full rounded-lg border border-input px-3 py-2.5"
                 >
 
@@ -236,7 +239,7 @@
                     for="cv"
                     class="mb-2 block text-sm font-medium"
                 >
-                    CV (PDF, maksimum 5 MiB)
+                    Berkas CV / Resume (Format PDF, Maksimal 5 MB)
                 </label>
 
                 <input
@@ -261,7 +264,7 @@
                 </p>
 
                 <p class="mt-3 text-xs text-slate-500">
-                    Consent version:
+                    Versi Persetujuan:
                     {{ $activeConsent->version }}
                 </p>
 
@@ -276,7 +279,7 @@
                     >
 
                     <span>
-                        Saya telah membaca dan menyetujui pemrosesan data untuk proses rekrutmen sesuai pemberitahuan di atas.
+                        Saya telah membaca, memahami, dan menyetujui pemrosesan data pribadi untuk tahapan seleksi rekrutmen sesuai ketentuan di atas.
                     </span>
                 </label>
 
@@ -317,7 +320,7 @@
                 type="submit"
                 class="inline-flex rounded-lg bg-cim-blue px-5 py-3 font-semibold text-white hover:bg-cim-navy"
             >
-                Submit Application
+                Kirim Lamaran Pekerjaan <span class="sr-only">Submit Application</span>
             </button>
         </form>
     </section>

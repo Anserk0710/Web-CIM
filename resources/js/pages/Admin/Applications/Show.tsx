@@ -22,6 +22,10 @@ import {
 } from '@/components/ui/button';
 
 import AdminLayout from '@/layouts/AdminLayout';
+import {
+    formatDateTimeIndonesian,
+    humanizeStatus,
+} from '@/lib/humanize';
 
 type Transition = {
     value: string;
@@ -101,37 +105,18 @@ type Props = {
     };
 };
 
-function formatDate(
-    value: string | null,
-): string {
-    if (!value) {
-        return '';
-    }
-
-    return new Intl.DateTimeFormat(
-        'id-ID',
-        {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-            timeZone: 'Asia/Makassar',
-        },
-    ).format(
-        new Date(value),
-    );
-}
-
 function formatBytes(
     value: number | null,
 ): string {
     if (!value) {
-        return '';
+        return '—';
     }
 
     return `${(
         value
         / 1024
         / 1024
-    ).toFixed(2)} MiB`;
+    ).toFixed(2)} MB`;
 }
 
 export default function Show({
@@ -222,13 +207,13 @@ export default function Show({
     return (
         <>
             <Head
-                title={`Application #${application.id}`}
+                title={`Berkas Lamaran #${application.id}`}
             />
 
             <AdminLayout
                 breadcrumbs={[
                     {
-                        label: 'Applications',
+                        label: 'Lamaran Masuk',
                         href: '/admin/applications',
                     },
                     {
@@ -239,9 +224,9 @@ export default function Show({
                 <PageHeader
                     title={
                         application.full_name
-                        ?? `Application #${application.id}`
+                        ?? `Berkas Lamaran #${application.id}`
                     }
-                    description={`${application.career.title}  ${application.status}`}
+                    description={`${application.career.title} · ${humanizeStatus(application.status)}`}
                     actions={
                         can.download
                         && application.has_cv
@@ -250,7 +235,7 @@ export default function Show({
                                     href={`/admin/applications/${application.id}/cv`}
                                     className="inline-flex h-10 items-center rounded-lg bg-cim-blue px-4 text-sm font-semibold text-white hover:bg-cim-navy"
                                 >
-                                    Download CV
+                                    Unduh Berkas CV
                                 </a>
                             )
                             : undefined
@@ -262,11 +247,12 @@ export default function Show({
                         role="status"
                         className="mt-6 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-950"
                     >
-                        Application ini telah dianonimkan pada{' '}
-                        {formatDate(
+                        Berkas lamaran ini telah disamarkan pada{' '}
+                        {formatDateTimeIndonesian(
                             application
                                 .anonymized_at,
-                        )}.
+                        )}{' '}
+                        demi perlindungan data pribadi pelamar.
                     </div>
                 )}
 
@@ -274,59 +260,59 @@ export default function Show({
                     <div className="space-y-6">
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Applicant
+                                Data Pribadi Pelamar
                             </h2>
 
                             <dl className="mt-5 grid gap-5 sm:grid-cols-2">
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Name
+                                        Nama Lengkap
                                     </dt>
 
                                     <dd className="mt-1 break-words">
                                         {
                                             application
                                                 .full_name
-                                            ?? 'Anonymized'
+                                            ?? 'Data telah disamarkan'
                                         }
                                     </dd>
                                 </div>
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Email
+                                        Alamat Email
                                     </dt>
 
                                     <dd className="mt-1 break-all">
                                         {
                                             application
                                                 .email
-                                            ?? 'Anonymized'
+                                            ?? 'Data telah disamarkan'
                                         }
                                     </dd>
                                 </div>
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Phone
+                                        Nomor Telepon / WhatsApp
                                     </dt>
 
                                     <dd className="mt-1">
                                         {
                                             application
                                                 .phone
-                                            ?? ''
+                                            ?? '—'
                                         }
                                     </dd>
                                 </div>
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Submitted
+                                        Tanggal Masuk
                                     </dt>
 
                                     <dd className="mt-1">
-                                        {formatDate(
+                                        {formatDateTimeIndonesian(
                                             application
                                                 .created_at,
                                         )}
@@ -337,7 +323,7 @@ export default function Show({
                             {application.introduction && (
                                 <div className="mt-6">
                                     <h3 className="text-sm font-semibold text-cim-navy">
-                                        Introduction
+                                        Surat Pengantar / Motivasi
                                     </h3>
 
                                     <p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-slate-700">
@@ -360,7 +346,7 @@ export default function Show({
                                         rel="noreferrer noopener"
                                         className="text-sm font-semibold text-cim-blue hover:text-cim-navy"
                                     >
-                                        Portfolio
+                                        Tautan Portofolio ↗
                                     </a>
                                 )}
 
@@ -374,7 +360,7 @@ export default function Show({
                                         rel="noreferrer noopener"
                                         className="text-sm font-semibold text-cim-blue hover:text-cim-navy"
                                     >
-                                        LinkedIn
+                                        Profil LinkedIn ↗
                                     </a>
                                 )}
                             </div>
@@ -382,13 +368,13 @@ export default function Show({
 
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Vacancy
+                                Informasi Lowongan
                             </h2>
 
                             <dl className="mt-5 grid gap-5 sm:grid-cols-2">
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Position
+                                        Posisi Lowongan
                                     </dt>
 
                                     <dd className="mt-1 font-medium">
@@ -402,7 +388,7 @@ export default function Show({
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Department
+                                        Departemen / Divisi
                                     </dt>
 
                                     <dd className="mt-1">
@@ -416,7 +402,7 @@ export default function Show({
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Location
+                                        Lokasi Penempatan
                                     </dt>
 
                                     <dd className="mt-1">
@@ -430,7 +416,7 @@ export default function Show({
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Public vacancy
+                                        Halaman Publik
                                     </dt>
 
                                     <dd className="mt-1">
@@ -440,7 +426,7 @@ export default function Show({
                                             rel="noreferrer noopener"
                                             className="font-semibold text-cim-blue hover:text-cim-navy"
                                         >
-                                            Open page
+                                            Lihat Halaman Karir ↗
                                         </a>
                                     </dd>
                                 </div>
@@ -449,13 +435,13 @@ export default function Show({
 
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Consent & CV
+                                Persetujuan Privasi & Berkas CV
                             </h2>
 
                             <dl className="mt-5 grid gap-5 sm:grid-cols-2">
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Consent version
+                                        Versi Ketentuan Privasi
                                     </dt>
 
                                     <dd className="mt-1">
@@ -463,18 +449,18 @@ export default function Show({
                                             application
                                                 .consent_version
                                                 ?.version
-                                            ?? ''
+                                            ?? '—'
                                         }
                                     </dd>
                                 </div>
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        Consented at
+                                        Waktu Persetujuan
                                     </dt>
 
                                     <dd className="mt-1">
-                                        {formatDate(
+                                        {formatDateTimeIndonesian(
                                             application
                                                 .consented_at,
                                         )}
@@ -483,21 +469,21 @@ export default function Show({
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        CV filename
+                                        Nama Berkas CV
                                     </dt>
 
                                     <dd className="mt-1 break-all">
                                         {
                                             application
                                                 .cv_original_name
-                                            ?? ''
+                                            ?? '—'
                                         }
                                     </dd>
                                 </div>
 
                                 <div>
                                     <dt className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                                        CV size
+                                        Ukuran Berkas CV
                                     </dt>
 
                                     <dd className="mt-1">
@@ -512,7 +498,7 @@ export default function Show({
 
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Notes
+                                Catatan Tim Internal
                             </h2>
 
                             {can.update
@@ -525,7 +511,7 @@ export default function Show({
                                         className="mt-5"
                                     >
                                         <FormField
-                                            label="Add internal note"
+                                            label="Tulis catatan internal"
                                             htmlFor="application_note"
                                             error={
                                                 noteForm
@@ -549,6 +535,7 @@ export default function Show({
                                                                 .value,
                                                         )
                                                 }
+                                                placeholder="Tambahkan evaluasi atau catatan proses seleksi pelamar..."
                                                 maxLength={5000}
                                                 className="min-h-28 w-full rounded-lg border border-input px-3 py-2"
                                             />
@@ -580,8 +567,8 @@ export default function Show({
                                                 {
                                                     noteForm
                                                         .processing
-                                                        ? 'Saving...'
-                                                        : 'Add Note'
+                                                        ? 'Menyimpan...'
+                                                        : 'Simpan Catatan'
                                                 }
                                             </Button>
                                         </div>
@@ -592,7 +579,7 @@ export default function Show({
                                 {application.notes.length === 0
                                     ? (
                                         <p className="text-sm text-muted-foreground">
-                                            No notes yet.
+                                            Belum ada catatan internal.
                                         </p>
                                     )
                                     : application.notes.map(
@@ -613,9 +600,9 @@ export default function Show({
                                                             .author
                                                             .name
                                                     }
-                                                    {'  '}
+                                                    {' · '}
                                                     {
-                                                        formatDate(
+                                                        formatDateTimeIndonesian(
                                                             note
                                                                 .created_at,
                                                         )
@@ -631,15 +618,15 @@ export default function Show({
                     <aside className="space-y-6">
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Workflow
+                                Alur Penanganan Lamaran
                             </h2>
 
                             <p className="mt-3 text-sm text-muted-foreground">
-                                Current status
+                                Status Saat Ini
                             </p>
 
                             <p className="mt-1 text-xl font-bold text-cim-navy">
-                                {application.status}
+                                {humanizeStatus(application.status)}
                             </p>
 
                             {can.update
@@ -653,7 +640,7 @@ export default function Show({
                                         className="mt-6 space-y-4"
                                     >
                                         <FormField
-                                            label="Next status"
+                                            label="Ubah Status Lamaran"
                                             htmlFor="target_status"
                                             error={
                                                 statusForm
@@ -694,8 +681,7 @@ export default function Show({
                                                             }
                                                         >
                                                             {
-                                                                transition
-                                                                    .label
+                                                                humanizeStatus(transition.value)
                                                             }
                                                         </option>
                                                     ),
@@ -707,8 +693,8 @@ export default function Show({
                                             label={
                                                 selectedTransition
                                                     ?.requires_reason
-                                                    ? 'Reason (required)'
-                                                    : 'Reason (optional)'
+                                                    ? 'Alasan Perubahan Status (Wajib diisi)'
+                                                    : 'Alasan Perubahan Status (Opsional)'
                                             }
                                             htmlFor="status_reason"
                                             error={
@@ -733,6 +719,7 @@ export default function Show({
                                                                 .value,
                                                         )
                                                 }
+                                                placeholder="Tuliskan keterangan pendukung perubahan status..."
                                                 maxLength={2000}
                                                 className="min-h-24 w-full rounded-lg border border-input px-3 py-2"
                                             />
@@ -764,8 +751,8 @@ export default function Show({
                                             {
                                                 statusForm
                                                     .processing
-                                                    ? 'Updating...'
-                                                    : 'Update Status'
+                                                    ? 'Memperbarui...'
+                                                    : 'Perbarui Status'
                                             }
                                         </Button>
                                     </form>
@@ -773,53 +760,53 @@ export default function Show({
 
                             {transitions.length === 0 && (
                                 <p className="mt-5 text-sm text-muted-foreground">
-                                    No further transition is available.
+                                    Tahap seleksi ini sudah selesai atau tidak ada pilihan status lanjutan.
                                 </p>
                             )}
                         </section>
 
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Retention State
+                                Masa Retensi & Perlindungan Data
                             </h2>
 
                             <dl className="mt-4 space-y-4 text-sm">
                                 <div>
                                     <dt className="text-muted-foreground">
-                                        Selection completed
+                                        Waktu Seleksi Selesai
                                     </dt>
 
                                     <dd className="mt-1 font-medium">
-                                        {formatDate(
+                                        {formatDateTimeIndonesian(
                                             application
                                                 .selection_completed_at,
-                                        )}
+                                        ) || '—'}
                                     </dd>
                                 </div>
 
                                 <div>
                                     <dt className="text-muted-foreground">
-                                        Retention due
+                                        Batas Waktu Penyimpanan Data
                                     </dt>
 
                                     <dd className="mt-1 font-medium">
-                                        {formatDate(
+                                        {formatDateTimeIndonesian(
                                             application
                                                 .retention_due_at,
-                                        )}
+                                        ) || '—'}
                                     </dd>
                                 </div>
 
                                 <div>
                                     <dt className="text-muted-foreground">
-                                        HR handover
+                                        Waktu Penyerahan ke HR
                                     </dt>
 
                                     <dd className="mt-1 font-medium">
-                                        {formatDate(
+                                        {formatDateTimeIndonesian(
                                             application
                                                 .hr_handover_at,
-                                        )}
+                                        ) || '—'}
                                     </dd>
                                 </div>
                             </dl>
@@ -834,7 +821,7 @@ export default function Show({
                                             onClick={recordHandover}
                                             className="w-full"
                                         >
-                                            Record HR handover
+                                            Catat Penyerahan Berkas ke HR
                                         </Button>
                                     </div>
                                 )}
@@ -842,7 +829,7 @@ export default function Show({
 
                         <section className="rounded-2xl border bg-background p-6">
                             <h2 className="text-lg font-semibold text-cim-navy">
-                                Status History
+                                Riwayat Perubahan Status
                             </h2>
 
                             <ol className="mt-5 space-y-5 border-l pl-5">
@@ -859,14 +846,13 @@ export default function Show({
 
                                             <p className="text-sm font-semibold text-cim-navy">
                                                 {
-                                                    event
-                                                        .from_status
-                                                    ?? ''
+                                                    event.from_status
+                                                        ? humanizeStatus(event.from_status)
+                                                        : 'Pendaftaran Awal'
                                                 }
-                                                {'  '}
+                                                {' → '}
                                                 {
-                                                    event
-                                                        .to_status
+                                                    humanizeStatus(event.to_status)
                                                 }
                                             </p>
 
@@ -875,11 +861,11 @@ export default function Show({
                                                     event
                                                         .actor
                                                         ?.name
-                                                    ?? 'Public submission'
+                                                    ?? 'Pendaftaran Mandiri (Pelamar)'
                                                 }
-                                                {'  '}
+                                                {' · '}
                                                 {
-                                                    formatDate(
+                                                    formatDateTimeIndonesian(
                                                         event
                                                             .created_at,
                                                     )
@@ -906,7 +892,7 @@ export default function Show({
                         href="/admin/applications"
                         className="text-sm font-semibold text-cim-blue hover:text-cim-navy"
                     >
-                         Back to Applications
+                        ← Kembali ke Daftar Lamaran
                     </Link>
                 </div>
             </AdminLayout>

@@ -50,7 +50,7 @@ class ResetPasswordController extends Controller
 
         if (! $activeUserExists) {
             throw ValidationException::withMessages([
-                'email' => 'Token reset password tidak valid atau telah kedaluwarsa.',
+                'email' => 'Tautan atur ulang kata sandi tidak valid atau telah kedaluwarsa.',
             ]);
         }
 
@@ -80,7 +80,7 @@ class ResetPasswordController extends Controller
 
                         if (! $locked->is_active) {
                             throw ValidationException::withMessages([
-                                'email' => 'Token reset password tidak valid atau telah kedaluwarsa.',
+                                'email' => 'Tautan atur ulang kata sandi tidak valid atau telah kedaluwarsa.',
                             ]);
                         }
 
@@ -109,7 +109,7 @@ class ResetPasswordController extends Controller
 
         if ($status !== Password::PASSWORD_RESET) {
             throw ValidationException::withMessages([
-                'email' => 'Token reset password tidak valid atau telah kedaluwarsa.',
+                'email' => 'Tautan atur ulang kata sandi tidak valid atau telah kedaluwarsa.',
             ]);
         }
 
@@ -117,7 +117,7 @@ class ResetPasswordController extends Controller
             ->route('login')
             ->with(
                 'status',
-                'Password berhasil diubah. Silakan login.',
+                'Kata sandi berhasil diperbarui. Silakan masuk menggunakan kata sandi baru Anda.',
             );
     }
 }

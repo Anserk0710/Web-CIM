@@ -109,7 +109,7 @@ class MediaController extends Controller
 
         return back()->with(
             'success',
-            'Media berhasil diupload.',
+            'Berkas media berhasil diunggah.',
         );
     }
 
@@ -139,7 +139,7 @@ class MediaController extends Controller
 
         return back()->with(
             'success',
-            'Media metadata diperbarui.',
+            'Keterangan berkas media berhasil diperbarui.',
         );
     }
 
@@ -158,7 +158,7 @@ class MediaController extends Controller
 
         return back()->with(
             'success',
-            'Media berhasil dihapus.',
+            'Berkas media berhasil dihapus.',
         );
     }
 }

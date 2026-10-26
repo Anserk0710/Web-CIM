@@ -4,14 +4,17 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PageSection;
+use App\Models\Media;
 use App\Models\SitePage;
 use App\Services\Audit\AuditService;
+use App\Services\Media\PageSectionMedia;
 use App\Support\Content\SiteContentRegistry;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -71,6 +74,20 @@ class PageContentController extends Controller
                 'canUpdate' => request()
                     ->user()
                     ->can('page.update'),
+                'canReadMedia' => request()->user()->can('media.read'),
+                'selectedMedia' => request()->user()->can('media.read')
+                    ? Media::query()->whereIn('id', $page->sections->flatMap(
+                        fn (PageSection $section): array => array_filter([
+                            $section->data['image_id'] ?? null,
+                            $section->data['video_id'] ?? null,
+                        ]),
+                    ))->get()->map(fn (Media $media): array => [
+                        'id' => $media->id,
+                        'name' => $media->original_name,
+                        'mime' => $media->mime,
+                        'url' => $media->url(),
+                    ])
+                    : [],
             ],
         );
     }
@@ -79,6 +96,7 @@ class PageContentController extends Controller
         Request $request,
         SitePage $page,
         AuditService $audit,
+        PageSectionMedia $sectionMedia,
     ): RedirectResponse {
         Gate::authorize('page.update');
 
@@ -129,10 +147,20 @@ class PageContentController extends Controller
             ];
         }
 
+        foreach ($request->input('sections', []) as $index => $section) {
+            $rules["sections.{$index}.data.image_id"] = [
+                'nullable', 'integer', Rule::exists('media', 'id')->whereIn('mime', ['image/jpeg', 'image/png', 'image/webp']),
+            ];
+            $rules["sections.{$index}.data.video_id"] = $page->key === 'HOME' && ($section['key'] ?? null) === 'hero'
+                ? ['nullable', 'integer', Rule::exists('media', 'id')->where('mime', 'video/mp4')]
+                : ['prohibited'];
+            $rules["sections.{$index}.data.image_alt"] = ['nullable', 'string', 'max:500'];
+        }
+
         $validated = $request->validate($rules);
 
         DB::transaction(
-            function () use ($request, $page, $allowed, $validated, $audit): void {
+            function () use ($request, $page, $allowed, $validated, $audit, $sectionMedia): void {
                 $locked = SitePage::query()
                     ->whereKey($page->id)
                     ->lockForUpdate()
@@ -169,7 +197,7 @@ class PageContentController extends Controller
                             $section['data'],
                         );
 
-                    PageSection::query()
+                    $savedSection = PageSection::query()
                         ->updateOrCreate(
                             [
                                 'page_id' => $locked->id,
@@ -186,6 +214,8 @@ class PageContentController extends Controller
                                 'sort_order' => $index,
                             ],
                         );
+
+                    $sectionMedia->sync($savedSection, $data, "sections.{$index}.data");
                 }
 
                 $locked->forceFill([

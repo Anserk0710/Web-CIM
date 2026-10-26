@@ -1,6 +1,7 @@
 // path: resources/js/public.ts
 
 import '../css/public.css';
+import { initialiseNavigation } from './public/navigation';
 
 function initialiseInquiryForms(): void {
     const forms = document.querySelectorAll<HTMLFormElement>(
@@ -75,7 +76,7 @@ function initialiseInquiryForms(): void {
             } else {
                 catalogProductId.value = '';
             }
-        }
+        };
 
         typeSelect.addEventListener(
             'change',
@@ -91,14 +92,30 @@ function initialiseInquiryForms(): void {
     });
 }
 
+function initialiseScrollProgress(): void {
+    const bar = document.querySelector<HTMLElement>('[data-scroll-progress]');
+    if (!bar) return;
+
+    const onScroll = (): void => {
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = total > 0 ? Math.min(1, Math.max(0, window.scrollY / total)) : 0;
+        bar.style.transform = `scaleX(${progress})`;
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+}
+
 document.documentElement.dataset.publicApp = 'ready';
 
-if (document.readyState === 'loading') {
-    document.addEventListener(
-        'DOMContentLoaded',
-        initialiseInquiryForms,
-        { once: true },
-    );
-} else {
+function boot(): void {
+    initialiseNavigation();
+    initialiseScrollProgress();
     initialiseInquiryForms();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+} else {
+    boot();
 }

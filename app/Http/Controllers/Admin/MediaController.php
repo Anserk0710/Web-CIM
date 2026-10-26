@@ -11,12 +11,42 @@ use App\Http\Requests\Admin\MediaUploadRequest;
 use App\Models\Media;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class MediaController extends Controller
 {
+    public function options(Request $request): JsonResponse
+    {
+        Gate::authorize('media.read');
+
+        $validated = $request->validate([
+            'kind' => ['required', 'in:image,video'],
+            'q' => ['nullable', 'string', 'max:150'],
+            'page' => ['nullable', 'integer', 'min:1'],
+        ]);
+
+        $query = Media::query();
+        $validated['kind'] === 'video'
+            ? $query->where('mime', 'video/mp4')
+            : $query->whereIn('mime', ['image/jpeg', 'image/png', 'image/webp']);
+
+        if (! empty($validated['q'])) {
+            $query->where('original_name', 'like', '%'.$validated['q'].'%');
+        }
+
+        return response()->json($query->latest('id')->paginate(20)->through(
+            fn (Media $media): array => [
+                'id' => $media->id,
+                'name' => $media->original_name,
+                'mime' => $media->mime,
+                'url' => $media->url(),
+            ],
+        ));
+    }
+
     public function index(
         Request $request,
     ): Response {

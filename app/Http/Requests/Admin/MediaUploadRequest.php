@@ -25,7 +25,9 @@ class MediaUploadRequest extends FormRequest
                     'png',
                     'webp',
                     'pdf',
+                    'mp4',
                 ])->max('10mb'),
+                'extensions:jpg,jpeg,png,webp,pdf,mp4',
             ],
 
             'default_alt' => [

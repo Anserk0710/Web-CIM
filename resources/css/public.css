@@ -1,1 +1,65 @@
 @import "./theme.css";
+@import "./public-navigation.css";
+
+/* Tech Grid Background Pattern */
+.bg-tech-grid {
+    background-image: 
+        radial-gradient(rgba(0, 240, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 32px 32px, 96px 96px, 96px 96px;
+}
+
+/* Subtle tech ambient glows */
+.tech-glow-radial {
+    background: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.12), rgba(3, 4, 94, 0.2) 45%, transparent 70%);
+}
+
+.tech-glow-card {
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tech-glow-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 240, 255, 0.35);
+    box-shadow: 0 12px 35px -10px rgba(0, 240, 255, 0.18);
+}
+
+/* Media Placement Blueprint Container */
+.media-placeholder-container {
+    position: relative;
+    background: linear-gradient(135deg, rgba(12, 18, 30, 0.95), rgba(7, 10, 15, 0.98));
+    border: 1px dashed rgba(0, 240, 255, 0.25);
+    border-radius: 1.25rem;
+    overflow: hidden;
+}
+
+.media-placeholder-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(to right, rgba(0, 240, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 240, 255, 0.04) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #070a0f;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 240, 255, 0.4);
+}

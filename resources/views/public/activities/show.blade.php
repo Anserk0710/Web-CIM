@@ -10,9 +10,9 @@
 @section('canonical', route('activities.show', $activity->public_slug))
 
 @if($revision->ogMedia)
-@section('og_image', $revision->ogMedia->url())
+    @section('og_image', $revision->ogMedia->url())
 @elseif($revision->featureMedia)
-@section('og_image', $revision->featureMedia->url())
+    @section('og_image', $revision->featureMedia->url())
 @endif
 
 @section('structured_data')
@@ -29,50 +29,63 @@
 @endsection
 
 @section('content')
-    <article class="mx-auto max-w-4xl px-4 py-12 sm:px-6 lg:px-8">
-        <nav aria-label="Breadcrumb" class="text-sm text-slate-600">
+    <article class="mx-auto max-w-4xl px-4 pt-28 pb-16 sm:pt-36 sm:pb-24 lg:px-8">
+        {{-- BREADCRUMB --}}
+        <nav aria-label="Breadcrumb" class="text-xs font-mono text-slate-400">
             <ol class="flex flex-wrap items-center gap-2">
-                <li><a href="{{ route('home') }}" class="hover:text-cim-blue">Home</a></li>
+                <li><a href="{{ route('home') }}" class="hover:text-white">Beranda</a></li>
                 <li aria-hidden="true">/</li>
-                <li><a href="{{ route('activities.index') }}" class="hover:text-cim-blue">Activity</a></li>
+                <li><a href="{{ route('activities.index') }}" class="hover:text-white">Kegiatan</a></li>
                 <li aria-hidden="true">/</li>
-                <li aria-current="page" class="font-medium text-cim-navy">
+                <li aria-current="page" class="text-[#00f0ff] truncate max-w-md">
                     {{ $revision->title }}
                 </li>
             </ol>
         </nav>
 
-        <header class="mt-8">
+        {{-- ARTICLE HEADER --}}
+        <header class="mt-8 border-b border-white/10 pb-8">
             @if($revision->category)
-                <p class="text-sm font-bold uppercase tracking-wide text-cim-blue">
+                <span class="inline-flex items-center gap-2 rounded-full border border-[#00f0ff]/30 bg-[#00f0ff]/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[#00f0ff]">
                     {{ $revision->category->name }}
-                </p>
+                </span>
             @endif
 
-            <h1 class="mt-3 text-4xl font-bold tracking-tight text-cim-navy sm:text-5xl">
+            <h1 class="mt-4 text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-[1.12]">
                 {{ $revision->title }}
             </h1>
 
             @if($revision->excerpt)
-                <p class="mt-5 text-lg leading-8 text-slate-600">
+                <p class="mt-6 text-lg sm:text-xl leading-relaxed text-slate-300">
                     {{ $revision->excerpt }}
                 </p>
             @endif
 
-            <p class="mt-5 text-sm text-slate-500">
-                {{ $activity->published_at?->format('d-m-Y') }}
-            </p>
+            <div class="mt-6 flex items-center gap-4 text-xs font-mono text-slate-500">
+                <time datetime="{{ $activity->published_at?->toIso8601String() }}">
+                    Diterbitkan: {{ $activity->published_at?->translatedFormat('d F Y') }}
+                </time>
+                <span>·</span>
+                <span>PT CAHYA INTAN MEDIKA</span>
+            </div>
         </header>
 
+        {{-- FEATURE IMAGE / MEDIA PLACEMENT --}}
         @if($revision->featureMedia)
-            <figure class="mt-8">
-                <img src="{{ $revision->featureMedia->url() }}" alt="{{ $revision->title }}"
-                    width="{{ $revision->featureMedia->width ?: 1200 }}" height="{{ $revision->featureMedia->height ?: 900 }}"
-                    fetchpriority="high" class="aspect-[16/9] w-full rounded-2xl border object-cover">
+            <figure class="mt-10 overflow-hidden rounded-3xl border border-white/10 shadow-2xl">
+                <img
+                    src="{{ $revision->featureMedia->url() }}"
+                    alt="{{ $revision->title }}"
+                    width="{{ $revision->featureMedia->width ?: 1200 }}"
+                    height="{{ $revision->featureMedia->height ?: 900 }}"
+                    fetchpriority="high"
+                    class="aspect-[16/9] w-full object-cover"
+                >
             </figure>
         @endif
 
-        <div class="mt-10 space-y-8">
+        {{-- CONTENT BLOCKS --}}
+        <div class="mt-12 space-y-8 rounded-2xl border border-white/10 bg-[#0c121e]/60 p-6 sm:p-10 backdrop-blur-md">
             @foreach($revision->blocks as $block)
                 @include('public.activities._block', [
                     'block' => $block,
@@ -82,37 +95,42 @@
             @endforeach
         </div>
 
+        {{-- RELATED PRODUCTS --}}
         @if($revision->relatedProducts->isNotEmpty())
-            <section class="mt-14 border-t pt-10">
-                <h2 class="text-2xl font-bold text-cim-navy">
-                    Related Products
+            <section class="mt-16 border-t border-white/10 pt-12">
+                <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#00f0ff]">
+                    PRODUK TERKAIT DOKUMENTASI INI
+                </p>
+                <h2 class="mt-2 text-2xl font-bold text-white">
+                    Instrumen yang Digunakan
                 </h2>
 
                 <div class="mt-6 grid gap-4 sm:grid-cols-2">
                     @foreach($revision->relatedProducts as $product)
                         @if($product->publishedRevision && $product->public_slug)
-                            <a href="{{ route('products.show', $product->public_slug) }}"
-                                class="rounded-xl border p-5 hover:border-cim-blue">
-                                <h3 class="font-semibold text-cim-navy">
+                            <a
+                                href="{{ route('products.show', $product->public_slug) }}"
+                                class="tech-glow-card rounded-2xl border border-white/10 bg-[#0c121e]/80 p-6 block"
+                            >
+                                <span class="text-xs font-mono text-[#00f0ff]">PRODUK MEDIS</span>
+                                <h3 class="mt-2 text-lg font-bold text-white">
                                     {{ $product->publishedRevision->name }}
                                 </h3>
 
                                 @if($product->publishedRevision->summary)
-                                    <p class="mt-2 text-sm leading-6 text-slate-600">
+                                    <p class="mt-2 text-xs leading-relaxed text-slate-400 line-clamp-2">
                                         {{ $product->publishedRevision->summary }}
                                     </p>
                                 @endif
+                                <p class="mt-4 text-xs font-semibold text-[#00f0ff] flex items-center justify-between">
+                                    <span>Lihat Spesifikasi</span>
+                                    <span aria-hidden="true">↗</span>
+                                </p>
                             </a>
                         @endif
                     @endforeach
                 </div>
             </section>
         @endif
-
-        <div class="mt-14 border-t pt-8">
-            <a href="{{ route('activities.index') }}" class="font-semibold text-cim-blue hover:text-cim-navy">
-                ← Back to Activity
-            </a>
-        </div>
     </article>
 @endsection

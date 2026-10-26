@@ -74,6 +74,17 @@ class HomeController extends Controller
                 ->first()
             : null;
 
+        $heroVideo = isset($hero['video_id'])
+            ? Media::query()->whereKey((int) $hero['video_id'])->where('mime', 'video/mp4')->first()
+            : null;
+
+        $sectionImages = Media::query()->images()
+            ->whereIn('id', array_filter([
+                $capabilitiesData['image_id'] ?? null,
+                $lifecycleData['image_id'] ?? null,
+            ]))
+            ->get()->keyBy('id');
+
         $metrics = collect(
             $content->listValue(
                 $metricsData['items'] ?? [],
@@ -178,6 +189,11 @@ class HomeController extends Controller
             'sections' => $sections,
             'hero' => $hero,
             'heroImage' => $heroImage,
+            'heroVideo' => $heroVideo,
+            'capabilitiesImage' => $sectionImages->get($capabilitiesData['image_id'] ?? null),
+            'capabilitiesImageAlt' => $capabilitiesData['image_alt'] ?? '',
+            'lifecycleImage' => $sectionImages->get($lifecycleData['image_id'] ?? null),
+            'lifecycleImageAlt' => $lifecycleData['image_alt'] ?? '',
             'metrics' => $metrics,
             'capabilities' => $content->listValue(
                 $capabilitiesData['items'] ?? [],
@@ -192,6 +208,8 @@ class HomeController extends Controller
             'lifecycleHeading' => $lifecycleData['heading']
                 ?? null,
             'featuredProducts' => $featuredProducts,
+            'featuredData' => $featuredData,
+            'activityData' => $activityData,
             'featuredActivities' => $featuredActivities,
             'coverageData' => $coverageData,
             'ctaData' => $ctaData,

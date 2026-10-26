@@ -41,6 +41,34 @@
     --ring: #00b4d8;
 
     --radius: 0.75rem;
+
+    --tech-bg: #070a0f;
+    --tech-surface: #0c121e;
+    --tech-surface-raised: #111a28;
+    --tech-border: rgba(255, 255, 255, 0.08);
+    --tech-border-glow: rgba(0, 240, 255, 0.25);
+    --tech-cyan: #00f0ff;
+    --tech-navy: #03045e;
+}
+
+.public-site {
+    --background: #070a0f;
+    --foreground: #f8fafc;
+    --card: #0c121e;
+    --card-foreground: #f8fafc;
+    --popover: #0c121e;
+    --popover-foreground: #f8fafc;
+    --primary: #00f0ff;
+    --primary-foreground: #070a0f;
+    --secondary: #0077b6;
+    --secondary-foreground: #ffffff;
+    --muted: #111a28;
+    --muted-foreground: #94a3b8;
+    --accent: #00f0ff;
+    --accent-foreground: #070a0f;
+    --border: rgba(255, 255, 255, 0.1);
+    --input: rgba(255, 255, 255, 0.15);
+    --ring: #00f0ff;
 }
 
 @theme inline {
@@ -77,6 +105,12 @@
     --color-cim-cyan: var(--cim-cyan);
     --color-cim-sky: var(--cim-sky);
     --color-cim-ice: var(--cim-ice);
+
+    --color-tech-bg: #070a0f;
+    --color-tech-surface: #0c121e;
+    --color-tech-surface-raised: #111a28;
+    --color-tech-cyan: #00f0ff;
+    --color-tech-navy: #03045e;
 
     --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);

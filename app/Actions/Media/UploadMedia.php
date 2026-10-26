@@ -162,6 +162,23 @@ class UploadMedia
         $size =
             (int) $file->getSize();
 
+        if ($mime === 'video/mp4') {
+            $header = file_get_contents($file->getRealPath(), false, null, 0, 12);
+
+            if (
+                strtolower($file->getClientOriginalExtension()) !== 'mp4'
+                || $header === false
+                || substr($header, 4, 4) !== 'ftyp'
+                || $size > 8 * 1024 * 1024
+            ) {
+                throw ValidationException::withMessages([
+                    'file' => 'Video harus berupa MP4 valid, maksimum 8 MiB.',
+                ]);
+            }
+
+            return;
+        }
+
         if (
             str_starts_with(
                 $mime,
